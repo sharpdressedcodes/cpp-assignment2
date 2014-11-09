@@ -1,0 +1,11 @@
+.settings/*
+.cproject
+.project
+Debug/*
+Release/*
+*.zip
+*.bak
+*.o
+Task*/
+mytic
+.dat
