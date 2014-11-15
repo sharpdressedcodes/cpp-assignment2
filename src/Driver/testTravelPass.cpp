@@ -18,10 +18,57 @@
 /*
  * Program entry point.
  */
-int main(){
+int main(int argc, char *argv[]){
+
+	//System::MyTicSystem system;
+	UI::mainMenu options;
+
+	/*if (argc != UI::ARG_ORDER_MAX){
+		cerr << "Invalid number of arguments supplied.\nExpected: "
+			<< UI::ARG_ORDER_MAX << " Received: " << argc << endl;
+		return EXIT_FAILURE;
+	}
+
+	system.loadStationsFromFile(argv[UI::LoadStations]);
+	system.loadUsersFromFile(argv[UI::LoadUsersAndZones]);
+	system.loadZonePricesFromFile(argv[UI::LoadUsersAndZones]);
+
+	if (system.getStations().size() == 0){
+		cerr << "Error: Did not load any Stations." << endl;
+		return EXIT_FAILURE;
+	} else if (system.getUsers().size() == 0){
+		cerr << "Error: Did not load any Users." << endl;
+		return EXIT_FAILURE;
+	} else if (system.getPasses().size() == 0){
+		cerr << "Error: Did not load any TravelPasses." << endl;
+		return EXIT_FAILURE;
+	}*/
+
+
+	UI::instance()->loadMenu(options);
+
+	if (!UI::instance()->enterMenu(argc, argv, options))
+		return EXIT_FAILURE;
+
+//	map<string, System::Station*> stations = system.getStations();
+//	for (map<string, System::Station*>::const_iterator it = stations.begin(); it != stations.end(); ++it)
+//		cout << it->first << " " << it->second->getZone() << endl;
+//
+//	map<string, User::BaseUser*> users = system.getUsers();
+//	for (map<string, User::BaseUser*>::const_iterator it = users.begin(); it != users.end(); ++it)
+//		cout << it->first << " " << it->second->getName() << " " << it->second->getEmail() << " " << it->second->getCredit() << endl;
+//
+//	map<string, Pass::TravelPass*> passes = system.getPasses();
+//	for (map<string, Pass::TravelPass*>::const_iterator it = passes.begin(); it != passes.end(); ++it)
+//		cout << it->first /*<< " " << it->second->getLength() << " " << it->second->getZones() << " " << it->second->getCost() << endl*/;
+
+	UI::instance()->deleteMenu(options);
+
+	//system.saveUsersToFile(argv[UI::SaveUsersAndZones]);
+	//system.saveZonesToFile(argv[UI::SaveUsersAndZones]);
 
 	//Create MyTic object and use this object in the menu
-	Tic::MyTic tic(MAX_TRAVELPASSES);
+	/*Tic::MyTic tic(MAX_TRAVELPASSES);
 	UI::mainMenu options;
 	UI::subMenu timeOptions;
 	UI::subMenu zoneOptions;
@@ -37,7 +84,7 @@ int main(){
 	// Clean up.
 	UI::instance()->deleteMenu(options);
 	UI::instance()->deleteTimeMenu(timeOptions);
-	UI::instance()->deleteZoneMenu(zoneOptions);
+	UI::instance()->deleteZoneMenu(zoneOptions);*/
 
 	/*
 	 * Task C4 - uncomment to check.

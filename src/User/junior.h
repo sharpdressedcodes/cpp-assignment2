@@ -9,12 +9,13 @@
 #define JUNIOR_H_
 
 #include "baseUser.h"
+#include "../Tic/juniorMyTic.h"
 
 namespace User {
 
 	class Junior : public BaseUser {
 	public:
-		Junior(string id, string name, string email);
+		Junior(string id, string name, string email, float credit);
 	};
 
 }

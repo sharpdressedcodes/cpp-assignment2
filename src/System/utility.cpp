@@ -10,6 +10,8 @@
 
 #include "utility.h"
 
+namespace System {
+
 /*
  * Function to clear the input buffer.
  */
@@ -111,6 +113,17 @@ int Utility::stringToInt(const string& str){
 
 }
 
+float Utility::stringToFloat(const string& str){
+
+	float result;
+	istringstream buffer(str);
+
+	buffer >> result;
+
+	return result;
+
+}
+
 /*
  * Convert an integer to a string.
  */
@@ -126,7 +139,7 @@ string Utility::intToString(const int number){
 /*
  * Convert a float to a string.
  */
-string Utility::floatToString(const float number, const int precision = -1){
+string Utility::floatToString(const float number, const int precision){
 
 	std::stringstream ss;
 
@@ -144,12 +157,21 @@ string Utility::floatToString(const float number, const int precision = -1){
 /*
  * Test if all characters in a string are digits.
  */
-bool Utility::isNumeric(const string& str) {
+bool Utility::isNumeric(const string& str, bool allowDot) {
 
 	bool result = true;
+	bool foundDot = false;
 
 	for (string::const_iterator it = str.begin();
 			it != str.end() && result; ++it){
+		if (allowDot && (*it) == '.'){
+			if (!foundDot){
+				foundDot = true;
+				continue;
+			} else {
+				return false;
+			}
+		}
 		result = isDigit((*it));
 	}
 
@@ -168,5 +190,183 @@ bool Utility::isDigit(const char c){
 		exists = (letter == c);
 
 	return exists;
+
+}
+
+bool Utility::fileExists(const string& filename){
+
+	bool result = false;
+	ifstream fs;
+
+	try {
+		fs.open(filename.c_str());
+		result = fs.is_open();
+		fs.close();
+	} catch (...){}
+
+	return result;
+
+}
+
+string Utility::loadFile(const string& filename){
+
+	ifstream fs(filename.c_str());
+	stringstream ss;
+
+	while (!fs.eof()){
+		string line;
+		getline(fs, line);
+		ss << line << endl;
+	}
+
+	fs.close();
+
+	return ss.str();
+
+}
+
+bool Utility::saveFile(const string& filename, const string& data, bool append = false){
+
+	bool result = false;
+	ofstream fs;
+
+	try {
+		if (append)
+			fs.open(filename.c_str(), ios::app);
+		else
+			fs.open(filename.c_str());
+		fs << data;
+		fs.close();
+		result = true;
+	} catch (...){}
+
+	return result;
+
+}
+
+vector<string> Utility::explode(const string& str, const string& delim){
+
+	string s(str);
+	vector<string> arr;
+	size_t pos = s.find(delim.c_str());
+
+	while (pos != string::npos){
+		arr.push_back(s.substr(0, pos));
+		if (pos + 1 <= s.size()){
+			s = s.substr(pos + 1);
+			pos = s.find(delim.c_str());
+			if (pos == string::npos)
+				arr.push_back(s);
+		} else {
+			break;
+		}
+	}
+
+	return arr;
+
+
+}
+
+string Utility::implode(const vector<string> arr, const string& delim){
+
+	string result;
+
+	for (vector<string>::const_iterator it = arr.begin(); it != arr.end(); ++it){
+		result.append((*it));
+		result.append(delim);
+	}
+
+	if (result.length() > 0 && result.compare(result.size() - delim.size(), delim.size(), delim) == 0)
+		result = result.substr(0, result.size() - delim.size());
+
+	return result;
+
+}
+
+bool Utility::startsWith(const string& str, const string& lookup){
+
+	if (str.length() == 0 || lookup.length() == 0 || lookup.length() > str.length())
+		return false;
+
+	return str.compare(0, lookup.length(), lookup.c_str()) == 0;
+
+}
+
+bool Utility::endsWith(const string& str, const string& lookup){
+
+	if (str.length() == 0 || lookup.length() == 0 || lookup.length() > str.length())
+		return false;
+
+	return str.compare(str.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
+
+}
+
+string Utility::ltrim(const string& str, const string& lookup){
+
+	string result(str);
+
+		/*	bool b = result.compare(0, lookup.length(), lookup.c_str()) == 0;
+
+	while (b && lookup.length() < result.length()){
+		result = result.substr(lookup.length());
+		b = result.compare(0, lookup.length(), lookup.c_str()) == 0;
+	}*/
+
+	while (Utility::startsWith(result, lookup) && lookup.length() < result.length())
+		result = result.substr(lookup.length());
+
+
+	return result;
+
+}
+
+string Utility::rtrim(const string& str, const string& lookup){
+
+	string result(str);
+
+	/*if (result.length() == 0 || result.compare(lookup) == 0){
+		result = "";
+		return result;
+	}
+
+	bool b = result.compare(result.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
+
+	while (b){
+		result = result.substr(0, result.length() - lookup.length());
+		b = result.compare(result.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
+	}*/
+
+	while (Utility::endsWith(result, lookup))
+		result = result.substr(0, result.length() - lookup.length());
+
+	return result;
+
+}
+
+string Utility::trim(const string& str, const string& lookup){
+
+	string result(str);
+
+	result = rtrim(ltrim(result, lookup), lookup);
+
+	return result;
+
+}
+
+string Utility::replace(const string& str, const string& lookup, string replacement, bool all){
+
+	string result(str);
+	size_t pos = result.find(lookup.c_str());
+
+	while (pos != string::npos){
+		result.replace(pos, lookup.length(), replacement.c_str());
+		if (!all)
+			break;
+		pos = result.find(lookup.c_str());
+	}
+
+	return result;
+
+}
 
 }

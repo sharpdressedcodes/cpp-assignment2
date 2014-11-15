@@ -10,29 +10,36 @@
 
 namespace User {
 
-	BaseUser::BaseUser(string id, string name, string email, UserType type){
+	BaseUser::BaseUser(string id, string name, string email, float credit){
 
 		this->id = id;
 		this->name = name;
 		this->email = email;
-		this->type = type;
+		this->credit = credit;
+		this->tic = NULL;
 
 	}
 
-	string BaseUser::getId(){
+	BaseUser::~BaseUser(){}
+
+	string BaseUser::getId() const {
 		return this->id;
 	}
 
-	string BaseUser::getName(){
+	string BaseUser::getName() const {
 		return this->name;
 	}
 
-	BaseUser::UserType BaseUser::getType(){
-		return this->type;
+	string BaseUser::getEmail() const {
+		return this->email;
 	}
 
-	string BaseUser::getEmail(){
-		return this->email;
+	float BaseUser::getCredit() const {
+		return this->credit;
+	}
+
+	Tic::MyTic* BaseUser::getTic() const {
+		return this->tic;
 	}
 
 	void BaseUser::setId(string newValue){
@@ -47,8 +54,24 @@ namespace User {
 		this->email = newValue;
 	}
 
-	void BaseUser::setType(BaseUser::UserType newValue){
-		this->type = newValue;
+	void BaseUser::setCredit(float newValue){
+		this->credit = newValue;
+	}
+
+	void BaseUser::setTic(Tic::MyTic* newValue){
+		this->tic = newValue;
+	}
+
+	bool BaseUser::addCredit(float newValue){
+
+		// TODO: throw Exception::InsufficientCredit
+		if (this->credit + newValue < 0)
+			return false;
+
+		this->credit += newValue;
+
+		return true;
+
 	}
 
 }

@@ -8,6 +8,14 @@ namespace Tic {
 
 	class SeniorMyTic : public ConsessionTic {
 
+	public:
+		SeniorMyTic();
+		SeniorMyTic(float discountRate);
+		~SeniorMyTic();
+		float getDiscountRate() const;
+
+		string toString() const;
+
 	};
 
 }

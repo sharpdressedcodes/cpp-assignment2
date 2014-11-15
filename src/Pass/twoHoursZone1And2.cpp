@@ -19,6 +19,12 @@ namespace Pass {
 	TwoHoursZone1And2::TwoHoursZone1And2()
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
 
+	TwoHoursZone1And2::TwoHoursZone1And2(float theCost)
+		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
+
+	TwoHoursZone1And2::TwoHoursZone1And2(string theLength, string theZones, float theCost)
+		: TravelPass(theLength, theZones, theCost) {}
+
 	TwoHoursZone1And2::~TwoHoursZone1And2(){}
 
 	/*

@@ -32,6 +32,10 @@ namespace Pass {
 		return cost;
 	}
 
+	vector<Journey*> TravelPass::getJourneys() {
+		return this->journeys;
+	}
+
 	void TravelPass::setLength(string newLength){
 		length = newLength;
 	}
@@ -42,6 +46,14 @@ namespace Pass {
 
 	void TravelPass::setCost(float newCost){
 		cost = newCost;
+	}
+
+	void TravelPass::addJourney(Journey* journey){
+		this->journeys.push_back(journey);
+	}
+
+	void TravelPass::clearJourneys(){
+		this->journeys.clear();
 	}
 
 }

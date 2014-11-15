@@ -10,14 +10,19 @@
 
 #include "uI.h"
 
-UI *UI::m_instance = NULL;
+namespace Ui {
 
-string UI::MENU_STRING_QUIT = "Quit";
-string UI::MENU_STRING_BUY = "Buy a travel pass";
-string UI::MENU_STRING_CHARGE = "Charge my MyTic";
-string UI::MENU_STRING_SHOW = "Show remaining credit";
-string UI::MENU_STRING_PRINT = "Print purchases";
-string UI::MENU_STRING_CANCEL = "Cancel";
+UI *UI::m_instance = NULL;
+System::MyTicSystem UI::m_system;
+
+string UI::MENU_STRING_BUY = "Buy a Journey for a User";
+string UI::MENU_STRING_CHARGE = "Recharge a MyTic card for a User";
+string UI::MENU_STRING_SHOW_CREDIT = "Show remaining credit for a User";
+string UI::MENU_STRING_PRINT = "Print User Reports";
+string UI::MENU_STRING_UPDATE = "Update pricing";
+string UI::MENU_STRING_SHOW_STATS = "Show Stations Statistics";
+string UI::MENU_STRING_ADD = "Add a new User";
+string UI::MENU_STRING_QUIT = "Save/Quit";
 
 string UI::CREDIT_PREFIX = "Your credit = $";
 string UI::YOU_PURCHASED_PREFIX = "You purchased ";
@@ -56,6 +61,12 @@ UI *UI::instance(){
 
 }
 
+System::MyTicSystem& UI::system(){
+
+	return m_system;
+
+}
+
 /*
  * Load the main menu variables into the struct.
  */
@@ -68,21 +79,30 @@ void UI::loadMenu(mainMenu& options){
 
 	i = 0;
 
-	options[i]->isQuit = true;
-	options[i]->index = MENU_INDEX_QUIT;
-	options[i++]->text = MENU_STRING_QUIT;
-
 	options[i]->index = MENU_INDEX_BUY;
 	options[i++]->text = MENU_STRING_BUY;
 
 	options[i]->index = MENU_INDEX_CHARGE;
 	options[i++]->text = MENU_STRING_CHARGE;
 
-	options[i]->index = MENU_INDEX_SHOW;
-	options[i++]->text = MENU_STRING_SHOW;
+	options[i]->index = MENU_INDEX_SHOW_CREDIT;
+	options[i++]->text = MENU_STRING_SHOW_CREDIT;
 
 	options[i]->index = MENU_INDEX_PRINT;
 	options[i++]->text = MENU_STRING_PRINT;
+
+	options[i]->index = MENU_INDEX_UPDATE;
+	options[i++]->text = MENU_STRING_UPDATE;
+
+	options[i]->index = MENU_INDEX_SHOW_STATS;
+	options[i++]->text = MENU_STRING_SHOW_STATS;
+
+	options[i]->index = MENU_INDEX_ADD;
+	options[i++]->text = MENU_STRING_ADD;
+
+	options[i]->isQuit = true;
+	options[i]->index = MENU_INDEX_QUIT;
+	options[i++]->text = MENU_STRING_QUIT;
 
 }
 
@@ -91,9 +111,9 @@ void UI::loadMenu(mainMenu& options){
  */
 void UI::loadTimeMenu(subMenu& timeOptions){
 
-	int i = 0;
+	//int i = 0;
 
-	for (i = 0; i < MAX_MENU_TIME; i++)
+	/*for (i = 0; i < Ui::MAX_MENU_TIME; i++)
 		timeOptions.push_back(new UI::menuOptions<char>());
 
 	i = 0;
@@ -109,7 +129,7 @@ void UI::loadTimeMenu(subMenu& timeOptions){
 	timeOptions[i]->isQuit = true;
 	timeOptions[i]->index = MENU_INDEX_TIME_CANCEL;
 	timeOptions[i]->subIndex = i;
-	timeOptions[i++]->text = MENU_STRING_CANCEL;
+	timeOptions[i++]->text = MENU_STRING_CANCEL;*/
 
 }
 
@@ -118,9 +138,9 @@ void UI::loadTimeMenu(subMenu& timeOptions){
  */
 void UI::loadZoneMenu(subMenu& zoneOptions){
 
-	int i = 0;
+	//int i = 0;
 
-	for (i = 0; i < MAX_MENU_ZONE; i++)
+	/*for (i = 0; i < MAX_MENU_ZONE; i++)
 		zoneOptions.push_back(new UI::menuOptions<char>());
 
 	i = 0;
@@ -136,7 +156,7 @@ void UI::loadZoneMenu(subMenu& zoneOptions){
 	zoneOptions[i]->isQuit = true;
 	zoneOptions[i]->index = MENU_INDEX_ZONE_CANCEL;
 	zoneOptions[i]->subIndex = i;
-	zoneOptions[i++]->text = MENU_STRING_CANCEL;
+	zoneOptions[i++]->text = MENU_STRING_CANCEL;*/
 
 }
 
@@ -318,10 +338,31 @@ void UI::printPurchases(Tic::MyTic& tic){
  * Main Menu.
  * Present the user with a set of main options.
  */
-void UI::enterMenu(Tic::MyTic& tic, mainMenu options,
-		subMenu timeOptions, subMenu zoneOptions){
+bool UI::enterMenu(/*Tic::MyTic& tic, */int argc, char *argv[], mainMenu options){//,
+		//subMenu timeOptions, subMenu zoneOptions){
 
 	bool hasQuit = false;
+
+	if (argc != UI::ARG_ORDER_MAX){
+		cerr << "Invalid number of arguments supplied.\nExpected: "
+			<< UI::ARG_ORDER_MAX << " Received: " << argc << endl;
+		return false;
+	}
+
+	m_system.loadStationsFromFile(argv[LoadStations]);
+	m_system.loadUsersFromFile(argv[LoadUsersAndZones]);
+	m_system.loadZonePricesFromFile(argv[LoadUsersAndZones]);
+
+	if (m_system.getStations().size() == 0){
+		cerr << "Error: Did not load any Stations." << endl;
+		return false;
+	} else if (m_system.getUsers().size() == 0){
+		cerr << "Error: Did not load any Users." << endl;
+		return false;
+	} else if (m_system.getPasses().size() == 0){
+		cerr << "Error: Did not load any TravelPasses." << endl;
+		return false;
+	}
 
 	cout << MESSAGE_MENU_WELCOME << endl;
 
@@ -357,23 +398,38 @@ void UI::enterMenu(Tic::MyTic& tic, mainMenu options,
 
 		case MENU_INDEX_BUY:
 
-			buyTicket(tic, timeOptions, zoneOptions);
+			//buyTicket(tic, timeOptions, zoneOptions);
 			break;
 
 		case MENU_INDEX_CHARGE:
 
-			addCredit(tic);
-			showCredit(tic);
+			//addCredit(tic);
+			//showCredit(tic);
 			break;
 
-		case MENU_INDEX_SHOW:
+		case MENU_INDEX_SHOW_CREDIT:
 
-			showCredit(tic);
+			//showCredit(tic);
 			break;
 
 		case MENU_INDEX_PRINT:
 
-			printPurchases(tic);
+			//printPurchases(tic);
+			break;
+
+		case MENU_INDEX_UPDATE:
+
+			//
+			break;
+
+		case MENU_INDEX_SHOW_STATS:
+
+			//
+			break;
+
+		case MENU_INDEX_ADD:
+
+			//
 			break;
 
 		case MENU_INDEX_QUIT:
@@ -386,8 +442,13 @@ void UI::enterMenu(Tic::MyTic& tic, mainMenu options,
 	}
 
 	// Clean memory.
-	tic.clearPurchases();
+	//tic.clearPurchases();
+	m_system.saveUsersToFile(argv[UI::SaveUsersAndZones]);
+	m_system.saveZonesToFile(argv[UI::SaveUsersAndZones]);
+
 	cout << MESSAGE_MENU_GOODBYE << endl;
+
+	return true;
 
 }
 
@@ -398,7 +459,7 @@ void UI::enterMenu(Tic::MyTic& tic, mainMenu options,
  */
 UI::subMenuOption UI::enterTimeMenu(subMenu timeOptions){
 
-	bool hasQuit = false;
+	/*bool hasQuit = false;
 
 	while (!hasQuit){
 
@@ -458,7 +519,7 @@ UI::subMenuOption UI::enterTimeMenu(subMenu timeOptions){
 
 		}
 
-	}
+	}*/
 
 	return NULL;
 
@@ -471,7 +532,7 @@ UI::subMenuOption UI::enterTimeMenu(subMenu timeOptions){
  */
 UI::subMenuOption UI::enterZoneMenu(subMenu zoneOptions){
 
-	bool hasQuit = false;
+	/*bool hasQuit = false;
 
 	while (!hasQuit){
 
@@ -531,7 +592,7 @@ UI::subMenuOption UI::enterZoneMenu(subMenu zoneOptions){
 
 		}
 
-	}
+	}*/
 
 	return NULL;
 
@@ -583,7 +644,7 @@ Pass::TravelPass* UI::assignTravelPass(subMenuOption timeOption,
 
 	Pass::TravelPass* pass = NULL;
 
-	switch (timeOption->index){
+	/*switch (timeOption->index){
 
 	case MENU_INDEX_TIME_2HOURS:
 
@@ -610,8 +671,10 @@ Pass::TravelPass* UI::assignTravelPass(subMenuOption timeOption,
 
 		break;
 
-	}
+	}*/
 
 	return pass;
+
+}
 
 }

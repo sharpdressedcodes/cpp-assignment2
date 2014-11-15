@@ -8,12 +8,16 @@ namespace Tic {
 
 	class ConsessionTic : public MyTic {
 	protected:
-		static float defaultDiscountRate;
+		static float DEFAULT_DISCOUNT_RATE;
 		float discountRate;
 	public:
+		ConsessionTic();
+		ConsessionTic(float discountRate);
 		virtual ~ConsessionTic();
-		virtual float getDiscountRate() = 0;
+		virtual float getDiscountRate() const = 0;
 		void setDiscountRate(float newValue);
+
+		virtual string toString() const = 0;
 	};
 
 }

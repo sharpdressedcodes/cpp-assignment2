@@ -20,10 +20,14 @@
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include <vector>
+#include "journey.h"
 #include "../System/utility.h"
 
 using std::string;
 using namespace std;
+using std::vector;
+using System::Utility;
 
 namespace Pass {
 
@@ -32,6 +36,7 @@ namespace Pass {
 	  string length;
 	  string zones;
 	  float cost;
+	  vector<Journey*> journeys;
 
 	public:
 	  TravelPass();
@@ -43,10 +48,13 @@ namespace Pass {
 	  virtual string getLength() const;   //Note the use of const
 	  virtual string getZones() const;
 	  virtual float getCost() const;
+	  virtual vector<Journey*> getJourneys();
 
 	  virtual void setLength(string newLength);
 	  virtual void setZones(string newZones);
 	  virtual void setCost(float newCost);
+	  virtual void addJourney(Journey* journey);
+	  virtual void clearJourneys();
 	  virtual bool isTravelPass(TravelPass& pUnknown) = 0;
 	  virtual string toString() = 0;
 	};

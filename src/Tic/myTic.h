@@ -31,7 +31,7 @@ namespace Tic {
 
 	class MyTic {
 
-	private:
+	protected:
 
 	  float credit;
 	  float limit;
@@ -47,24 +47,26 @@ namespace Tic {
 	  MyTic();
 	  MyTic(int maxPasses_);
 	  MyTic(float theCredit, float theLimit, int maxPasses_);
-	  ~MyTic() ;
-	  void input();   // Data input for a MyTic object
-	  void print();  // Data output for a MyTic object
+	  virtual ~MyTic() ;
+	  virtual void input();   // Data input for a MyTic object
+	  virtual void print();  // Data output for a MyTic object
 
-	  float getCredit() const;   //Note the use of const
-	  float getLimit() const;
+	  virtual float getCredit() const;   //Note the use of const
+	  virtual float getLimit() const;
 
-	  unsigned int getMaxPasses() const;
-	  void setMaxPasses(unsigned int newValue);
+	  virtual unsigned int getMaxPasses() const;
+	  virtual void setMaxPasses(unsigned int newValue);
 
 	  /*TO DO  REQUIRED FUNCTIONS REQUIRED FOR PURCHASING A TRAVEL PASS */
 
-	  bool addCredit(float amount);
-	  bool buyPass(Pass::TravelPass* pass);
-	  void clearPurchases();
-	  unsigned int getPurchaseCount() const;
-	  vector<Pass::TravelPass*> getPurchases() const;
-	  float getPurchaseTotal() const;
+	  virtual bool addCredit(float amount);
+	  virtual bool buyPass(Pass::TravelPass* pass);
+	  virtual void clearPurchases();
+	  virtual unsigned int getPurchaseCount() const;
+	  virtual vector<Pass::TravelPass*> getPurchases() const;
+	  virtual float getPurchaseTotal() const;
+
+	  virtual string toString() const = 0;
 
 	};
 

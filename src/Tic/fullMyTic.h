@@ -7,7 +7,11 @@
 namespace Tic {
 
 	class FullMyTic : public MyTic {
+	public:
+		FullMyTic();
+		~FullMyTic();
 
+		string toString() const;
 	};
 
 }

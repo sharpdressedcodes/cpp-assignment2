@@ -1,48 +1,38 @@
-/*
- * baseUser.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
 
 #ifndef BASEUSER_H_
 #define BASEUSER_H_
 
 #include <string>
+#include "../Tic/myTic.h"
 
 using std::string;
 
 namespace User {
 
-	/*enum UserType {
-		Adult,
-		Junior,
-		Senior
-	};*/
-
 	class BaseUser {
 
 	public:
-		enum UserType {
-			Adult,
-			Junior,
-			Senior
-		};
-		BaseUser(string id, string name, string email, UserType type);
-		string getId();
-		string getName();
-		BaseUser::UserType getType();
-		string getEmail();
-		void setId(string newValue);
-		void setName(string newValue);
-		void setEmail(string newValue);
-		void setType(UserType newValue);
+
+		BaseUser(string id, string name, string email, float credit);
+		virtual ~BaseUser();
+		virtual string getId() const;
+		virtual string getName() const;
+		virtual string getEmail() const;
+		virtual float getCredit() const;
+		virtual Tic::MyTic* getTic() const;
+		virtual void setId(string newValue);
+		virtual void setName(string newValue);
+		virtual void setEmail(string newValue);
+		virtual void setCredit(float newValue);
+		virtual void setTic(Tic::MyTic* newValue);
+		virtual bool addCredit(float newValue);
 
 	protected:
 		string id;
 		string name;
 		string email;
-		BaseUser::UserType type;
+		float credit;
+		Tic::MyTic* tic;
 	};
 
 }

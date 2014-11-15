@@ -30,6 +30,7 @@ namespace Pass {
 		static const string DEFAULT_ZONES;
 
 		TwoHoursZone1();
+		TwoHoursZone1(float theCost);
 		TwoHoursZone1(string theLength, string theZones, float theCost);
 		~TwoHoursZone1();
 		void input();   // Data input for a TwoHoursZone1 object

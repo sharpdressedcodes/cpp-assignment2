@@ -17,6 +17,7 @@
 #include "../Pass/twoHoursZone1And2.h"
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
+#include "../System/myTicSystem.h"
 #include "../System/utility.h"
 #include <string>
 #include <vector>
@@ -25,8 +26,9 @@ using namespace std;
 using std::vector;
 using namespace Pass;
 using Pass::AllDayZone1;
+using System::Utility;
 
-enum MENU_OPTIONS {
+/*enum MENU_OPTIONS {
 	MENU_INDEX_QUIT,
 	MENU_INDEX_BUY,
 	MENU_INDEX_CHARGE,
@@ -47,7 +49,9 @@ enum MENU_ZONE_OPTIONS {
 	MENU_INDEX_ZONE_1AND2 = 'b',
 	MENU_INDEX_ZONE_CANCEL = 'c',
 	MAX_MENU_ZONE = 3
-};
+};*/
+
+namespace Ui {
 
 /*
  * User Interface (UI).
@@ -65,13 +69,23 @@ private:
 	UI(UI const&){}
 	UI& operator=(UI const&);//{}
 	static UI *m_instance;
+	static System::MyTicSystem m_system;
 
+	static string MENU_STRING_BUY;
+	static string MENU_STRING_CHARGE;
+	static string MENU_STRING_SHOW_CREDIT;
+	static string MENU_STRING_PRINT;
+	static string MENU_STRING_UPDATE;
+	static string MENU_STRING_SHOW_STATS;
+	static string MENU_STRING_ADD;
 	static string MENU_STRING_QUIT;
+
+	/*static string MENU_STRING_QUIT;
 	static string MENU_STRING_BUY;
 	static string MENU_STRING_CHARGE;
 	static string MENU_STRING_SHOW;
 	static string MENU_STRING_PRINT;
-	static string MENU_STRING_CANCEL;
+	static string MENU_STRING_CANCEL;*/
 
 	static string CREDIT_PREFIX;
 	static string YOU_PURCHASED_PREFIX;
@@ -98,6 +112,26 @@ private:
 
 public:
 
+	enum MENU_OPTIONS {
+		MENU_INDEX_BUY,
+		MENU_INDEX_CHARGE,
+		MENU_INDEX_SHOW_CREDIT,
+		MENU_INDEX_PRINT,
+		MENU_INDEX_UPDATE,
+		MENU_INDEX_SHOW_STATS,
+		MENU_INDEX_ADD,
+		MENU_INDEX_QUIT,
+		MAX_MENU
+	};
+
+	enum ARG_ORDER {
+		App,
+		LoadStations,
+		LoadUsersAndZones,
+		SaveUsersAndZones,
+		ARG_ORDER_MAX
+	};
+
 	/*
 	 * Since there is 1 main menu and 2 sub menus and they don't differ much
 	 * it makes sense to use a template. For now, this swaps int and char.
@@ -116,14 +150,15 @@ public:
 	typedef vector<subMenuOption> subMenu;
 
 	static UI *instance();
+	static System::MyTicSystem& system();
 	void loadMenu(mainMenu& options);
 	void loadTimeMenu(subMenu& timeOptions);
 	void loadZoneMenu(subMenu& zoneOptions);
 	void deleteMenu(mainMenu& options);
 	void deleteTimeMenu(subMenu& timeOptions);
 	void deleteZoneMenu(subMenu& zoneOptions);
-	void enterMenu(Tic::MyTic& tic, mainMenu options,
-			subMenu timeOptions, subMenu zoneOptions);
+	bool enterMenu(/*Tic::MyTic& tic, */int argc, char *argv[], mainMenu options);//,
+			//subMenu timeOptions, subMenu zoneOptions);
 	subMenuOption enterTimeMenu(subMenu timeOptions);
 	subMenuOption enterZoneMenu(subMenu zoneOptions);
 	void showCredit(const Tic::MyTic& tic);
@@ -136,5 +171,7 @@ public:
 			subMenuOption zoneOption);
 
 };
+
+}
 
 #endif /* UI_H_ */

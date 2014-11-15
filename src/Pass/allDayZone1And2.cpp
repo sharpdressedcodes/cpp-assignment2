@@ -19,6 +19,12 @@ namespace Pass {
 	AllDayZone1And2::AllDayZone1And2()
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
 
+	AllDayZone1And2::AllDayZone1And2(float theCost)
+		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
+
+	AllDayZone1And2::AllDayZone1And2(string theLength, string theZones, float theCost)
+		: TravelPass(theLength, theZones, theCost) {}
+
 	AllDayZone1And2::~AllDayZone1And2(){}
 
 	/*

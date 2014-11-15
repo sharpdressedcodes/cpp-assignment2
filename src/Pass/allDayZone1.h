@@ -29,6 +29,7 @@ namespace Pass {
 		static const string DEFAULT_ZONES;
 
 		AllDayZone1();
+		AllDayZone1(float theCost);
 		AllDayZone1(string theLength, string theZones, float theCost);
 		~AllDayZone1();
 		void input();   // Data input for a AllDayZone1 object
