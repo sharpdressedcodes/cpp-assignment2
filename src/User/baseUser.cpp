@@ -10,6 +10,10 @@
 
 namespace User {
 
+	const unsigned int BaseUser::ID_LEN_MAX = 2;
+	const unsigned int BaseUser::NAME_LEN_MAX = 100;
+	const unsigned int BaseUser::EMAIL_LEN_MAX = 100;
+
 	BaseUser::BaseUser(string id, string name, string email, float credit){
 
 		this->id = id;
@@ -20,7 +24,9 @@ namespace User {
 
 	}
 
-	BaseUser::~BaseUser(){}
+	BaseUser::~BaseUser(){
+		delete this->tic;
+	}
 
 	string BaseUser::getId() const {
 		return this->id;

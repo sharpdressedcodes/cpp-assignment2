@@ -29,6 +29,7 @@ namespace Pass {
 		static const string DEFAULT_ZONES;
 
 		AllDayZone1();
+//		AllDayZone1(const AllDayZone1& zone);
 		AllDayZone1(float theCost);
 		AllDayZone1(string theLength, string theZones, float theCost);
 		~AllDayZone1();
@@ -39,6 +40,7 @@ namespace Pass {
 
 		friend ostream& operator<<(ostream& stream, AllDayZone1& pass);
 		friend istream& operator>>(istream& stream, AllDayZone1& pass);
+		bool canAddJourney(Journey* journey);
 
 	};
 

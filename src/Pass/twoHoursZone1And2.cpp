@@ -102,4 +102,12 @@ namespace Pass {
 
 	}
 
+
+	bool TwoHoursZone1And2::canAddJourney(Journey* journey){
+
+		// TODO: implement canAddJourney
+		return true;
+
+	}
+
 }

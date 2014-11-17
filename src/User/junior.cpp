@@ -9,4 +9,6 @@ namespace User {
 
 	}
 
+	Junior::~Junior(){}
+
 }

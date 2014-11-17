@@ -7,14 +7,16 @@ const string MyTicSystem::USER_FILE_FLAG = "#users";
 const string MyTicSystem::ZONE_FILE_FLAG = "#prices";
 const string MyTicSystem::COMMENT_FILE_FLAG = "#";
 const string MyTicSystem::FILE_DATA_DELIM = ":";
+const unsigned int MyTicSystem::MAX_TRAVELPASSES = 100;
 
 MyTicSystem::MyTicSystem(){}
 
 MyTicSystem::~MyTicSystem(){
-	// TODO: save users
-	// TODO: save prices
+
 	Utility::deleteObjectMap(this->users);
 	Utility::deleteObjectMap(this->stations);
+	Utility::deleteObjectMap(this->passes);
+
 }
 
 map<string, User::BaseUser*> MyTicSystem::getUsers(){
@@ -41,48 +43,29 @@ Pass::TravelPass* MyTicSystem::getPass(const string& id){
 	return this->passes.count(id) == 0 ? NULL : this->passes[id];
 }
 
-string MyTicSystem::getStationsFilename() const {
-	return this->stationsFilename;
-}
-
-string MyTicSystem::getTicsInputFilename() const {
-	return this->ticsInputFilename;
-}
-
-string MyTicSystem::getTicsOutputFilename() const {
-	return this->ticsOutputFilename;
-}
-
-void MyTicSystem::setStationsFilename(string newValue){
-	this->stationsFilename = newValue;
-}
-
-void MyTicSystem::setTicsInputFilename(string newValue){
-	this->ticsInputFilename = newValue;
-}
-
-void MyTicSystem::setTicsOutputFilename(string newValue){
-	this->ticsOutputFilename = newValue;
-}
-
 void MyTicSystem::clearUsers(){
+
 	Utility::deleteObjectMap(this->users);
 	this->users.clear();
+
 }
 
 void MyTicSystem::clearStations(){
+
 	Utility::deleteObjectMap(this->stations);
 	this->stations.clear();
+
 }
 
 void MyTicSystem::clearPasses(){
+
 	Utility::deleteObjectMap(this->passes);
 	this->passes.clear();
+
 }
 
 bool MyTicSystem::loadStationsFromFile(const string& filename){
 
-	bool result = false;
 	ifstream fs;
 
 	clearStations();
@@ -112,12 +95,11 @@ bool MyTicSystem::loadStationsFromFile(const string& filename){
 
 	}
 
-	return result;
+	return this->stations.size() > 0;
 }
 
 bool MyTicSystem::loadUsersFromFile(const string& filename){
 
-	bool result = false;
 	bool parsing = false;
 	ifstream fs;
 
@@ -141,7 +123,7 @@ bool MyTicSystem::loadUsersFromFile(const string& filename){
 			} else if(Utility::startsWith(line, ZONE_FILE_FLAG)){
 				parsing = false;
 				continue;
-			} else if (line.substr(0, COMMENT_FILE_FLAG.length()) == COMMENT_FILE_FLAG){
+			} else if (Utility::startsWith(line, COMMENT_FILE_FLAG)){
 				continue;
 			}
 
@@ -164,14 +146,12 @@ bool MyTicSystem::loadUsersFromFile(const string& filename){
 
 	}
 
-
-	return result;
+	return this->users.size() > 0;
 
 }
 
 bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 
-	bool result = false;
 	bool parsing = false;
 	ifstream fs;
 
@@ -195,10 +175,9 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 			} else if(Utility::startsWith(line, USER_FILE_FLAG)){
 				parsing = false;
 				continue;
-			} else if (line.substr(0, COMMENT_FILE_FLAG.length()) == COMMENT_FILE_FLAG){
+			} else if (Utility::startsWith(line, COMMENT_FILE_FLAG)){
 				continue;
 			}
-
 
 			if (parsing){
 				Pass::TravelPass* pass = zoneFromString(line);
@@ -209,7 +188,9 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 						cerr << pass->toString() << " already exists\n";
 						return false;
 					}
-					this->passes[pass->toString()] = pass;
+					stringstream ss;
+					ss << prepareLengthAsKey(pass->getLength()) << prepareZoneAsKey(pass->getZones());
+					this->passes[ss.str()] = pass;
 				}
 			}
 
@@ -219,8 +200,7 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 
 	}
 
-
-	return result;
+	return this->passes.size() > 0;
 
 }
 
@@ -282,7 +262,6 @@ Pass::TravelPass* MyTicSystem::zoneFromString(const string& data){
 	else if (!Utility::isNumeric(arr.at(2), true))
 		return NULL;
 
-
 	Pass::TravelPass* pass = NULL;
 	float cost = Utility::stringToFloat(arr.at(2));
 
@@ -333,12 +312,8 @@ void MyTicSystem::saveZonesToFile(const string& filename){
 
 	for (map<string, Pass::TravelPass*>::const_iterator it = this->passes.begin(); it != this->passes.end(); ++it){
 		vector<string> arr;
-		string length = Utility::replace(it->second->getLength(), " ");
-		string zones = Utility::replace(it->second->getZones(), "Zones ", "Zone");
-		zones = Utility::replace(zones, " and ");
-		zones = Utility::replace(zones, " ");
-		arr.push_back(Utility::replace(length, "s"));
-		arr.push_back(zones);
+		arr.push_back(prepareLengthAsKey(it->second->getLength()));
+		arr.push_back(prepareZoneAsKey(it->second->getZones()));
 		arr.push_back(Utility::floatToString(it->second->getCost(), 2));
 		lines.push_back(Utility::implode(arr, FILE_DATA_DELIM));
 	}
@@ -368,6 +343,83 @@ string MyTicSystem::userTypeToString(User::BaseUser* user){
 		return "adult";
 	else //if (dynamic_cast<User::Junior*>(user) != NULL)
 		return "junior";
+
+}
+
+size_t MyTicSystem::getLongestUserIdLength(){
+
+	size_t len = 0;
+
+	for (map<string, User::BaseUser*>::const_iterator it = users.begin(); it != users.end(); ++it)
+		if (it->second->getId().length() > len)
+			len = it->second->getId().length();
+
+	return len;
+
+}
+
+size_t MyTicSystem::getLongestStationIdLength(){
+
+	size_t len = 0;
+
+	for (map<string, Station*>::const_iterator it = stations.begin(); it != stations.end(); ++it)
+		if (it->second->getName().length() > len)
+			len = it->second->getName().length();
+
+	return len;
+
+}
+
+string MyTicSystem::prepareLengthAsKey(const string& length){
+
+	string result = Utility::replace(length, " ");
+
+	result = Utility::replace(result, "s");
+
+	return result;
+
+}
+
+string MyTicSystem::prepareZoneAsKey(const string& zone){
+
+	string result = Utility::replace(zone, "Zones ", "Zone");
+
+	result = Utility::replace(result, " and ");
+	result = Utility::replace(result, " ");
+
+	return result;
+
+}
+
+void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
+
+	bool b = false;
+	vector<TravelPass*> purchases = user->getTic()->getPurchases();
+
+	if (purchases.size() > 0){
+		TravelPass *pass1 = purchases.at(purchases.size() - 1);
+		if (pass1 && pass1->canAddJourney(journey)){
+			//user->getTic()->buyPass(pass1);
+			//user->addCredit(-pass1->getCost());
+			pass1->addJourney(journey);
+			b = true;
+		}
+	}
+
+	if (!b){
+		// TODO: add logic
+		TravelPass *p = passes.at("2HourZone1");
+		Pass::TwoHoursZone1 *pass = new Pass::TwoHoursZone1(p->getLength(), p->getZones(), p->getCost());
+
+		// remember to delete the pass if there is an error
+
+		user->getTic()->buyPass(pass);
+		user->addCredit(-pass->getCost());
+		pass->addJourney(journey);
+	}
+
+	journey->getFromStation()->incrementStartedJourneys();
+	journey->getToStation()->incrementFinishedJourneys();
 
 }
 

@@ -24,7 +24,9 @@ namespace Tic {
 	MyTic::MyTic(float theCredit, float theLimit, int maxPasses_)
 	: credit(theCredit), limit(theLimit), maxPasses(maxPasses_){}
 
-	MyTic::~MyTic(){}
+	MyTic::~MyTic(){
+		Utility::deleteObjectVector(purchases);
+	}
 
 	float MyTic::getCredit() const {
 		return credit;
@@ -74,7 +76,7 @@ namespace Tic {
 	 */
 	bool MyTic::buyPass(Pass::TravelPass* pass){
 
-		if (purchases.size() >= maxPasses)
+		if (maxPasses > 0 && purchases.size() >= maxPasses)
 			return false;
 
 		addCredit(-pass->getCost());
@@ -89,9 +91,7 @@ namespace Tic {
 	 */
 	void MyTic::clearPurchases(){
 
-		for (size_t i = 0; i < purchases.size(); i++)
-			delete purchases[i];
-
+		Utility::deleteObjectVector(purchases);
 		purchases.clear();
 
 	}

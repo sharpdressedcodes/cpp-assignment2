@@ -10,5 +10,7 @@ namespace User {
 
 	}
 
+	Senior::~Senior(){}
+
 }
 

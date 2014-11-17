@@ -26,13 +26,11 @@ namespace System {
 		map<string, User::BaseUser*> users;
 		map<string, Station*> stations;
 		map<string, Pass::TravelPass*> passes;
-		string stationsFilename;
-		string ticsInputFilename;
-		string ticsOutputFilename;
 		static const string USER_FILE_FLAG;
 		static const string ZONE_FILE_FLAG;
 		static const string COMMENT_FILE_FLAG;
 		static const string FILE_DATA_DELIM;
+		static const unsigned int MAX_TRAVELPASSES;
 	public:
 		MyTicSystem();
 		~MyTicSystem();
@@ -42,12 +40,6 @@ namespace System {
 		User::BaseUser* getUser(const string& id);
 		Station* getStation(const string& id);
 		Pass::TravelPass* getPass(const string& id);
-		string getStationsFilename() const;
-		string getTicsInputFilename() const;
-		string getTicsOutputFilename() const;
-		void setStationsFilename(string newValue);
-		void setTicsInputFilename(string newValue);
-		void setTicsOutputFilename(string newValue);
 		void clearUsers();
 		void clearStations();
 		void clearPasses();
@@ -61,6 +53,11 @@ namespace System {
 		void saveZonesToFile(const string& filename);
 		UserType userStringToType(const string& data);
 		string userTypeToString(User::BaseUser* user);
+		size_t getLongestUserIdLength();
+		size_t getLongestStationIdLength();
+		static string prepareLengthAsKey(const string& length);
+		static string prepareZoneAsKey(const string& zone);
+		void addJourney(User::BaseUser* user, Pass::Journey* journey);
 	};
 
 }

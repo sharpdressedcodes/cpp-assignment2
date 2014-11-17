@@ -57,6 +57,7 @@ namespace Pass {
 	  virtual void clearJourneys();
 	  virtual bool isTravelPass(TravelPass& pUnknown) = 0;
 	  virtual string toString() = 0;
+	  virtual bool canAddJourney(Journey* journey) = 0;
 	};
 
 }

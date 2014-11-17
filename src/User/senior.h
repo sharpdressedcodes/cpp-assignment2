@@ -10,6 +10,7 @@ namespace User {
 	class Senior : public BaseUser {
 	public:
 		Senior(string id, string name, string email, float credit);
+		~Senior();
 	};
 
 }

@@ -12,6 +12,8 @@
 
 namespace System {
 
+const unsigned int Utility::STRING_CASE_CONVERSION = 32;
+
 /*
  * Function to clear the input buffer.
  */
@@ -30,7 +32,7 @@ void Utility::clearInputBuffer(){
  */
 int Utility::getIntFromConsole(const unsigned int min,
 		const unsigned int max, const string& message,
-		const string& errorMessage, bool allowEmpty = true){
+		const string& errorMessage, bool allowEmpty){
 
 	int i = -1;
 	bool isValid = false;
@@ -72,7 +74,7 @@ int Utility::getIntFromConsole(const unsigned int min,
  */
 string Utility::getStringFromConsole(const unsigned int min,
 		const unsigned int max, const string& message,
-		const string& errorMessage, bool allowEmpty = true){
+		const string& errorMessage, bool allowEmpty){
 
 	bool isValid = false;
 	string result;
@@ -92,6 +94,103 @@ string Utility::getStringFromConsole(const unsigned int min,
 			isValid = true;
 
 		}
+
+	}
+
+	return result;
+
+}
+
+string Utility::getStringChoiceFromConsole(const vector<string>& choices,
+		const string& message, const string& errorMessage, bool allowEmpty){
+
+	string result;
+	bool isValid = false;
+	size_t smallestLength = 1000;
+	size_t longestLength = 0;
+
+	for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+		size_t len = (*it).length();
+		if (smallestLength > len)
+			smallestLength = len;
+		if (longestLength < len)
+			longestLength = len;
+	}
+
+	while (!isValid){
+
+		cout << message;
+		cin.clear();
+		getline(cin, result);
+
+		if (result.length() == 0 && allowEmpty)
+			return result;
+
+		if (result.length() < smallestLength){
+			cerr << errorMessage << endl;
+			continue;
+		} else if (result.length() > longestLength){
+			cerr << errorMessage << endl;
+			continue;
+		}
+
+		for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+			if (result.compare((*it).c_str()) == 0){
+				isValid = true;
+				break;
+			}
+		}
+
+		if (!isValid)
+			cerr << errorMessage << endl;
+
+	}
+
+	return result;
+
+}
+
+string Utility::getSubstringChoiceFromConsole(const unsigned int min,
+			const vector<string>& choices, const string& message,
+			const string& errorMessage, bool allowEmpty){
+
+	string result;
+	bool isValid = false;
+	size_t smallestLength = min;
+	size_t longestLength = 0;
+
+	for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+		size_t len = (*it).length();
+		if (longestLength < len)
+			longestLength = len;
+	}
+
+	while (!isValid){
+
+		cout << message;
+		cin.clear();
+		getline(cin, result);
+
+		if (result.length() == 0 && allowEmpty)
+			return result;
+
+		if (result.length() < smallestLength){
+			cerr << errorMessage << endl;
+			continue;
+		} else if (result.length() > longestLength){
+			cerr << errorMessage << endl;
+			continue;
+		}
+
+		for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+			if (Utility::toLower(result).compare(Utility::toLower((*it).substr(0, result.length())).c_str()) == 0){
+				isValid = true;
+				break;
+			}
+		}
+
+		if (!isValid)
+			cerr << errorMessage << endl;
 
 	}
 
@@ -305,13 +404,6 @@ string Utility::ltrim(const string& str, const string& lookup){
 
 	string result(str);
 
-		/*	bool b = result.compare(0, lookup.length(), lookup.c_str()) == 0;
-
-	while (b && lookup.length() < result.length()){
-		result = result.substr(lookup.length());
-		b = result.compare(0, lookup.length(), lookup.c_str()) == 0;
-	}*/
-
 	while (Utility::startsWith(result, lookup) && lookup.length() < result.length())
 		result = result.substr(lookup.length());
 
@@ -323,18 +415,6 @@ string Utility::ltrim(const string& str, const string& lookup){
 string Utility::rtrim(const string& str, const string& lookup){
 
 	string result(str);
-
-	/*if (result.length() == 0 || result.compare(lookup) == 0){
-		result = "";
-		return result;
-	}
-
-	bool b = result.compare(result.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
-
-	while (b){
-		result = result.substr(0, result.length() - lookup.length());
-		b = result.compare(result.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
-	}*/
 
 	while (Utility::endsWith(result, lookup))
 		result = result.substr(0, result.length() - lookup.length());
@@ -367,6 +447,36 @@ string Utility::replace(const string& str, const string& lookup, string replacem
 
 	return result;
 
+}
+
+string Utility::toLower(const string& str){
+
+	string s(str), result;
+
+	for (string::iterator it = s.begin(); it != s.end(); ++it){
+		char c = (*it);
+		result.append(1, c > 'A' - 1 && c < 'Z' + 1 ? c + STRING_CASE_CONVERSION : c);
+	}
+
+	return result;
+
+}
+
+string Utility::toUpper(const string& str){
+
+	string s(str), result;
+
+	for (string::iterator it = s.begin(); it != s.end(); ++it){
+		char c = (*it);
+		result.append(1, c > 'a' - 1 && c < 'z' + 1 ? c - STRING_CASE_CONVERSION : c);
+	}
+
+	return result;
+
+}
+
+string Utility::reverse(const string& str){
+	return string(str.rbegin(), str.rend());
 }
 
 }

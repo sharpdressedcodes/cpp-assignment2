@@ -13,8 +13,12 @@ namespace User {
 
 	public:
 
+		static const unsigned int ID_LEN_MAX;
+		static const unsigned int NAME_LEN_MAX;
+		static const unsigned int EMAIL_LEN_MAX;
+
 		BaseUser(string id, string name, string email, float credit);
-		virtual ~BaseUser();
+		virtual ~BaseUser() = 0;
 		virtual string getId() const;
 		virtual string getName() const;
 		virtual string getEmail() const;

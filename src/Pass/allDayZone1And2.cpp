@@ -102,4 +102,14 @@ namespace Pass {
 
 	}
 
+
+	bool AllDayZone1And2::canAddJourney(Journey* journey){
+
+		// TODO: implement canAddJourney
+		return true;
+
+	}
+
+
+
 }

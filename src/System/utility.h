@@ -39,6 +39,8 @@ private:
 	Utility(Utility const&){}
 	Utility& operator=(Utility const&);//{}
 
+	static const unsigned int STRING_CASE_CONVERSION;
+
 public:
 
 	/*
@@ -51,10 +53,16 @@ public:
 	 */
 	static int getIntFromConsole(const unsigned int min,
 			const unsigned int max, const string& message,
-			const string& errorMessage, bool allowEmpty);
+			const string& errorMessage, bool allowEmpty = false);
 	static string getStringFromConsole(const unsigned int min,
 			const unsigned int max, const string& message,
-			const string& errorMessage, bool allowEmpty);
+			const string& errorMessage, bool allowEmpty = false);
+	static string getStringChoiceFromConsole(const vector<string>& choices,
+			const string& message, const string& errorMessage,
+			bool allowEmpty = false);
+	static string getSubstringChoiceFromConsole(const unsigned int min,
+			const vector<string>& choices, const string& message,
+			const string& errorMessage, bool allowEmpty = false);
 	static int stringToInt(const string& str);
 	static float stringToFloat(const string& str);
 	static string intToString(const int number);
@@ -73,6 +81,9 @@ public:
 	static string rtrim(const string& str, const string& lookup);
 	static string trim(const string& str, const string& lookup);
 	static string replace(const string& str, const string& lookup, string replacement = std::string(), bool all = true);
+	static string toLower(const string& str);
+	static string toUpper(const string& str);
+	static string reverse(const string& str);
 
 
 	template <class T>
@@ -88,6 +99,14 @@ public:
 
 		for (size_t i = 0; i < keys.size(); i++)
 			delete objectMap[keys[i]];
+
+	}
+
+	template <class T>
+	static void deleteObjectVector(vector<T> objectVector){
+
+		for (size_t i = 0; i < objectVector.size(); i++)
+			delete objectVector[i];
 
 	}
 

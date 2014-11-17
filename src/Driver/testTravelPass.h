@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include "../System/myTicSystem.h"
 #include "../Tic/myTic.h"
-#include "../Ui/uI.h"
+#include "../Ui/console.h"
 #include "../Pass/travelPass.h"
 #include "../Pass/twoHoursZone1.h"
 #include "../Pass/twoHoursZone1And2.h"
@@ -30,6 +30,6 @@
 #include "../Pass/allDayZone1And2.h"
 #define MAX_TRAVELPASSES 100
 using namespace std;
-using Ui::UI;
+//using Ui::ConsoleUI;
 
 #endif

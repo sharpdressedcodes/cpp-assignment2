@@ -13,12 +13,14 @@
 namespace Pass {
 
 	TravelPass::TravelPass()
-		: cost(0) {}
+		: length(string()), zones(string()), cost(0) {}
 
 	TravelPass::TravelPass(string theLength, string theZones, float theCost)
 		: length(theLength), zones(theZones), cost(theCost){}
 
-	TravelPass::~TravelPass(){}
+	TravelPass::~TravelPass(){
+		Utility::deleteObjectVector(journeys);
+	}
 
 	string TravelPass::getLength() const {
 		return length;
@@ -49,11 +51,18 @@ namespace Pass {
 	}
 
 	void TravelPass::addJourney(Journey* journey){
-		this->journeys.push_back(journey);
+
+		if (canAddJourney(journey)){
+			this->journeys.push_back(journey);
+		}
+
 	}
 
 	void TravelPass::clearJourneys(){
+
+		Utility::deleteObjectVector(journeys);
 		this->journeys.clear();
+
 	}
 
 }

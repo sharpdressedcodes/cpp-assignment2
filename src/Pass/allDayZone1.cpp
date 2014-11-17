@@ -19,6 +19,11 @@ namespace Pass {
 	AllDayZone1::AllDayZone1()
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
 
+//	AllDayZone1::AllDayZone1(const AllDayZone1& zone)
+//		: TravelPass(zone.getLength(), zone.getZones(), zone.getCost()) {
+//
+//	}
+
 	AllDayZone1::AllDayZone1(float theCost)
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
 
@@ -101,5 +106,23 @@ namespace Pass {
 		return stream;
 
 	}
+
+
+
+
+
+
+	bool AllDayZone1::canAddJourney(Journey* journey){
+
+		// TODO: implement canAddJourney
+		return true;
+
+	}
+
+
+
+
+
+
 
 }

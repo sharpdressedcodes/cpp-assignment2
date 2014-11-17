@@ -8,8 +8,8 @@
 * Start up code provided by Robert T.McQuillan
 ****************************************************************************/
 
-#ifndef UI_H_
-#define UI_H_
+#ifndef CONSOLEUI_H_
+#define CONSOLEUI_H_
 
 #include "../Tic/myTic.h"
 #include "../Pass/travelPass.h"
@@ -18,8 +18,9 @@
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
 #include "../System/myTicSystem.h"
+#include "baseUI.h"
 #include "../System/utility.h"
-#include <string>
+//#include <string>
 #include <vector>
 
 using namespace std;
@@ -58,18 +59,9 @@ namespace Ui {
  * This class is implemented as a Singleton because it makes
  * sense to have one class controlling the UI.
  */
-class UI {
+class Console : public BaseUI {
 
 private:
-
-	/*
-	 * Hide constructors and self instance variable.
-	 */
-	UI(){}
-	UI(UI const&){}
-	UI& operator=(UI const&);//{}
-	static UI *m_instance;
-	static System::MyTicSystem m_system;
 
 	static string MENU_STRING_BUY;
 	static string MENU_STRING_CHARGE;
@@ -113,7 +105,7 @@ private:
 public:
 
 	enum MENU_OPTIONS {
-		MENU_INDEX_BUY,
+		MENU_INDEX_BUY = 1,
 		MENU_INDEX_CHARGE,
 		MENU_INDEX_SHOW_CREDIT,
 		MENU_INDEX_PRINT,
@@ -129,7 +121,7 @@ public:
 		LoadStations,
 		LoadUsersAndZones,
 		SaveUsersAndZones,
-		ARG_ORDER_MAX
+		MAX_ARG_ORDER
 	};
 
 	/*
@@ -144,34 +136,52 @@ public:
 		bool isQuit;
 	};
 
-	typedef UI::menuOptions<int>* mainMenuOption;
-	typedef UI::menuOptions<char>* subMenuOption;
+	typedef Console::menuOptions<int>* mainMenuOption;
+	typedef Console::menuOptions<char>* subMenuOption;
 	typedef vector<mainMenuOption> mainMenu;
 	typedef vector<subMenuOption> subMenu;
 
-	static UI *instance();
-	static System::MyTicSystem& system();
-	void loadMenu(mainMenu& options);
-	void loadTimeMenu(subMenu& timeOptions);
-	void loadZoneMenu(subMenu& zoneOptions);
-	void deleteMenu(mainMenu& options);
-	void deleteTimeMenu(subMenu& timeOptions);
-	void deleteZoneMenu(subMenu& zoneOptions);
-	bool enterMenu(/*Tic::MyTic& tic, */int argc, char *argv[], mainMenu options);//,
-			//subMenu timeOptions, subMenu zoneOptions);
-	subMenuOption enterTimeMenu(subMenu timeOptions);
-	subMenuOption enterZoneMenu(subMenu zoneOptions);
-	void showCredit(const Tic::MyTic& tic);
-	void addCredit(Tic::MyTic& tic);
-	bool buyTicket(Tic::MyTic& tic, subMenu timeOptions, subMenu zoneOptions);
-	void printPurchases(Tic::MyTic& tic);
-	bool validateTimeOption(const char option, subMenu timeOptions);
-	bool validateZoneOption(const char option, subMenu zoneOptions);
-	Pass::TravelPass* assignTravelPass(subMenuOption timeOption,
-			subMenuOption zoneOption);
+	Console();
+	~Console();
+	bool run(int argc, char *argv[]);
+	bool buyJourney();
+	User::BaseUser* rechargeTic();
+	void showCredit(User::BaseUser* user = NULL);
+	void printReports();
+	bool updatePricing();
+	void showStatistics();
+	bool addUser();
 
+	//void loadMenu(mainMenu& options);
+	//void loadTimeMenu(subMenu& timeOptions);
+	//void loadZoneMenu(subMenu& zoneOptions);
+	//void deleteMenu(mainMenu& options);
+	//void deleteTimeMenu(subMenu& timeOptions);
+	//void deleteZoneMenu(subMenu& zoneOptions);
+	//bool enterMenu(/*Tic::MyTic& tic, */int argc, char *argv[], mainMenu options);//,
+			//subMenu timeOptions, subMenu zoneOptions);
+	//subMenuOption enterTimeMenu(subMenu timeOptions);
+	//subMenuOption enterZoneMenu(subMenu zoneOptions);
+	//void showCredit(const Tic::MyTic& tic);
+	//void addCredit(Tic::MyTic& tic);
+	//bool buyTicket(Tic::MyTic& tic, subMenu timeOptions, subMenu zoneOptions);
+	//void printPurchases(Tic::MyTic& tic);
+	//bool validateTimeOption(const char option, subMenu timeOptions);
+	//bool validateZoneOption(const char option, subMenu zoneOptions);
+	//Pass::TravelPass* assignTravelPass(subMenuOption timeOption,
+		//subMenuOption zoneOption);
+
+private:
+	mainMenu m_options;
+
+	void loadMenu();
+	void deleteMenu();
+	User::BaseUser* getUserFromConsole();
+	System::Station* getStationFromConsole(string prefix = string());
+	Pass::TravelPass* getPassFromConsole(string suffix = string());
+	string getTimeFromConsole(string prefix = string());
 };
 
 }
 
-#endif /* UI_H_ */
+#endif /* CONSOLEUI_H_ */
