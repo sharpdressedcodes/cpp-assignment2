@@ -7,7 +7,8 @@ JuniorMyTic::JuniorMyTic() : ConsessionTic(){
 
 }
 
-JuniorMyTic::JuniorMyTic(float discountRate) : ConsessionTic(discountRate){
+JuniorMyTic::JuniorMyTic(float credit, float discountRate, vector<string> freeDays)
+	: ConsessionTic(credit, discountRate, freeDays){
 
 }
 

@@ -38,6 +38,7 @@ namespace Tic {
 	  /*TO DO ANY FURTHER ATTRIBUTES AND CONSTANTS*/
 	  unsigned int maxPasses;
 	  vector<Pass::TravelPass*> purchases;
+	  vector<string> freeDays;
 
 	public:
 
@@ -46,7 +47,7 @@ namespace Tic {
 
 	  MyTic();
 	  MyTic(int maxPasses_);
-	  MyTic(float theCredit, float theLimit, int maxPasses_);
+	  MyTic(float theCredit, float theLimit, int maxPasses_, vector<string> freeDays = vector<string>());
 	  virtual ~MyTic() ;
 	  virtual void input();   // Data input for a MyTic object
 	  virtual void print();  // Data output for a MyTic object
@@ -55,16 +56,20 @@ namespace Tic {
 	  virtual float getLimit() const;
 
 	  virtual unsigned int getMaxPasses() const;
+	  virtual vector<string> getFreeDays() const;
 	  virtual void setMaxPasses(unsigned int newValue);
+	  virtual void setFreeDays(vector<string> newValue);
 
-	  /*TO DO  REQUIRED FUNCTIONS REQUIRED FOR PURCHASING A TRAVEL PASS */
-
-	  virtual bool addCredit(float amount);
-	  virtual bool buyPass(Pass::TravelPass* pass);
+	  virtual bool isFreeDay(const string& day);
+	  virtual float getRealAmount(const string& day, const float amount) = 0;
+	  virtual bool canAfford(const string& day, const float amount);
+	  virtual bool addCredit(const float amount);
+	  virtual bool buyPass(Pass::TravelPass* pass, const string& day);
 	  virtual void clearPurchases();
 	  virtual unsigned int getPurchaseCount() const;
 	  virtual vector<Pass::TravelPass*> getPurchases() const;
-	  virtual float getPurchaseTotal() const;
+	  virtual float getPurchaseTotal(string day = string()) const;
+	  virtual void removePurchases(string day);
 
 	  virtual string toString() const = 0;
 

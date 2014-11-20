@@ -16,7 +16,7 @@ public:
 	virtual ~BaseUI();
 	System::MyTicSystem getSystem() const;
 	virtual bool run(int argc, char *argv[]) = 0;
-	virtual bool buyJourney() = 0;
+	virtual bool buyJourney(bool debug = false) = 0;
 	virtual User::BaseUser* rechargeTic() = 0;
 	virtual void showCredit(User::BaseUser* user = NULL) = 0;
 	virtual void printReports() = 0;

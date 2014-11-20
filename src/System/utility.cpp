@@ -183,7 +183,7 @@ string Utility::getSubstringChoiceFromConsole(const unsigned int min,
 		}
 
 		for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
-			if (Utility::toLower(result).compare(Utility::toLower((*it).substr(0, result.length())).c_str()) == 0){
+			if (toLower(result).compare(toLower((*it).substr(0, result.length())).c_str()) == 0){
 				isValid = true;
 				break;
 			}

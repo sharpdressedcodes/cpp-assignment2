@@ -3,6 +3,7 @@
 #define SENIORMYTIC_H_
 
 #include "consessionTic.h"
+#include "../System/dateTime.h"
 
 namespace Tic {
 
@@ -10,12 +11,10 @@ namespace Tic {
 
 	public:
 		SeniorMyTic();
-		SeniorMyTic(float discountRate);
+		SeniorMyTic(float credit, float discountRate = ConsessionTic::DEFAULT_DISCOUNT_RATE, vector<string> freeDays = vector<string>());
 		~SeniorMyTic();
 		float getDiscountRate() const;
-
 		string toString() const;
-
 	};
 
 }

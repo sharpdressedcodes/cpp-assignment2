@@ -8,6 +8,7 @@
 #include "../User/adult.h"
 #include "../User/junior.h"
 #include "../User/senior.h"
+#include "../Pass/journey.h"
 #include "station.h"
 
 using std::map;
@@ -58,6 +59,8 @@ namespace System {
 		static string prepareLengthAsKey(const string& length);
 		static string prepareZoneAsKey(const string& zone);
 		void addJourney(User::BaseUser* user, Pass::Journey* journey);
+		void transferJourneys(Pass::TravelPass *fromPass, Pass::TravelPass *toPass);
+		void incrementStations(Pass::Journey *journey);
 	};
 
 }

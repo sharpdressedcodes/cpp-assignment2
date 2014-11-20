@@ -643,7 +643,7 @@ bool Console::run(int argc, char *argv[]){
 
 	map<string, User::BaseUser*> users = m_system.getUsers();
 	for (map<string, User::BaseUser*>::const_iterator it = users.begin(); it != users.end(); ++it)
-		cout << it->first << " " << it->second->getName() << " " << it->second->getEmail() << " " << it->second->getCredit() << endl;
+		cout << it->first << " " << it->second->getName() << " " << it->second->getEmail() << " " << it->second->getTic()->getCredit() << endl;
 
 	map<string, Pass::TravelPass*> passes = m_system.getPasses();
 	for (map<string, Pass::TravelPass*>::const_iterator it = passes.begin(); it != passes.end(); ++it)
@@ -684,7 +684,7 @@ bool Console::run(int argc, char *argv[]){
 
 		case MENU_INDEX_BUY:
 
-			buyJourney();
+			buyJourney(true);
 			break;
 
 		case MENU_INDEX_CHARGE:
@@ -739,37 +739,57 @@ bool Console::run(int argc, char *argv[]){
 
 }
 
-bool Console::buyJourney(){
+bool Console::buyJourney(bool debug){
 
 	const unsigned int minDayLength = 3;
-	vector<string> days;
 	string day, departureTime, arrivalTime;
-	User::BaseUser* user = getUserFromConsole();
-	System::Station* fromStation = getStationFromConsole("From");
-	System::Station* toStation = getStationFromConsole("To");
+	static int ela = 10;
 
-	while (fromStation->getName().compare(toStation->getName()) == 0){
-		cerr << "Error: stations must be different." << endl;
-		toStation = getStationFromConsole("To");
+	if (debug){
+		User::BaseUser* user = m_system.getUser("bs");
+		System::Station* fromStation = m_system.getStation("epping");
+		System::Station* toStation = m_system.getStation("central");
+		day = "Monday";
+		//departureTime = "0700";
+		//arrivalTime = "0800";
+		departureTime = Utility::intToString(ela);
+		departureTime.append("00");
+		arrivalTime = Utility::intToString(ela);
+		arrivalTime.append("20");
+		ela++;
+		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+	} else {
+		User::BaseUser* user = getUserFromConsole();
+		System::Station* fromStation = getStationFromConsole("From");
+		System::Station* toStation = getStationFromConsole("To");
+
+		while (fromStation->getName().compare(toStation->getName()) == 0){
+			cerr << "Error: stations must be different." << endl;
+			toStation = getStationFromConsole("To");
+		}
+
+		day = Utility::getSubstringChoiceFromConsole(
+			minDayLength,
+			System::DateTime::getDaysAsVector(),
+			"What day: ",
+			"Error: Invalid day."
+		);
+		departureTime = getTimeFromConsole("Departure ");
+		arrivalTime = getTimeFromConsole("Arrival ");
+
+		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
 	}
 
-	days.push_back("Monday");
-	days.push_back("Tuesday");
-	days.push_back("Wednesday");
-	days.push_back("Thursday");
-	days.push_back("Friday");
-	days.push_back("Saturday");
-	days.push_back("Sunday");
 
-	day = Utility::getSubstringChoiceFromConsole(minDayLength, days, "What day: ", "Error: Invalid day.");
-	departureTime = getTimeFromConsole("Departure ");
-	arrivalTime = getTimeFromConsole("Arrival ");
 
-	Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
-	m_system.addJourney(user, journey);
-	//cout << journey->toString() << endl;
+	//Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+	//m_system.addJourney(user, journey);
 
-	showCredit(user);
+//	showCredit(user);
 
 	return false;
 }
@@ -783,10 +803,13 @@ User::BaseUser* Console::rechargeTic(){
 
 	user = getUserFromConsole();
 	ss << "How much do you want to add to " << user->getId() << "'s card: ";
-	credit = Utility::getIntFromConsole(0, Tic::MyTic::MAX_LIMIT, ss.str(), "Error: Invalid amount.");
+	//credit = Utility::getIntFromConsole(0, Tic::MyTic::MAX_LIMIT, ss.str(), "Error: Invalid amount.");
 
+	// TODO: test this
 	while (!b){
-		b = user->addCredit(credit);
+		credit = Utility::getIntFromConsole(0, Tic::MyTic::MAX_LIMIT, ss.str(), "Error: Invalid amount.");
+		//b = user->addCredit(credit);
+		b = user->getTic()->addCredit(credit);
 		if (!b)
 			cerr << "Error: Cannot add that amount." << endl;
 	}
@@ -801,7 +824,7 @@ void Console::showCredit(User::BaseUser* user){
 	if (user == NULL)
 		user = getUserFromConsole();
 
-	cout << "Credit remaining for " << user->getId() << ": $" << Utility::floatToString(user->getCredit(), 2) << endl;
+	cout << "Credit remaining for " << user->getId() << ": $" << Utility::floatToString(user->getTic()->getCredit(), 2) << endl;
 
 }
 
@@ -813,48 +836,47 @@ void Console::printReports(){
 	cout << "User Reports:" << endl;
 
 	for (map<string, User::BaseUser*>::const_iterator it = users.begin(); it != users.end(); ++it){
-		//if (dynamic_cast<User::Senior*>(it->second) != NULL){
 
-			//Tic::SeniorMyTic *tic = dynamic_cast<Tic::SeniorMyTic*>(it->second->getTic());
-			vector<Pass::TravelPass*> passes = it->second->getTic()->getPurchases();
-			unsigned int counter = 1;
+		vector<Pass::TravelPass*> passes = it->second->getTic()->getPurchases();
+		unsigned int counter = 1;
 
-			if (passes.size() > 0){
-				if (printed)
-					cout << endl;
-				printed = true;
-				cout << "Purchases by " << it->second->getId() << ":" << endl;
+		if (passes.size() > 0){
+			if (printed)
+				cout << endl;
+			printed = true;
+			cout << "Purchases by " << it->second->getId() << ":" << endl;
+		}
+
+		for (vector<Pass::TravelPass*>::const_iterator it2 = passes.begin(); it2 != passes.end(); ++it2){
+			Pass::TravelPass* pass = (*it2);
+			bool consession = dynamic_cast<Tic::ConsessionTic*>(it->second->getTic()) != NULL;
+			if (pass->getJourneys().size() == 0){
+				//cerr << "No journeys for " << pass->toString() << endl;
+				//return;
+				continue;
+			}
+			Journey *journey = pass->getJourneys().at(0);
+			cout << counter << ". " << pass->getLength() << " "
+				<< pass->getZones() << (consession ? " Consession" : "")
+				<< " Travel Pass purchased on " << journey->getDay()
+				<< " at " << journey->getDepartureTime()
+				<< " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
+
+			cout << "Journeys on this pass:" << endl;
+
+			char letter = 'a';
+			vector<Journey*> journeys = pass->getJourneys();
+
+			for (vector<Journey*>::const_iterator it3 = journeys.begin(); it3 != journeys.end(); ++it3, ++letter){
+				journey = (*it3);
+				cout << letter << ". " << journey->getFromStation()->getName()
+					<< " to " << journey->getToStation()->getName()
+					<< " at " << journey->getDepartureTime() << endl;
 			}
 
-			for (vector<Pass::TravelPass*>::const_iterator it2 = passes.begin(); it2 != passes.end(); ++it2, ++counter){
-				Pass::TravelPass* pass = (*it2);
-				bool consession = dynamic_cast<Tic::ConsessionTic*>(it->second->getTic()) != NULL;
-				Journey *journey = pass->getJourneys().at(0);
-				cout << counter << ". " << pass->getLength() << " "
-					<< pass->getZones() << (consession ? " Consession" : "")
-					<< " Travel Pass purchased on " << journey->getDay()
-					<< " at " << journey->getDepartureTime()
-					<< " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
+			++counter;
 
-				cout << "Journeys on this pass:" << endl;
-
-				char letter = 'a';
-				vector<Journey*> journeys = pass->getJourneys();
-
-				for (vector<Journey*>::const_iterator it3 = journeys.begin(); it3 != journeys.end(); ++it3, ++letter){
-					journey = (*it3);
-					cout << letter << ". " << journey->getFromStation()->getName()
-						<< " to " << journey->getToStation()->getName()
-						<< " at " << journey->getDepartureTime() << endl;
-				}
-
-			}
-
-		//} else if (dynamic_cast<User::Adult*>(it->second) != NULL){
-
-		//} else /*if (dynamic_cast<User::Junior*>(it->second) != NULL)*/{
-
-		//}
+		}
 
 	}
 

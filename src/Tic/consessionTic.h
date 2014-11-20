@@ -8,15 +8,16 @@ namespace Tic {
 
 	class ConsessionTic : public MyTic {
 	protected:
-		static float DEFAULT_DISCOUNT_RATE;
+		static const float DEFAULT_DISCOUNT_RATE;
 		float discountRate;
+
 	public:
 		ConsessionTic();
-		ConsessionTic(float discountRate);
+		ConsessionTic(float credit, float discountRate = ConsessionTic::DEFAULT_DISCOUNT_RATE, vector<string> freeDays = vector<string>());
 		virtual ~ConsessionTic();
+		virtual float getRealAmount(const string& day, const float amount);
 		virtual float getDiscountRate() const = 0;
-		void setDiscountRate(float newValue);
-
+		virtual void setDiscountRate(float newValue);
 		virtual string toString() const = 0;
 	};
 

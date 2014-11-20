@@ -22,14 +22,14 @@ namespace User {
 		virtual string getId() const;
 		virtual string getName() const;
 		virtual string getEmail() const;
-		virtual float getCredit() const;
+		//virtual float getCredit() const;
 		virtual Tic::MyTic* getTic() const;
 		virtual void setId(string newValue);
 		virtual void setName(string newValue);
 		virtual void setEmail(string newValue);
-		virtual void setCredit(float newValue);
+		//virtual void setCredit(float newValue);
 		virtual void setTic(Tic::MyTic* newValue);
-		virtual bool addCredit(float newValue);
+		//virtual bool addCredit(float newValue);
 
 	protected:
 		string id;

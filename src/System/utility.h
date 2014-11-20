@@ -105,8 +105,10 @@ public:
 	template <class T>
 	static void deleteObjectVector(vector<T> objectVector){
 
-		for (size_t i = 0; i < objectVector.size(); i++)
+		for (size_t i = 0; i < objectVector.size(); i++){
+			cout << "Deleting object " << endl;
 			delete objectVector[i];
+		}
 
 	}
 

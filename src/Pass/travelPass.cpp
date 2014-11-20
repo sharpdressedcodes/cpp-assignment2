@@ -34,8 +34,19 @@ namespace Pass {
 		return cost;
 	}
 
-	vector<Journey*> TravelPass::getJourneys() {
-		return this->journeys;
+	vector<Journey*> TravelPass::getJourneys(string day) {
+
+		if (day.length() == 0)
+			return this->journeys;
+		else {
+			vector<Journey*> j;
+			for (vector<Journey*>::const_iterator it = journeys.begin(); it != journeys.end(); ++it){
+				if (day.compare((*it)->getDay()) == 0)
+					j.push_back((*it));
+			}
+			return j;
+		}
+
 	}
 
 	void TravelPass::setLength(string newLength){
@@ -52,9 +63,9 @@ namespace Pass {
 
 	void TravelPass::addJourney(Journey* journey){
 
-		if (canAddJourney(journey)){
+		//if (canAddJourney(journey)){
 			this->journeys.push_back(journey);
-		}
+		//}
 
 	}
 
@@ -62,6 +73,23 @@ namespace Pass {
 
 		Utility::deleteObjectVector(journeys);
 		this->journeys.clear();
+
+	}
+
+	void TravelPass::removeJourney(Journey *journey){
+
+		//journeys.
+		//size_t i = 0;
+		//vector<Journey*>::iterator it = remove(journeys.begin(), journeys.end(), 1);
+
+		for (size_t i = 0, i_ = journeys.size(); i < i_; ++i){
+			if (journey->toString().compare(journeys[i]->toString()) == 0){
+				//journeys.erase(journeys.begin() + i);
+				cout << "Erasing " << journeys[i]->toString() << endl;
+				journeys.erase(journeys.begin() + i);
+				break;
+			}
+		}
 
 	}
 

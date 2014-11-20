@@ -18,8 +18,9 @@
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
 #include "../System/myTicSystem.h"
-#include "baseUI.h"
+#include "../System/dateTime.h"
 #include "../System/utility.h"
+#include "baseUI.h"
 //#include <string>
 #include <vector>
 
@@ -144,7 +145,7 @@ public:
 	Console();
 	~Console();
 	bool run(int argc, char *argv[]);
-	bool buyJourney();
+	bool buyJourney(bool debug = false);
 	User::BaseUser* rechargeTic();
 	void showCredit(User::BaseUser* user = NULL);
 	void printReports();

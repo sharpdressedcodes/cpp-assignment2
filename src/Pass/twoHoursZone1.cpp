@@ -102,11 +102,32 @@ namespace Pass {
 
 	}
 
-
 	bool TwoHoursZone1::canAddJourney(Journey* journey){
 
-		// TODO: implement canAddJourney
-		return true;
+		bool correctDay = true;
+		bool correctTime = true;
+		string diff = System::DateTime::subtractTime(journey->getDepartureTime(), journey->getArrivalTime());
+		int hours = Utility::stringToInt(diff.substr(0, 2));
+
+		if (journeys.size() > 0){
+
+			// calculate the time between first departure and last arrival
+			// and see if that plus the new journey is longer than 2 hours
+
+			string current = System::DateTime::subtractTime(
+				journeys[0]->getDepartureTime(),
+				//journeys[journeys.size() - 1]->getArrivalTime()
+				journey->getArrivalTime()
+			);
+			string added = current;//System::DateTime::addTime(current, diff);
+			cout << "Current=" << current << " added=" << added << endl;
+			hours = Utility::stringToInt(added.substr(0, 2));
+			correctDay = journey->getDay().compare(journeys[0]->getDay()) == 0;
+			correctTime = journeys[0]->getArrivalTime() <= journey->getDepartureTime();
+
+		}
+
+		return correctDay && correctTime && hours < 2;
 
 	}
 

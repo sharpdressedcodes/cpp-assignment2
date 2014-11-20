@@ -107,22 +107,24 @@ namespace Pass {
 
 	}
 
-
-
-
-
-
 	bool AllDayZone1::canAddJourney(Journey* journey){
 
-		// TODO: implement canAddJourney
-		return true;
+		//if (journey->getDay().compare(System::DateTime::getCurrentDayOfWeek()) == 0){
+
+			if (journeys.size() == 0)
+				return true;
+
+			vector<Journey*> j = getJourneys(journey->getDay());
+			if (j.size() == 0)
+				return true;
+
+			if (j[j.size() - 1]->getArrivalTime() <= journey->getDepartureTime())
+				return true;
+
+		//}
+
+		return false;
 
 	}
-
-
-
-
-
-
 
 }

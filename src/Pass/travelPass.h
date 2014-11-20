@@ -17,11 +17,13 @@
 #ifndef __TRAVELPASS_H__
 #define __TRAVELPASS_H__
 
+//#include <algorithm>
 #include <string>
 #include <iostream>
 #include <typeinfo>
 #include <vector>
 #include "journey.h"
+#include "../System/dateTime.h"
 #include "../System/utility.h"
 
 using std::string;
@@ -48,7 +50,7 @@ namespace Pass {
 	  virtual string getLength() const;   //Note the use of const
 	  virtual string getZones() const;
 	  virtual float getCost() const;
-	  virtual vector<Journey*> getJourneys();
+	  virtual vector<Journey*> getJourneys(string day = string());
 
 	  virtual void setLength(string newLength);
 	  virtual void setZones(string newZones);
@@ -58,6 +60,7 @@ namespace Pass {
 	  virtual bool isTravelPass(TravelPass& pUnknown) = 0;
 	  virtual string toString() = 0;
 	  virtual bool canAddJourney(Journey* journey) = 0;
+	  virtual void removeJourney(Journey *journey);
 	};
 
 }

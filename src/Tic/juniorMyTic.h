@@ -10,7 +10,7 @@ namespace Tic {
 
 	public:
 		JuniorMyTic();
-		JuniorMyTic(float discountRate);
+		JuniorMyTic(float credit, float discountRate = ConsessionTic::DEFAULT_DISCOUNT_RATE, vector<string> freeDays = vector<string>());
 		~JuniorMyTic();
 		float getDiscountRate() const;
 

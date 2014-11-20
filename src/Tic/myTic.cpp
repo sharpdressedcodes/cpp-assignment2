@@ -21,8 +21,10 @@ namespace Tic {
 	MyTic::MyTic(int maxPasses_)
 		: credit(0), limit(MAX_LIMIT), maxPasses(maxPasses_){}
 
-	MyTic::MyTic(float theCredit, float theLimit, int maxPasses_)
-	: credit(theCredit), limit(theLimit), maxPasses(maxPasses_){}
+	MyTic::MyTic(float theCredit, float theLimit, int maxPasses_, vector<string> freeDays)
+	: credit(theCredit), limit(theLimit), maxPasses(maxPasses_){
+		this->freeDays = freeDays;
+	}
 
 	MyTic::~MyTic(){
 		Utility::deleteObjectVector(purchases);
@@ -40,8 +42,16 @@ namespace Tic {
 		return maxPasses;
 	}
 
+	vector<string> MyTic::getFreeDays() const {
+		return this->freeDays;
+	}
+
 	void MyTic::setMaxPasses(unsigned int newValue){
 		maxPasses = newValue;
+	}
+
+	void MyTic::setFreeDays(vector<string> newValue){
+		freeDays = newValue;
 	}
 
 	/*
@@ -55,6 +65,24 @@ namespace Tic {
 	 * UI class.
 	 */
 	void MyTic::print(){}
+
+	bool MyTic::isFreeDay(const string& day){
+
+		if (this->freeDays.size() > 0){
+			for (vector<string>::const_iterator it = freeDays.begin(); it != freeDays.end(); ++it)
+				if (day.compare((*it)) == 0)
+					return true;
+		}
+
+		return false;
+
+	}
+
+	bool MyTic::canAfford(const string& day, const float amount){
+
+		return getRealAmount(day, amount) <= this->credit;
+
+	}
 
 	/*
 	 * Attempt to add credit to an account. If the amount exceeds the limit, this
@@ -74,12 +102,15 @@ namespace Tic {
 	 * Attempt to buy a TravelPass. This function will return false if the user
 	 * already has the maximum allowed passes.
 	 */
-	bool MyTic::buyPass(Pass::TravelPass* pass){
+	bool MyTic::buyPass(Pass::TravelPass* pass, const string& day){
 
 		if (maxPasses > 0 && purchases.size() >= maxPasses)
 			return false;
 
+		//addCredit(-getRealAmount(day, pass->getCost()));
 		addCredit(-pass->getCost());
+		cout << "Adding credit " << -pass->getCost() << endl;
+		cout << "Adding pass " << pass->getLength() << endl;
 		purchases.push_back(pass);
 
 		return true;
@@ -107,15 +138,36 @@ namespace Tic {
 	/*
 	 * Iterate over the purchases vector and add up the cost of each purchase.
 	 */
-	float MyTic::getPurchaseTotal() const {
+	float MyTic::getPurchaseTotal(string day) const {
 
 		float result = 0;
 
-		for (vector<Pass::TravelPass*>::const_iterator it = purchases.begin();
-				it != purchases.end(); ++it)
+		for (vector<Pass::TravelPass*>::const_iterator it = purchases.begin(); it != purchases.end(); ++it){
+			if (day.length() > 0 && (*it)->getJourneys().size() > 0 && day.compare((*it)->getJourneys()[0]->getDay()) != 0)
+				continue;
 			result += (*it)->getCost();
+		}
 
 		return result;
+
+	}
+
+	void MyTic::removePurchases(string day){
+
+		cout << "Deleting " << purchases[0]->getLength() << endl;
+		delete purchases[0];
+		purchases.erase(purchases.begin());
+		return;
+
+		for (size_t i = 0, i_ = purchases.size(); i < i_; ++i){
+			Pass::TwoHoursZone1* zone = dynamic_cast<Pass::TwoHoursZone1*>(purchases[i]);
+			if (zone != NULL){
+				cout << "Deleting " << zone->getLength() << endl;
+				//delete zone;
+				//delete purchases[i];
+				//purchases.erase(purchases.begin() + i);
+			}
+		}
 
 	}
 

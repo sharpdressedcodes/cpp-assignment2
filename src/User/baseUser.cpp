@@ -1,10 +1,3 @@
-/*
- * baseUser.cpp
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
-
 
 #include "baseUser.h"
 
@@ -40,9 +33,9 @@ namespace User {
 		return this->email;
 	}
 
-	float BaseUser::getCredit() const {
-		return this->credit;
-	}
+//	float BaseUser::getCredit() const {
+//		return this->credit;
+//	}
 
 	Tic::MyTic* BaseUser::getTic() const {
 		return this->tic;
@@ -60,25 +53,25 @@ namespace User {
 		this->email = newValue;
 	}
 
-	void BaseUser::setCredit(float newValue){
-		this->credit = newValue;
-	}
+//	void BaseUser::setCredit(float newValue){
+//		this->credit = newValue;
+//	}
 
 	void BaseUser::setTic(Tic::MyTic* newValue){
 		this->tic = newValue;
 	}
 
-	bool BaseUser::addCredit(float newValue){
-
-		// TODO: throw Exception::InsufficientCredit
-		if (this->credit + newValue < 0)
-			return false;
-
-		this->credit += newValue;
-
-		return true;
-
-	}
+//	bool BaseUser::addCredit(float newValue){
+//
+//		// TODO: throw Exception::InsufficientCredit
+//		if (this->credit + newValue < 0)
+//			return false;
+//
+//		this->credit += newValue;
+//
+//		return true;
+//
+//	}
 
 }
 

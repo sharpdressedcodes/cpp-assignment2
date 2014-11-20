@@ -293,7 +293,7 @@ void MyTicSystem::saveUsersToFile(const string& filename){
 		arr.push_back(userTypeToString(it->second));
 		arr.push_back(it->second->getName());
 		arr.push_back(it->second->getEmail());
-		arr.push_back(Utility::floatToString(it->second->getCredit(), 2));
+		arr.push_back(Utility::floatToString(it->second->getTic()->getCredit(), 2));
 		lines.push_back(Utility::implode(arr, FILE_DATA_DELIM));
 	}
 
@@ -393,30 +393,119 @@ string MyTicSystem::prepareZoneAsKey(const string& zone){
 
 void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 
-	bool b = false;
 	vector<TravelPass*> purchases = user->getTic()->getPurchases();
+	TravelPass *pass1 = NULL;
+	float refund = 0;
 
 	if (purchases.size() > 0){
-		TravelPass *pass1 = purchases.at(purchases.size() - 1);
+		pass1 = purchases.at(purchases.size() - 1);
 		if (pass1 && pass1->canAddJourney(journey)){
-			//user->getTic()->buyPass(pass1);
-			//user->addCredit(-pass1->getCost());
 			pass1->addJourney(journey);
-			b = true;
+			incrementStations(journey);
+			cout << "Current " << pass1->getLength() << " Travel Pass still valid" << endl;
+			return;
 		}
 	}
 
-	if (!b){
-		// TODO: add logic
-		TravelPass *p = passes.at("2HourZone1");
-		Pass::TwoHoursZone1 *pass = new Pass::TwoHoursZone1(p->getLength(), p->getZones(), p->getCost());
+	Pass::TwoHoursZone1 *thz = dynamic_cast<Pass::TwoHoursZone1*>(passes.at("2HourZone1"));
+	Pass::AllDayZone1 *adz = dynamic_cast<Pass::AllDayZone1*>(passes.at("AllDayZone1"));
 
-		// remember to delete the pass if there is an error
+	// Will this new purchase of a TwoHourZone1
+	// combined with all the other TwoHourZone1's for that day
+	// cost more than or the same as just purchasing an all day pass?
 
-		user->getTic()->buyPass(pass);
-		user->addCredit(-pass->getCost());
-		pass->addJourney(journey);
+	if (user->getTic()->getPurchaseTotal(journey->getDay()) +
+		user->getTic()->getRealAmount(journey->getDay(), thz->getCost()) >=
+		user->getTic()->getRealAmount(journey->getDay(), adz->getCost())){
+
+		float cost = user->getTic()->getRealAmount(journey->getDay(), adz->getCost()) - user->getTic()->getPurchaseTotal(journey->getDay());
+
+		if (cost > 0 && user->getTic()->getCredit() < cost){
+			cerr << user->getId() << "does not have enough credit to buy a " << adz->getLength() << " pass." << endl;
+			return;
+		}
+
+		Pass::AllDayZone1 *adz1 = new Pass::AllDayZone1(adz->getLength(), adz->getZones(), user->getTic()->getRealAmount(journey->getDay(), adz->getCost()));
+		Pass::TwoHoursZone1* zone = NULL;
+		vector<vector<TravelPass*>::iterator> temp;
+
+		// go back and look for all the 2 hour passes for that day, and grab the journeys from them
+		for (vector<TravelPass*>::iterator it = purchases.begin(); it != purchases.end(); ++it){
+			zone = dynamic_cast<Pass::TwoHoursZone1*>((*it));
+			if (zone != NULL){
+				transferJourneys((*it), adz1);
+				// then delete those passes
+				//purchases.erase(purchases.begin() + it);
+				//purchases.erase(it);
+				//temp.push_back(it);
+			}
+		}
+
+		//if
+		//for (vector<vector<TravelPass*>::iterator>::const_iterator it = temp.begin(); it != temp.end(); ++it){
+			//cout << "Deleting " << (*(*it))->toString() << endl;
+
+			//purchases.erase((*it));
+			//delete (*(*it));
+		//}
+
+		adz1->addJourney(journey);
+		//cout << "Added journey " << journey->toString() << " to " << adz1->getLength() << endl;
+
+		refund = user->getTic()->getPurchaseTotal(journey->getDay()) - user->getTic()->getRealAmount(journey->getDay(), adz->getCost());
+
+		//cout << "PurchaseTotal=" << user->getTic()->getPurchaseTotal(journey->getDay()) << " new amount=" << user->getTic()->getRealAmount(journey->getDay(), adz->getCost()) << endl;
+		//refund = cost < 0 ? -cost : 0;//(user->getTic()->getPurchaseTotal(journey->getDay()) + user->getTic()->getRealAmount(journey->getDay(), thz->getCost())) - user->getTic()->getRealAmount(journey->getDay(), adz->getCost());
+		//cout << "Refund=" << refund << endl;
+
+		if (refund > 0)
+			user->getTic()->addCredit(refund);
+		else
+			adz1->setCost(-refund);
+
+		//user->getTic()->removePurchases(journey->getDay());
+		user->getTic()->buyPass(adz1, journey->getDay());
+		incrementStations(journey);
+		cout << zone->getLength() << " Travel Pass upgraded to " << adz1->getLength() << " Pass for " << user->getId() << " for $" << Utility::floatToString(cost, 2) << endl;
+		return;
+
 	}
+
+	//Pass::TwoHoursZone1 *thz = dynamic_cast<Pass::TwoHoursZone1*>(passes.at("2HourZone1"));
+
+	// The journey won't fit onto an existing pass OR
+	// The cost of a new TwoHourZone1 (+ prev TwoHourZone1's) is cheaper than getting an AllDayZone1 OR
+	// They don't have any passes yet
+
+	//float charge = user->getTic()->getRealAmount(journey->getDay(), thz->getCost());
+	if (!user->getTic()->canAfford(journey->getDay(), thz->getCost())){
+		// TODO: throw exception
+		cerr << user->getId() << "does not have enough credit to buy a TwoHourZone1 pass." << endl;
+		return;
+	}
+
+	Pass::TwoHoursZone1 *pass = new Pass::TwoHoursZone1(thz->getLength(), thz->getZones(), user->getTic()->getRealAmount(journey->getDay(), thz->getCost()));
+	user->getTic()->buyPass(pass, journey->getDay());
+	pass->addJourney(journey);
+	incrementStations(journey);
+	bool consession = dynamic_cast<Tic::ConsessionTic*>(user->getTic()) != NULL;
+	cout << pass->getLength() << " " << pass->getZones() << (consession ? " (Consession)" : "") << " Pass purchased for " << user->getId() << " for $" << Utility::floatToString(pass->getCost()) << endl;
+	cout << "Valid until " << DateTime::addTime(journey->getDepartureTime(), "0200") << endl;
+
+}
+
+void MyTicSystem::transferJourneys(Pass::TravelPass *fromPass, Pass::TravelPass *toPass){
+
+	vector<Pass::Journey*> j = fromPass->getJourneys();
+
+	for (size_t i = 0, i_ = j.size(); i < i_; ++i){
+		toPass->addJourney(j[i]);
+		fromPass->removeJourney(j[i]);
+	}
+
+}
+
+void MyTicSystem::incrementStations(Pass::Journey *journey){
 
 	journey->getFromStation()->incrementStartedJourneys();
 	journey->getToStation()->incrementFinishedJourneys();
