@@ -85,7 +85,6 @@ public:
 	static string toUpper(const string& str);
 	static string reverse(const string& str);
 	//static float round(const float num, const int precision);
-	static bool validateEmailAddress(const string& address);
 
 	template <class T>
 	static void deleteObjectMap(map<string, T> objectMap){

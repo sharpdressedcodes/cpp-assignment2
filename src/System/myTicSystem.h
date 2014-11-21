@@ -4,16 +4,17 @@
 
 #include <map>
 #include <string>
-#include "../User/baseUser.h"
-#include "../User/adult.h"
-#include "../User/junior.h"
-#include "../User/senior.h"
-#include "../Pass/journey.h"
 #include "../Exception/insuffcientCredit.h"
 #include "../Exception/invalidFileFormat.h"
 #include "../Exception/passExists.h"
 #include "../Exception/stationExists.h"
 #include "../Exception/userIdExists.h"
+#include "../Pass/journey.h"
+#include "../User/baseUser.h"
+#include "../User/adult.h"
+#include "../User/junior.h"
+#include "../User/senior.h"
+#include "../Validation/emailAddress.h"
 #include "dateTime.h"
 #include "station.h"
 

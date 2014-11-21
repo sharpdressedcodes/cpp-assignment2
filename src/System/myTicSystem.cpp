@@ -240,10 +240,11 @@ User::BaseUser* MyTicSystem::userFromString(const string& data){
 		return NULL;
 
 	vector<string> arr = Utility::explode(data, FILE_DATA_DELIM);
+	Validation::EmailAddress emailValidator;
 
 	if (arr.size() != 5)
 		return NULL;
-	else if (!Utility::validateEmailAddress(arr.at(3)))
+	else if (!emailValidator(arr.at(3)))
 		return NULL;
 	else if (!Utility::isNumeric(arr.at(4), true))
 		return NULL;

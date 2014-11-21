@@ -20,6 +20,7 @@
 #include "../System/myTicSystem.h"
 #include "../System/dateTime.h"
 #include "../System/utility.h"
+#include "../Validation/emailAddress.h"
 #include "baseUI.h"
 //#include <string>
 #include <vector>
