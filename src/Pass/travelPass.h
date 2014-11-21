@@ -39,6 +39,8 @@ namespace Pass {
 	  string zones;
 	  float cost;
 	  vector<Journey*> journeys;
+	  string startTime;
+	  string startDay;
 
 	public:
 	  TravelPass();
@@ -61,6 +63,9 @@ namespace Pass {
 	  virtual string toString() = 0;
 	  virtual bool canAddJourney(Journey* journey) = 0;
 	  virtual void removeJourney(Journey *journey);
+	  //virtual bool canUpgrade() = 0;
+	  virtual string getStartTime() const;
+	  virtual string getStartDay() const;
 	};
 
 }

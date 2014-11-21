@@ -143,7 +143,7 @@ namespace Tic {
 		float result = 0;
 
 		for (vector<Pass::TravelPass*>::const_iterator it = purchases.begin(); it != purchases.end(); ++it){
-			if (day.length() > 0 && (*it)->getJourneys().size() > 0 && day.compare((*it)->getJourneys()[0]->getDay()) != 0)
+			if (day.length() > 0 && (*it)->getJourneys().size() > 0 && day.compare((*it)->getJourneys().at(0)->getDay()) != 0)
 				continue;
 			result += (*it)->getCost();
 		}

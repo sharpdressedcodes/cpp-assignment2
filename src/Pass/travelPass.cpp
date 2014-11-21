@@ -63,9 +63,12 @@ namespace Pass {
 
 	void TravelPass::addJourney(Journey* journey){
 
-		//if (canAddJourney(journey)){
-			this->journeys.push_back(journey);
-		//}
+		if (journeys.size() == 0){
+			startTime = journey->getDepartureTime();
+			startDay = journey->getDay();
+		}
+
+		journeys.push_back(journey);
 
 	}
 
@@ -91,6 +94,14 @@ namespace Pass {
 			}
 		}
 
+	}
+
+	string TravelPass::getStartTime() const {
+		return startTime;
+	}
+
+	string TravelPass::getStartDay() const {
+		return startDay;
 	}
 
 }

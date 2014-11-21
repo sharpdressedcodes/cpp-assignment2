@@ -108,6 +108,7 @@ namespace Pass {
 		bool correctTime = true;
 		string diff = System::DateTime::subtractTime(journey->getDepartureTime(), journey->getArrivalTime());
 		int hours = Utility::stringToInt(diff.substr(0, 2));
+		int required = journey->getHighestZone();
 
 		if (journeys.size() > 0){
 
@@ -120,14 +121,14 @@ namespace Pass {
 				journey->getArrivalTime()
 			);
 			string added = current;//System::DateTime::addTime(current, diff);
-			cout << "Current=" << current << " added=" << added << endl;
+			//cout << "Current=" << current << " added=" << added << endl;
 			hours = Utility::stringToInt(added.substr(0, 2));
 			correctDay = journey->getDay().compare(journeys[0]->getDay()) == 0;
 			correctTime = journeys[0]->getArrivalTime() <= journey->getDepartureTime();
 
 		}
 
-		return correctDay && correctTime && hours < 2;
+		return required < 2 && correctDay && correctTime && hours < 2;
 
 	}
 

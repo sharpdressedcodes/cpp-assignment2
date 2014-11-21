@@ -240,7 +240,7 @@ string Utility::intToString(const int number){
  */
 string Utility::floatToString(const float number, const int precision){
 
-	std::stringstream ss;
+	stringstream ss;
 
 	if (precision > -1){
 		ss.setf(ios::fixed | ios::showpoint);
@@ -478,5 +478,18 @@ string Utility::toUpper(const string& str){
 string Utility::reverse(const string& str){
 	return string(str.rbegin(), str.rend());
 }
+
+//float Utility::round(const float num, const int precision){
+//
+//	stringstream ss;
+//
+//	ss.setf(ios::fixed | ios::showpoint);
+//	ss.precision(precision);
+//
+//	ss << num;
+//
+//	return stringToFloat(ss.str());
+//
+//}
 
 }

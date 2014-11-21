@@ -38,6 +38,7 @@ public:
 	System::Station *getFromStation() const;
 	System::Station *getToStation() const;
 	string toString() const;
+	int getHighestZone()const;
 	//void setLength(float newValue);
 };
 

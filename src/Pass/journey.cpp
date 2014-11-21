@@ -62,4 +62,18 @@ string Journey::toString() const {
 
 }
 
+int Journey::getHighestZone() const{
+
+	int result = 0;
+
+	if (fromStation->getZone() > result)
+		result = fromStation->getZone();
+
+	if (toStation->getZone() > result)
+		result = toStation->getZone();
+
+	return result;
+
+}
+
 }

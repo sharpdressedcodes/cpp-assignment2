@@ -41,6 +41,7 @@ namespace Pass {
 		friend ostream& operator<<(ostream& stream, TwoHoursZone1And2& pass);
 		friend istream& operator>>(istream& stream, TwoHoursZone1And2& pass);
 		bool canAddJourney(Journey* journey);
+		//bool canUpgrade();
 	};
 
 }

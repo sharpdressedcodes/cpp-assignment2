@@ -109,22 +109,30 @@ namespace Pass {
 
 	bool AllDayZone1::canAddJourney(Journey* journey){
 
+		int requiredZone = journey->getHighestZone();
+
 		//if (journey->getDay().compare(System::DateTime::getCurrentDayOfWeek()) == 0){
 
 			if (journeys.size() == 0)
-				return true;
+				return requiredZone < 2;
 
 			vector<Journey*> j = getJourneys(journey->getDay());
 			if (j.size() == 0)
-				return true;
+				return requiredZone < 2;
 
 			if (j[j.size() - 1]->getArrivalTime() <= journey->getDepartureTime())
-				return true;
+				return requiredZone < 2;
 
 		//}
 
 		return false;
 
 	}
+
+//	bool AllDayZone1::canUpgrade(){
+//
+//
+//
+//	}
 
 }

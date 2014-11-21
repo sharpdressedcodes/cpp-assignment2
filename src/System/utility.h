@@ -84,7 +84,7 @@ public:
 	static string toLower(const string& str);
 	static string toUpper(const string& str);
 	static string reverse(const string& str);
-
+	//static float round(const float num, const int precision);
 
 	template <class T>
 	static void deleteObjectMap(map<string, T> objectMap){
@@ -106,7 +106,6 @@ public:
 	static void deleteObjectVector(vector<T> objectVector){
 
 		for (size_t i = 0; i < objectVector.size(); i++){
-			cout << "Deleting object " << endl;
 			delete objectVector[i];
 		}
 

@@ -685,6 +685,7 @@ bool Console::run(int argc, char *argv[]){
 		case MENU_INDEX_BUY:
 
 			buyJourney(true);
+			//buyJourney();
 			break;
 
 		case MENU_INDEX_CHARGE:
@@ -746,20 +747,78 @@ bool Console::buyJourney(bool debug){
 	static int ela = 10;
 
 	if (debug){
+
 		User::BaseUser* user = m_system.getUser("bs");
-		System::Station* fromStation = m_system.getStation("epping");
-		System::Station* toStation = m_system.getStation("central");
+		System::Station* fromStation = m_system.getStation("central");
+		System::Station* toStation = m_system.getStation("flagstaff");
 		day = "Monday";
-		//departureTime = "0700";
-		//arrivalTime = "0800";
-		departureTime = Utility::intToString(ela);
-		departureTime.append("00");
-		arrivalTime = Utility::intToString(ela);
-		arrivalTime.append("20");
-		ela++;
+		departureTime = "0900";
+		arrivalTime = "0905";
+		//departureTime = Utility::intToString(ela);
+		//departureTime.append("00");
+		//arrivalTime = Utility::intToString(ela);
+		//arrivalTime.append("20");
+		//ela++;
 		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
 		m_system.addJourney(user, journey);
 		showCredit(user);
+		cout << endl;
+
+
+		fromStation = m_system.getStation("flagstaff");
+		toStation = m_system.getStation("richmond");
+		day = "Monday";
+		departureTime = "1000";
+		arrivalTime = "1015";
+		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+
+
+		fromStation = m_system.getStation("richmond");
+		toStation = m_system.getStation("flagstaff");
+		day = "Monday";
+		departureTime = "1500";
+		arrivalTime = "1525";
+		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+
+
+		user = m_system.getUser("ws");
+		fromStation = m_system.getStation("flagstaff");
+		toStation = m_system.getStation("richmond");
+		day = "Monday";
+		departureTime = "1600";
+		arrivalTime = "1650";
+		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+
+		fromStation = m_system.getStation("richmond");
+		toStation = m_system.getStation("lilydale");
+		day = "Monday";
+		departureTime = "1700";
+		arrivalTime = "1730";
+		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+
+		fromStation = m_system.getStation("lilydale");
+		toStation = m_system.getStation("epping");
+		day = "Monday";
+		departureTime = "1800";
+		arrivalTime = "1950";
+		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		m_system.addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+
+
 	} else {
 		User::BaseUser* user = getUserFromConsole();
 		System::Station* fromStation = getStationFromConsole("From");
@@ -778,6 +837,18 @@ bool Console::buyJourney(bool debug){
 		);
 		departureTime = getTimeFromConsole("Departure ");
 		arrivalTime = getTimeFromConsole("Arrival ");
+
+		int id, ia;
+		id = Utility::stringToInt(departureTime);
+		ia = Utility::stringToInt(arrivalTime);
+
+		while (id >= ia){
+			cerr << "Departure time must be before arrival time." << endl;
+			departureTime = getTimeFromConsole("Departure ");
+			arrivalTime = getTimeFromConsole("Arrival ");
+			id = Utility::stringToInt(departureTime);
+			ia = Utility::stringToInt(arrivalTime);
+		}
 
 		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
 		m_system.addJourney(user, journey);
