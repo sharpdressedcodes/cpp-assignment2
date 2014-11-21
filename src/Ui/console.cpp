@@ -525,8 +525,10 @@ bool Console::addUser(){
 	b = false;
 	while (!b){
 		email = Utility::getStringFromConsole(1, User::BaseUser::EMAIL_LEN_MAX, "User email address: ", "Error: Invalid email.");
+		//Validation::BaseValidator<string>* emailValidator = dynamic_cast<Validation::EmailAddress*>(m_system.getValidator("email"));
 		Validation::EmailAddress emailValidator;
 		b = emailValidator(email);
+		//b = m_system.getValidator("email")(email);
 		if (!b) {
 			cerr << "Error: Invalid email format." << endl;
 		} else {

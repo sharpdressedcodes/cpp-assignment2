@@ -15,6 +15,7 @@
 #include "../User/junior.h"
 #include "../User/senior.h"
 #include "../Validation/emailAddress.h"
+#include "../Validation/inputData.h"
 #include "dateTime.h"
 #include "station.h"
 
@@ -34,6 +35,7 @@ namespace System {
 		map<string, User::BaseUser*> users;
 		map<string, Station*> stations;
 		map<string, Pass::TravelPass*> passes;
+		map<string, Validation::BaseValidator<string>*> validators;
 		static const string USER_FILE_FLAG;
 		static const string ZONE_FILE_FLAG;
 		static const string COMMENT_FILE_FLAG;
@@ -72,6 +74,8 @@ namespace System {
 		void incrementStations(Pass::Journey *journey);
 		Pass::TravelPass *createRequiredPass(User::BaseUser* user, Pass::Journey *journey, int required, int hours);
 		void addUser(User::BaseUser* user);
+		map<string, Validation::BaseValidator<string>*> getValidators();
+		Validation::BaseValidator<string>* getValidator(const string& key);
 
 
 

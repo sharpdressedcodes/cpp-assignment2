@@ -9,13 +9,22 @@ const string MyTicSystem::COMMENT_FILE_FLAG = "#";
 const string MyTicSystem::FILE_DATA_DELIM = ":";
 const unsigned int MyTicSystem::MAX_TRAVELPASSES = 100;
 
-MyTicSystem::MyTicSystem(){}
+MyTicSystem::MyTicSystem(){
+
+	Validation::EmailAddress *emailValidator = new Validation::EmailAddress();
+	Validation::InputData *dataValidator = new Validation::InputData(FILE_DATA_DELIM);
+
+	validators["email"] = emailValidator;
+	validators["data"] = dataValidator;
+
+}
 
 MyTicSystem::~MyTicSystem(){
 
 	Utility::deleteObjectMap(this->users);
 	Utility::deleteObjectMap(this->stations);
 	Utility::deleteObjectMap(this->passes);
+	Utility::deleteObjectMap(this->validators);
 
 }
 
@@ -610,6 +619,16 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user, Pass::Jo
 void MyTicSystem::addUser(User::BaseUser* user){
 
 	users[user->getId()] = user;
+
+}
+
+map<string, Validation::BaseValidator<string>*> MyTicSystem::getValidators(){
+	return validators;
+}
+
+Validation::BaseValidator<string>* MyTicSystem::getValidator(const string& key){
+
+	return validators.at(key);
 
 }
 

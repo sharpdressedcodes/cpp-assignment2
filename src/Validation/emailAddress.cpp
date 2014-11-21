@@ -11,11 +11,11 @@ EmailAddress::EmailAddress(string email){
 bool EmailAddress::operator ()(string email){
 
 	this->email = email;
-	return validate();
+	return validate(email);
 
 }
 
-bool EmailAddress::validate(){
+bool EmailAddress::validate(string obj){
 
 	bool result = false;
 	size_t at = email.find('@');
