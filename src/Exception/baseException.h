@@ -1,32 +1,28 @@
-/*
- * baseException.h
- *
- *  Created on: 08/11/2014
- *      Author: greg
- */
 
 #ifndef BASEEXCEPTION_H_
 #define BASEEXCEPTION_H_
 
-//#include <string>
-#include <exception>
+//#include <exception>
 
-//using std::string;
-using std::exception;
+//using std::exception;
+
+#include <string>
+
+using std::string;
 
 namespace Exception {
 
-	class BaseException : public exception {
-	//protected:
-		//string message;
-
+	class BaseException /*: public exception*/ {
+	protected:
+		string message;
 	public:
-		//BaseException(string errorMessage);
-		//virtual ~BaseException() = 0;
-		//string getMessage() const throw();
-		virtual const char* what() const throw() = 0;
+		//virtual const char* what() const throw() = 0;
+		BaseException();
+		BaseException(string message);
+		virtual ~BaseException();
+		virtual string getMessage() = 0;
+
 	};
 }
-
 
 #endif /* BASEEXCEPTION_H_ */

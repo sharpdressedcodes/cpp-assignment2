@@ -1,23 +1,26 @@
-/*
- * userIdExists.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
 
 #ifndef USERIDEXISTS_H_
 #define USERIDEXISTS_H_
 
 #include "baseException.h"
+#include <string>
+#include <sstream>
+
+using std::string;
+using std::stringstream;
 
 namespace Exception {
 
 	class UserIdExists : public BaseException {
+	private:
+		//char* toAppend;
+		string toAppend;
 	public:
-		const char* what() const throw();
+		UserIdExists(string toAppend = string());
+		//const char* what() const throw();
+		string getMessage();
 	};
 
 }
-
 
 #endif /* USERIDEXISTS_H_ */

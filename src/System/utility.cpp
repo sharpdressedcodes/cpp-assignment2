@@ -492,4 +492,21 @@ string Utility::reverse(const string& str){
 //
 //}
 
+bool Utility::validateEmailAddress(const string& address){
+
+	bool result = false;
+	size_t at = address.find('@');
+	size_t dot = address.find('.', at != string::npos ? at : 0);
+
+	result = address.length() > 4;
+	result &= at != string::npos;
+	result &= dot != string::npos;
+	result &= at < dot;
+	result &= at != 0;
+	result &= dot != address.length() - 1;
+
+	return result;
+
+}
+
 }

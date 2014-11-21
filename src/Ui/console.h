@@ -153,25 +153,6 @@ public:
 	void showStatistics();
 	bool addUser();
 
-	//void loadMenu(mainMenu& options);
-	//void loadTimeMenu(subMenu& timeOptions);
-	//void loadZoneMenu(subMenu& zoneOptions);
-	//void deleteMenu(mainMenu& options);
-	//void deleteTimeMenu(subMenu& timeOptions);
-	//void deleteZoneMenu(subMenu& zoneOptions);
-	//bool enterMenu(/*Tic::MyTic& tic, */int argc, char *argv[], mainMenu options);//,
-			//subMenu timeOptions, subMenu zoneOptions);
-	//subMenuOption enterTimeMenu(subMenu timeOptions);
-	//subMenuOption enterZoneMenu(subMenu zoneOptions);
-	//void showCredit(const Tic::MyTic& tic);
-	//void addCredit(Tic::MyTic& tic);
-	//bool buyTicket(Tic::MyTic& tic, subMenu timeOptions, subMenu zoneOptions);
-	//void printPurchases(Tic::MyTic& tic);
-	//bool validateTimeOption(const char option, subMenu timeOptions);
-	//bool validateZoneOption(const char option, subMenu zoneOptions);
-	//Pass::TravelPass* assignTravelPass(subMenuOption timeOption,
-		//subMenuOption zoneOption);
-
 private:
 	mainMenu m_options;
 
@@ -181,6 +162,7 @@ private:
 	System::Station* getStationFromConsole(string prefix = string());
 	Pass::TravelPass* getPassFromConsole(string suffix = string());
 	string getTimeFromConsole(string prefix = string());
+	bool validateData(const string& str);
 };
 
 }

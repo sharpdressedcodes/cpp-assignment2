@@ -1,9 +1,3 @@
-/*
- * invalidFileFormat.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
 
 #ifndef INVALIDFILEFORMAT_H_
 #define INVALIDFILEFORMAT_H_
@@ -17,10 +11,13 @@ namespace Exception {
 
 	class InvalidFileFormat : public BaseException {
 	private:
-		char *filename;
+		//char *filename;
+		string filename;
 	public:
-		InvalidFileFormat(const char *filename);
-		const char* what() const throw();
+		//InvalidFileFormat(const char *filename);
+		InvalidFileFormat(string filename);
+		string getMessage();
+		//const char* what() const throw();
 	};
 
 }

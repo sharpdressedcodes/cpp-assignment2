@@ -75,20 +75,27 @@ bool MyTicSystem::loadStationsFromFile(const string& filename){
 		fs.open(filename.c_str());
 
 		while (!fs.eof()){
+
 			string line;
 			getline(fs, line);
+
 			line = Utility::trim(line, "\r");
 			line = Utility::trim(line, " ");
+
+			if (line.length() == 0)
+				continue;
+
 			Station *station = stationFromString(line);
-			if (station != NULL){
-				if (this->stations.count(station->getName()) > 0){
-					// TODO: error: dont allow duplicates
-					fs.close();
-					cout << station->getName() << " already exists\n";
-					return false;
-				}
-				this->stations[station->getName()] = station;
+
+			if (station == NULL){
+				fs.close();
+				throw Exception::InvalidFileFormat(filename.c_str());
+			} else if (this->stations.count(station->getName()) > 0){
+				fs.close();
+				throw Exception::StationExists();
 			}
+
+			this->stations[station->getName()] = station;
 		}
 
 		fs.close();
@@ -113,8 +120,12 @@ bool MyTicSystem::loadUsersFromFile(const string& filename){
 
 			string line;
 			getline(fs, line);
+
 			line = Utility::trim(line, "\r");
 			line = Utility::trim(line, " ");
+
+			if (line.length() == 0)
+				continue;
 
 			// Only grab the parts we are interested in.
 			if (Utility::startsWith(line, USER_FILE_FLAG)){
@@ -129,15 +140,16 @@ bool MyTicSystem::loadUsersFromFile(const string& filename){
 
 			if (parsing){
 				User::BaseUser* user = userFromString(line);
-				if (user != NULL){
-					if (this->users.count(user->getId()) > 0){
-						// TODO: error: dont allow duplicates
-						fs.close();
-						cerr << user->getId() << " already exists\n";
-						return false;
-					}
-					this->users[user->getId()] = user;
+				if (user == NULL){
+					fs.close();
+					throw Exception::InvalidFileFormat(filename.c_str());
+				} else if (this->users.count(user->getId()) > 0){
+					fs.close();
+					stringstream es;
+					es << " Offending File: " << filename.c_str();
+					throw Exception::UserIdExists(es.str());
 				}
+				this->users[user->getId()] = user;
 			}
 
 		}
@@ -168,6 +180,9 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 			line = Utility::trim(line, "\r");
 			line = Utility::trim(line, " ");
 
+			if (line.length() == 0)
+				continue;
+
 			// Only grab the parts we are interested in.
 			if (Utility::startsWith(line, ZONE_FILE_FLAG)){
 				parsing = true;
@@ -181,17 +196,16 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 
 			if (parsing){
 				Pass::TravelPass* pass = zoneFromString(line);
-				if (pass != NULL){
-					if (this->passes.count(pass->toString()) > 0){
-						// TODO: error: dont allow duplicates
-						fs.close();
-						cerr << pass->toString() << " already exists\n";
-						return false;
-					}
-					stringstream ss;
-					ss << prepareLengthAsKey(pass->getLength()) << prepareZoneAsKey(pass->getZones());
-					this->passes[ss.str()] = pass;
+				if (pass == NULL){
+					fs.close();
+					throw Exception::InvalidFileFormat(filename.c_str());
+				} else if (this->passes.count(pass->toString()) > 0){
+					fs.close();
+					throw Exception::PassExists();
 				}
+				stringstream ss;
+				ss << prepareLengthAsKey(pass->getLength()) << prepareZoneAsKey(pass->getZones());
+				this->passes[ss.str()] = pass;
 			}
 
 		}
@@ -206,7 +220,6 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 
 Station* MyTicSystem::stationFromString(const string& data) {
 
-	// TODO: throw exception InvalidFileFormat(filename)
 	if (data.find(FILE_DATA_DELIM) == string::npos)
 		return NULL;
 
@@ -223,13 +236,14 @@ Station* MyTicSystem::stationFromString(const string& data) {
 
 User::BaseUser* MyTicSystem::userFromString(const string& data){
 
-	// TODO: throw exception InvalidFileFormat(filename)
 	if (data.find(FILE_DATA_DELIM) == string::npos)
 		return NULL;
 
 	vector<string> arr = Utility::explode(data, FILE_DATA_DELIM);
 
 	if (arr.size() != 5)
+		return NULL;
+	else if (!Utility::validateEmailAddress(arr.at(3)))
 		return NULL;
 	else if (!Utility::isNumeric(arr.at(4), true))
 		return NULL;
@@ -242,7 +256,7 @@ User::BaseUser* MyTicSystem::userFromString(const string& data){
 	case Adult:
 		return new User::Adult(arr.at(0), arr.at(2), arr.at(3), credit);
 	case Junior:
-		return new User::Junior(arr.at(1), arr.at(2), arr.at(3), credit);
+		return new User::Junior(arr.at(0), arr.at(2), arr.at(3), credit);
 	default:
 		return NULL;
 	}
@@ -251,7 +265,6 @@ User::BaseUser* MyTicSystem::userFromString(const string& data){
 
 Pass::TravelPass* MyTicSystem::zoneFromString(const string& data){
 
-	// TODO: throw exception InvalidFileFormat(filename)
 	if (data.find(FILE_DATA_DELIM) == string::npos)
 		return NULL;
 
@@ -432,8 +445,11 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 		// either TwoHourZone1 or TwoHourZone12, unless the travel time is more than 2 hours,
 		//then either an AllDayZone1 or AllDayZone12 is needed
 
-		cout << "stage 1" << endl;
-		addPass(user, requiredZone, journey);
+		//try {
+			addPass(user, requiredZone, journey);
+		//} catch (Exception::InsuffcientCredit &noCredit){
+			//cerr << noCredit.what() << endl;
+		//}
 
 	} else {
 
@@ -476,11 +492,15 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 			upgrade = false;
 		}
 
-		if (upgrade){
-			upgradePass(user, requiredZone, journey, required, totalHours);
-		} else {
-			addPass(user, requiredZone, journey);
-		}
+		//try{
+			if (upgrade){
+				upgradePass(user, requiredZone, journey, required, totalHours);
+			} else {
+				addPass(user, requiredZone, journey);
+			}
+		//} catch (Exception::InsuffcientCredit &noCredit){
+			//cerr << noCredit.what() << endl;
+		//}
 
 	}
 
@@ -489,11 +509,9 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 void MyTicSystem::addPass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Journey* journey){
 
 	if (!user->getTic()->canAfford(journey->getDay(), pass->getCost())){
-		// TODO: throw exception
-		cerr << user->getId() << "does not have enough credit to buy a " << pass->getLength() << pass->getZones() << " pass." << endl;
 		delete pass;
 		delete journey;
-		return;
+		throw Exception::InsuffcientCredit();
 	}
 
 	user->getTic()->buyPass(pass, journey->getDay());
@@ -517,10 +535,9 @@ void MyTicSystem::upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass
 	pass->setCost(cost);
 
 	if (cost > 0 && user->getTic()->getCredit() < cost){
-		cerr << user->getId() << "does not have enough credit to buy a " << pass->getLength() << " pass." << endl;
 		delete pass;
 		delete journey;
-		return;
+		throw Exception::InsuffcientCredit();
 	}
 
 	Pass::TravelPass* zone = NULL;
@@ -539,7 +556,7 @@ void MyTicSystem::upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass
 	pass->addJourney(journey);
 	user->getTic()->buyPass(pass, journey->getDay());
 	incrementStations(journey);
-	upgradeTravelPass(user, zone, pass, journey);
+	//upgradeTravelPass(user, zone, pass, journey);
 
 	cout << zone->getLength() << " Travel Pass upgraded to " << pass->getLength() << " Pass for " << user->getId() << " for $" << Utility::floatToString(cost, 2) << endl;
 
@@ -586,6 +603,12 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user, Pass::Jo
 	}
 
 	return requiredZone;
+
+}
+
+void MyTicSystem::addUser(User::BaseUser* user){
+
+	users[user->getId()] = user;
 
 }
 

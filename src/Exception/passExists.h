@@ -1,18 +1,18 @@
 
-#ifndef INVALIDDATA_H_
-#define INVALIDDATA_H_
+#ifndef PASSEXISTS_H_
+#define PASSEXISTS_H_
 
 #include "baseException.h"
 
 namespace Exception {
 
-	class InvalidData : public BaseException {
+	class PassExists : public BaseException {
 	public:
 		//const char* what() const throw();
+		PassExists();
 		string getMessage();
 	};
 
 }
 
-
-#endif /* INVALIDDATA_H_ */
+#endif /* PASSEXISTS_H_ */

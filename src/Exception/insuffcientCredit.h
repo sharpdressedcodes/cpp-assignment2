@@ -7,14 +7,12 @@
 namespace Exception {
 
 	class InsuffcientCredit : public BaseException {
-
 	public:
-		//InsuffcientCredit();
-		//~InsuffcientCredit();
-		const char* what() const throw();
+		//const char* what() const throw();
+		InsuffcientCredit();
+		string getMessage();
 	};
 
 }
-
 
 #endif /* INSUFFCIENTCREDIT_H_ */
