@@ -94,11 +94,11 @@ string DateTime::subtractTime(const string& time1, const string& time2){
 	string sh, sm;
 	const int mMax = 60;
 
-	hour1 = Utility::stringToInt(time1.substr(0, 2));
-	hour2 = Utility::stringToInt(time2.substr(0, 2));
+	hour1 = Utility::stringToInt(time1.substr(0, time1.length() == 3 ? 1 : 2));
+	hour2 = Utility::stringToInt(time2.substr(0, time2.length() == 3 ? 1 : 2));
 
-	minute1 = Utility::stringToInt(time1.substr(2));
-	minute2 = Utility::stringToInt(time2.substr(2));
+	minute1 = Utility::stringToInt(time1.substr(time1.length() - 2, 2));
+	minute2 = Utility::stringToInt(time2.substr(time2.length() - 2, 2));
 
 	h = hour2 - hour1;
 	m = minute2 - minute1;
@@ -132,11 +132,11 @@ string DateTime::addTime(const string& time1, const string& time2){
 	string sh, sm;
 	const int mMax = 60;
 
-	hour1 = Utility::stringToInt(time1.substr(0, 2));
-	hour2 = Utility::stringToInt(time2.substr(0, 2));
+	hour1 = Utility::stringToInt(time1.substr(0, time1.length() == 3 ? 1 : 2));
+	hour2 = Utility::stringToInt(time2.substr(0, time2.length() == 3 ? 1 : 2));
 
-	minute1 = Utility::stringToInt(time1.substr(2));
-	minute2 = Utility::stringToInt(time2.substr(2));
+	minute1 = Utility::stringToInt(time1.substr(time1.length() - 2, 2));
+	minute2 = Utility::stringToInt(time2.substr(time2.length() - 2, 2));
 
 	h = hour1 + hour2;
 	m = minute1 + minute2;

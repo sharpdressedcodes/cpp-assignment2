@@ -752,8 +752,10 @@ bool Console::buyJourney(bool debug){
 		System::Station* fromStation = m_system.getStation("central");
 		System::Station* toStation = m_system.getStation("flagstaff");
 		day = "Monday";
-		departureTime = "0900";
-		arrivalTime = "0905";
+		//departureTime = "0900";
+		//arrivalTime = "0905";
+		departureTime = "900";
+		arrivalTime = "905";
 		//departureTime = Utility::intToString(ela);
 		//departureTime.append("00");
 		//arrivalTime = Utility::intToString(ela);
@@ -1218,7 +1220,9 @@ string Console::getTimeFromConsole(string prefix){
 	message.append("ime: ");
 
 	while (!b){
-		result = Utility::getStringFromConsole(timeSize, timeSize, message, errorMessage);
+		result = Utility::getStringFromConsole(timeSize - 1, timeSize, message, errorMessage);
+		if (result.length() == timeSize - 1)
+			result.insert(0, "0");
 		if (!Utility::isNumeric(result)){
 			cerr << errorMessage << endl;
 		} else if (Utility::stringToInt(result.substr(0, ts)) >= hourMax){
