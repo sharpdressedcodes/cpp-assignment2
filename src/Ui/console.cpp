@@ -220,7 +220,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -237,7 +237,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -255,7 +255,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -272,7 +272,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -292,7 +292,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -309,7 +309,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -326,7 +326,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}
@@ -372,7 +372,7 @@ bool Console::buyJourney(bool debug){
 			m_system.addJourney(user, journey);
 			showCredit(user);
 			cout << endl;
-		} catch (Exception::InsuffcientCredit &noCredit){
+		} catch (Exception::InsufficientCredit &noCredit){
 			cerr << noCredit.getMessage() << endl;
 			return false;
 		}

@@ -8,4 +8,5 @@ Release/*
 *.o
 Task*/
 mytic
-.dat
+*.dat
+src/myTic.dat

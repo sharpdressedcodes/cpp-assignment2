@@ -6,10 +6,10 @@
 
 namespace Exception {
 
-	class InsuffcientCredit : public BaseException {
+	class InsufficientCredit : public BaseException {
 	public:
 		//const char* what() const throw();
-		InsuffcientCredit();
+		InsufficientCredit();
 		string getMessage();
 	};
 

@@ -1,5 +1,5 @@
 
-#include "insuffcientCredit.h"
+#include "insufficientCredit.h"
 
 namespace Exception {
 
@@ -7,9 +7,9 @@ namespace Exception {
 		return "Insufficient credit to perform that transaction!";
 	}*/
 
-	InsuffcientCredit::InsuffcientCredit() : BaseException(string()) {}
+	InsufficientCredit::InsufficientCredit() : BaseException(string()) {}
 
-	string InsuffcientCredit::getMessage(){
+	string InsufficientCredit::getMessage(){
 		string s("Insufficient credit to perform that transaction!");
 		return s;
 	}

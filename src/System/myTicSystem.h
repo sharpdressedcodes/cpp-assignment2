@@ -4,7 +4,7 @@
 
 #include <map>
 #include <string>
-#include "../Exception/insuffcientCredit.h"
+#include "../Exception/insufficientCredit.h"
 #include "../Exception/invalidFileFormat.h"
 #include "../Exception/passExists.h"
 #include "../Exception/stationExists.h"

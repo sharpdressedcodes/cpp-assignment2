@@ -540,7 +540,7 @@ void MyTicSystem::addPass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Jo
 	if (!user->getTic()->canAfford(journey->getDay(), pass->getCost())){
 		delete pass;
 		delete journey;
-		throw Exception::InsuffcientCredit();
+		throw Exception::InsufficientCredit();
 	}
 
 	user->getTic()->buyPass(pass, journey->getDay());
@@ -572,7 +572,7 @@ void MyTicSystem::upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass
 	if (cost > 0 && user->getTic()->getCredit() < cost){
 		delete pass;
 		delete journey;
-		throw Exception::InsuffcientCredit();
+		throw Exception::InsufficientCredit();
 	}
 
 	Pass::TravelPass* zone = NULL;
