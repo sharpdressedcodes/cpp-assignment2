@@ -41,6 +41,7 @@ namespace Pass {
 	  vector<Journey*> journeys;
 	  string startTime;
 	  string startDay;
+	  string startDate;
 
 	public:
 	  TravelPass();
@@ -66,6 +67,9 @@ namespace Pass {
 	  //virtual bool canUpgrade() = 0;
 	  virtual string getStartTime() const;
 	  virtual string getStartDay() const;
+	  virtual string getStartDate() const;
+	  virtual void setStartDate(string newValue);
+	  virtual string getEndDate();
 	};
 
 }

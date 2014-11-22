@@ -195,7 +195,7 @@ bool Console::run(int argc, char *argv[]){
 bool Console::buyJourney(bool debug){
 
 	const unsigned int minDayLength = 3;
-	string day, departureTime, arrivalTime;
+	string day, departureTime, arrivalTime, departureDate, arrivalDate;
 	//static int ela = 10;
 
 	if (debug){
@@ -208,12 +208,14 @@ bool Console::buyJourney(bool debug){
 		//arrivalTime = "0905";
 		departureTime = "900";
 		arrivalTime = "905";
+		departureDate = "01012014";
+		arrivalDate = "01012014";
 		//departureTime = Utility::intToString(ela);
 		//departureTime.append("00");
 		//arrivalTime = Utility::intToString(ela);
 		//arrivalTime.append("20");
 		//ela++;
-		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		Journey *journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -223,13 +225,14 @@ bool Console::buyJourney(bool debug){
 			return false;
 		}
 
-
 		fromStation = m_system.getStation("flagstaff");
 		toStation = m_system.getStation("richmond");
 		day = "Monday";
 		departureTime = "1000";
 		arrivalTime = "1015";
-		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		departureDate = "01012014";
+		arrivalDate = "01012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -245,7 +248,26 @@ bool Console::buyJourney(bool debug){
 		day = "Monday";
 		departureTime = "1500";
 		arrivalTime = "1525";
-		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		departureDate = "01012014";
+		arrivalDate = "01012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
+		try {
+			m_system.addJourney(user, journey);
+			showCredit(user);
+			cout << endl;
+		} catch (Exception::InsuffcientCredit &noCredit){
+			cerr << noCredit.getMessage() << endl;
+			return false;
+		}
+
+		fromStation = m_system.getStation("flagstaff");
+		toStation = m_system.getStation("epping");
+		day = "Wednesday";
+		departureTime = "1500";
+		arrivalTime = "1525";
+		departureDate = "03012014";
+		arrivalDate = "04012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -256,13 +278,16 @@ bool Console::buyJourney(bool debug){
 		}
 
 
+
 		user = m_system.getUser("ws");
 		fromStation = m_system.getStation("flagstaff");
 		toStation = m_system.getStation("richmond");
 		day = "Monday";
 		departureTime = "1600";
 		arrivalTime = "1650";
-		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		departureDate = "01012014";
+		arrivalDate = "01012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -277,7 +302,9 @@ bool Console::buyJourney(bool debug){
 		day = "Monday";
 		departureTime = "1700";
 		arrivalTime = "1730";
-		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		departureDate = "01012014";
+		arrivalDate = "01012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -292,7 +319,9 @@ bool Console::buyJourney(bool debug){
 		day = "Monday";
 		departureTime = "1800";
 		arrivalTime = "1950";
-		journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		departureDate = "01012014";
+		arrivalDate = "01012014";
+		journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -319,9 +348,13 @@ bool Console::buyJourney(bool debug){
 			"What day: ",
 			"Error: Invalid day."
 		);
+		departureDate = getDateFromConsole("Departure ");
 		departureTime = getTimeFromConsole("Departure ");
+		arrivalDate = getDateFromConsole("Arrival ");
 		arrivalTime = getTimeFromConsole("Arrival ");
 
+
+		// TODO: make sure arrival date is after departure date
 		int id, ia;
 		id = Utility::stringToInt(departureTime);
 		ia = Utility::stringToInt(arrivalTime);
@@ -334,7 +367,7 @@ bool Console::buyJourney(bool debug){
 			ia = Utility::stringToInt(arrivalTime);
 		}
 
-		Journey *journey = new Journey(day, departureTime, arrivalTime, fromStation, toStation);
+		Journey *journey = new Journey(day, departureDate, arrivalDate, departureTime, arrivalTime, fromStation, toStation);
 		try {
 			m_system.addJourney(user, journey);
 			showCredit(user);
@@ -412,7 +445,7 @@ void Console::printReports(){
 			Journey *journey = pass->getJourneys().at(0);
 			cout << counter << ". " << pass->getLength() << " "
 				<< pass->getZones() << (consession ? " Consession" : "")
-				<< " Travel Pass purchased on " << journey->getDay()
+				<< " Travel Pass purchased on " << journey->getDay() << " " << journey->getDepartureDate()
 				<< " at " << journey->getDepartureTime()
 				<< " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
 
@@ -425,6 +458,7 @@ void Console::printReports(){
 				journey = (*it3);
 				cout << letter << ". " << journey->getFromStation()->getName()
 					<< " to " << journey->getToStation()->getName()
+					<< " on " << journey->getDepartureDate()
 					<< " at " << journey->getDepartureTime() << endl;
 			}
 
@@ -704,6 +738,45 @@ Pass::TravelPass* Console::getPassFromConsole(string suffix){
 	}
 
 	return pass;
+
+}
+
+string Console::getDateFromConsole(string prefix){
+
+	//01012014
+	//1012014
+	bool b = false;
+	string result, errorMessage("Error: Invalid date."), message(prefix);
+	const int dateSize = 8;
+	const int dayMax = 31;
+	const int monthMax = 12;
+
+	if (prefix.length() > 0)
+		message.append("d");
+	else
+		message.append("D");
+
+	message.append("ate: ");
+
+	while (!b){
+		result = Utility::getStringFromConsole(dateSize - 1, dateSize, message, errorMessage);
+		if (result.length() == dateSize - 1)
+			result.insert(0, "0");
+
+		if (!Utility::isNumeric(result)){
+			cerr << errorMessage << endl;
+		} else if (Utility::stringToInt(result.substr(0, 2)) >= dayMax){
+			cerr << errorMessage << endl;
+		} else if (Utility::stringToInt(result.substr(2, 2)) >= monthMax){
+			cerr << errorMessage << endl;
+		} else if (Utility::stringToInt(result.substr(4, 2)) != 20){
+			cerr << errorMessage << endl;
+		} else {
+			b = true;
+		}
+	}
+
+	return result;
 
 }
 

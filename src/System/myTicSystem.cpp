@@ -223,6 +223,9 @@ bool MyTicSystem::loadZonePricesFromFile(const string& filename){
 
 	}
 
+	if (this->passes.count("WeeklyZone12") == 0)
+		this->passes["WeeklyZone12"] = new Pass::Weekly();
+
 	return this->passes.size() > 0;
 
 }
@@ -296,6 +299,8 @@ Pass::TravelPass* MyTicSystem::zoneFromString(const string& data){
 		pass = new Pass::AllDayZone1(cost);
 	} else if (arr.at(0).compare("AllDay") == 0 && arr.at(1).compare("Zone12") == 0){
 		pass = new Pass::AllDayZone1And2(cost);
+	} else if (arr.at(0).compare("Weekly") == 0 && arr.at(1).compare("Zone12") == 0){
+		pass = new Pass::Weekly(cost);
 	}
 
 	return pass;
@@ -433,19 +438,25 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 	//Pass::TwoHoursZone1And2 *thZone12 = dynamic_cast<Pass::TwoHoursZone1And2*>(passes.at("2HourZone12"));
 	Pass::AllDayZone1 *adZone1 = dynamic_cast<Pass::AllDayZone1*>(passes.at("AllDayZone1"));
 	Pass::AllDayZone1And2 *adZone12 = dynamic_cast<Pass::AllDayZone1And2*>(passes.at("AllDayZone12"));
+	Pass::Weekly *weekly = dynamic_cast<Pass::Weekly*>(passes.at("WeeklyZone12"));
 
 	int required = journey->getHighestZone();
 	Pass::TravelPass* currentZone = pass1;
 	Pass::TravelPass* requiredZone = NULL;
-	string travelTime = DateTime::subtractTime(journey->getDepartureTime(), journey->getArrivalTime());
+	//string travelTime = DateTime::subtractTime(journey->getDepartureTime(), journey->getArrivalTime());
+	string travelTime = DateTime::subtractDateTime(journey->getDepartureDate(), journey->getArrivalDate(), journey->getDepartureTime(), journey->getArrivalTime());
 	int hours = Utility::stringToInt(travelTime.substr(0, 2));
 	string totalTime;
 	int totalHours = hours;
 
 	if (currentZone != NULL){
-		totalTime = DateTime::subtractTime(currentZone->getStartTime(), journey->getArrivalTime());
+		//totalTime = DateTime::subtractTime(currentZone->getStartTime(), journey->getArrivalTime());
+		totalTime = DateTime::subtractDateTime(currentZone->getStartDate(), journey->getArrivalDate(), currentZone->getStartTime(), journey->getArrivalTime());
 		totalHours = Utility::stringToInt(totalTime.substr(0, 2));
 	}
+
+	//cout << "MyTicSystem::addJourney: " << endl;
+	//cout << "ttime=" << travelTime << " hours=" << hours << " totaltime=" << totalTime << " totalhours=" << totalHours << "\n" << endl;
 
 	requiredZone = createRequiredPass(user, journey, required, totalHours);
 
@@ -475,14 +486,14 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 		key = ss.str();
 		bool upgrade = false;
 
-		if (key.compare("2 HoursZone 1") == 0){
-			//upgrade = hours > 2;// && required == 2;
-			//upgrade = hours > 2 || required == 2;
+		if (key.compare("Weekly") == 0){
+			upgrade = false;
+		} else if (key.compare("2 HoursZone 1") == 0){
 			upgrade = totalHours > 2 || required == 2;
-			cout << "upgrade1=" << upgrade << endl;
+			//cout << "upgrade1=" << upgrade << endl;
 			if (!upgrade){
 				upgrade = user->getTic()->getPurchaseTotal(journey->getDay()) + user->getTic()->getRealAmount(journey->getDay(), requiredZone->getCost()) >=
-						(user->getTic()->getRealAmount(journey->getDay(), required == 2 ? adZone12->getCost() : adZone1->getCost()));
+					(user->getTic()->getRealAmount(journey->getDay(), required == 2 ? adZone12->getCost() : adZone1->getCost()));
 			}
 		} else if (key.compare("2 HoursZones 1 and 2") == 0){
 			//upgrade = hours > 2;
@@ -494,12 +505,20 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 				//float cc = user->getTic()->getRealAmount(journey->getDay(), adZone12->getCost());
 				//cout << "aa=" << aa << " bb=" << bb << " cc=" << cc << " required=" << required << " hours=" << hours << " traveltime=" << travelTime << " requiredzone=" << requiredZone->toString() << endl;
 				upgrade = user->getTic()->getPurchaseTotal(journey->getDay()) + user->getTic()->getRealAmount(journey->getDay(), requiredZone->getCost()) >=
-						user->getTic()->getRealAmount(journey->getDay(), adZone12->getCost());
+					user->getTic()->getRealAmount(journey->getDay(), adZone12->getCost());
 			}
 		} else if (key.compare("All DayZone 1") == 0){
-			upgrade = required == 2;
+			upgrade = totalHours > 23 || required == 2;
+			if (!upgrade){
+				upgrade = user->getTic()->getPurchaseTotalForWeek(currentZone->getEndDate()) + user->getTic()->getRealAmount(journey->getDay(), requiredZone->getCost()) >=
+					user->getTic()->getRealAmount(journey->getDay(), weekly->getCost());
+			}
 		} else if (key.compare("All DayZones 1 and 2") == 0){
-			upgrade = false;
+			upgrade = totalHours > 23;
+			if (!upgrade){
+				upgrade = user->getTic()->getPurchaseTotalForWeek(currentZone->getEndDate()) + user->getTic()->getRealAmount(journey->getDay(), requiredZone->getCost()) >=
+					user->getTic()->getRealAmount(journey->getDay(), weekly->getCost());
+			}
 		}
 
 		//try{
@@ -529,10 +548,13 @@ void MyTicSystem::addPass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Jo
 	incrementStations(journey);
 
 	bool consession = dynamic_cast<Tic::ConsessionTic*>(user->getTic()) != NULL;
-	cout << pass->getLength() << " " << pass->getZones() << (consession ? " (Consession)" : "") << " Pass purchased for " << user->getId() << " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
+	cout << pass->getLength() << " " << pass->getZones() << (consession ? " (Consession)" : "")
+		<< " Pass purchased for " << user->getId() << " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
 
 	if (pass->getLength().find("AllDay") != string::npos)
 		cout << "Valid until midnight" << endl;
+	else if (pass->getLength().find("Weekly") != string::npos)
+		cout << "Valid until " << pass->getEndDate() << endl;
 	else
 		cout << "Valid until " << DateTime::addTime(journey->getDepartureTime(), "0200") << endl;
 
@@ -540,9 +562,12 @@ void MyTicSystem::addPass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Jo
 
 void MyTicSystem::upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Journey* journey, int required, int hours){
 
+	bool isWeekly = pass->getLength().find("Weekly") != string::npos;
 	vector<TravelPass*> purchases = user->getTic()->getPurchases();
-	float cost = pass->getCost() - user->getTic()->getPurchaseTotal(journey->getDay());
+	float cost = pass->getCost() - (isWeekly ? user->getTic()->getPurchaseTotalForWeek(journey->getArrivalDate()/* pass->getStartDate()*/) : user->getTic()->getPurchaseTotal(journey->getDay()));
+	//float cost = pass->getCost() - user->getTic()->getPurchaseTotal(journey->getDay());
 	pass->setCost(cost);
+	bool dateSet = false;
 
 	if (cost > 0 && user->getTic()->getCredit() < cost){
 		delete pass;
@@ -553,14 +578,28 @@ void MyTicSystem::upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass
 	Pass::TravelPass* zone = NULL;
 	vector<vector<TravelPass*>::iterator> temp;
 
-	// go back and look for all the 2 hour passes for that day, and grab the journeys from them
+	// go back and look for all the 2 hour passes for that day, (or AllDay if needed)
+	// and grab the journeys from them
+
 	for (vector<TravelPass*>::iterator it = purchases.begin(); it != purchases.end(); ++it){
+
 		zone = dynamic_cast<Pass::TwoHoursZone1*>((*it));
 		if (zone == NULL)
 			zone = dynamic_cast<Pass::TwoHoursZone1And2*>((*it));
-		// TODO: what about the rest? (if weekly passes)
-		if (zone != NULL)
+
+		if (zone == NULL && isWeekly){
+			zone = dynamic_cast<Pass::AllDayZone1*>((*it));
+			if (zone == NULL)
+				zone = dynamic_cast<Pass::AllDayZone1And2*>((*it));
+		}
+
+		if (zone != NULL){
+			if (!dateSet){
+				dateSet = true;
+				pass->setStartDate((*it)->getStartDate());
+			}
 			transferJourneys((*it), pass);
+		}
 	}
 
 	pass->addJourney(journey);
@@ -597,6 +636,10 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user, Pass::Jo
 	Pass::TwoHoursZone1And2 *thZone12 = dynamic_cast<Pass::TwoHoursZone1And2*>(passes.at("2HourZone12"));
 	Pass::AllDayZone1 *adZone1 = dynamic_cast<Pass::AllDayZone1*>(passes.at("AllDayZone1"));
 	Pass::AllDayZone1And2 *adZone12 = dynamic_cast<Pass::AllDayZone1And2*>(passes.at("AllDayZone12"));
+	Pass::Weekly *weekly = dynamic_cast<Pass::Weekly*>(passes.at("WeeklyZone12"));
+
+	//cout << "MyTicSystem::createRequiredPass: " << endl;
+	//cout << "hours=" << hours << " req=" << required << endl;
 
 	if (hours < 2){
 		if (required < 2){
@@ -604,12 +647,14 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user, Pass::Jo
 		} else {
 			requiredZone = new Pass::TwoHoursZone1And2(thZone12->getLength(), thZone12->getZones(), user->getTic()->getRealAmount(journey->getDay(), thZone12->getCost()));
 		}
-	} else {
+	} else if (hours < 24) {
 		if (required < 2){
 			requiredZone = new Pass::AllDayZone1(adZone1->getLength(), adZone1->getZones(), user->getTic()->getRealAmount(journey->getDay(), adZone1->getCost()));
 		} else {
 			requiredZone = new Pass::AllDayZone1And2(adZone12->getLength(), adZone12->getZones(), user->getTic()->getRealAmount(journey->getDay(), adZone12->getCost()));
 		}
+	} else {
+		requiredZone = new Pass::Weekly(weekly->getLength(), weekly->getZones(), user->getTic()->getRealAmount(journey->getDay(), weekly->getCost()));
 	}
 
 	return requiredZone;

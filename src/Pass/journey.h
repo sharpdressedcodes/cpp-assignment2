@@ -26,11 +26,13 @@ private:
 	string arrivalTime;
 	System::Station *fromStation;
 	System::Station *toStation;
+	string departureDate;
+	string arrivalDate;
 
 public:
 	Journey();
 	//Journey(float length);
-	Journey(string day, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation);
+	Journey(string day, string departureDate, string arrivalDate, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation);
 	//float getLength() const;
 	string getDay() const;
 	string getDepartureTime() const;
@@ -40,6 +42,8 @@ public:
 	string toString() const;
 	int getHighestZone()const;
 	//void setLength(float newValue);
+	string getDepartureDate() const;
+	string getArrivalDate() const;
 };
 
 }

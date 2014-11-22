@@ -109,8 +109,8 @@ namespace Tic {
 
 		//addCredit(-getRealAmount(day, pass->getCost()));
 		addCredit(-pass->getCost());
-		cout << "Adding credit " << -pass->getCost() << endl;
-		cout << "Adding pass " << pass->getLength() << endl;
+		//cout << "Adding credit " << -pass->getCost() << endl;
+		//cout << "Adding pass " << pass->getLength() << endl;
 		purchases.push_back(pass);
 
 		return true;
@@ -152,22 +152,44 @@ namespace Tic {
 
 	}
 
+	float MyTic::getPurchaseTotalForWeek(const string& endDate) const {
+
+		float result = 0;
+
+		for (vector<Pass::TravelPass*>::const_reverse_iterator it = purchases.rbegin(); it != purchases.rend(); ++it){
+			if (dynamic_cast<Pass::Weekly*>((*it)) != NULL /*&& result > 0*/){
+				//result = 0;//(*it)->getCost();
+				break;
+			}
+			if (/*dynamic_cast<Pass::Weekly*>((*it)) == NULL &&*/
+					(*it)->getJourneys().size() > 0 &&
+					System::DateTime::compareDates((*it)->getStartDate(), System::DateTime::getStartOfWeek(endDate)) >= 0 &&
+					System::DateTime::compareDates((*it)->getEndDate(), endDate) <= 0)
+				result += (*it)->getCost();
+		}
+
+		//cout << "ptotal=" << result << endl;
+
+		return result;
+
+	}
+
 	void MyTic::removePurchases(string day){
 
-		cout << "Deleting " << purchases[0]->getLength() << endl;
-		delete purchases[0];
-		purchases.erase(purchases.begin());
-		return;
-
-		for (size_t i = 0, i_ = purchases.size(); i < i_; ++i){
-			Pass::TwoHoursZone1* zone = dynamic_cast<Pass::TwoHoursZone1*>(purchases[i]);
-			if (zone != NULL){
-				cout << "Deleting " << zone->getLength() << endl;
-				//delete zone;
-				//delete purchases[i];
-				//purchases.erase(purchases.begin() + i);
-			}
-		}
+//		cout << "Deleting " << purchases[0]->getLength() << endl;
+//		delete purchases[0];
+//		purchases.erase(purchases.begin());
+//		return;
+//
+//		for (size_t i = 0, i_ = purchases.size(); i < i_; ++i){
+//			Pass::TwoHoursZone1* zone = dynamic_cast<Pass::TwoHoursZone1*>(purchases[i]);
+//			if (zone != NULL){
+//				cout << "Deleting " << zone->getLength() << endl;
+//				//delete zone;
+//				//delete purchases[i];
+//				//purchases.erase(purchases.begin() + i);
+//			}
+//		}
 
 	}
 

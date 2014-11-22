@@ -162,6 +162,7 @@ private:
 	User::BaseUser* getUserFromConsole();
 	System::Station* getStationFromConsole(string prefix = string());
 	Pass::TravelPass* getPassFromConsole(string suffix = string());
+	string getDateFromConsole(string prefix = string());
 	string getTimeFromConsole(string prefix = string());
 	bool validateData(const string& str);
 };

@@ -22,13 +22,15 @@ void Journey::setLength(float newValue) {
 Journey::Journey ()
 	: day(string()), departureTime(string()), arrivalTime(string()), fromStation(NULL), toStation(NULL){}
 
-Journey::Journey(string day, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation){
+Journey::Journey(string day, string departureDate, string arrivalDate, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation){
 
 	this->day = day;
 	this->departureTime = departureTime;
 	this->arrivalTime = arrivalTime;
 	this->fromStation = fromStation;
 	this->toStation = toStation;
+	this->departureDate = departureDate;
+	this->arrivalDate = arrivalDate;
 
 }
 
@@ -74,6 +76,14 @@ int Journey::getHighestZone() const{
 
 	return result;
 
+}
+
+string Journey::getDepartureDate() const {
+	return departureDate;
+}
+
+string Journey::getArrivalDate() const {
+	return arrivalDate;
 }
 
 }

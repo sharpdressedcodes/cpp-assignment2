@@ -66,6 +66,7 @@ namespace Pass {
 		if (journeys.size() == 0){
 			startTime = journey->getDepartureTime();
 			startDay = journey->getDay();
+			startDate = journey->getDepartureDate();
 		}
 
 		journeys.push_back(journey);
@@ -88,7 +89,7 @@ namespace Pass {
 		for (size_t i = 0, i_ = journeys.size(); i < i_; ++i){
 			if (journey->toString().compare(journeys[i]->toString()) == 0){
 				//journeys.erase(journeys.begin() + i);
-				cout << "Erasing " << journeys[i]->toString() << endl;
+				//cout << "Erasing " << journeys[i]->toString() << endl;
 				journeys.erase(journeys.begin() + i);
 				break;
 			}
@@ -102,6 +103,18 @@ namespace Pass {
 
 	string TravelPass::getStartDay() const {
 		return startDay;
+	}
+
+	string TravelPass::getStartDate() const {
+		return startDate;
+	}
+
+	void TravelPass::setStartDate(string newValue){
+		this->startDate = newValue;
+	}
+
+	string TravelPass::getEndDate(){
+		return startDate;
 	}
 
 }

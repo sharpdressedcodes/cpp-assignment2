@@ -26,6 +26,22 @@ enum eDays {
 	eDaysMax
 };
 
+enum eMonths {
+	eJanuary,
+	eFebruary,
+	eMarch,
+	eApril,
+	eMay,
+	eJune,
+	eJuly,
+	eAugust,
+	eSeptember,
+	eOctober,
+	eNovember,
+	eDecember,
+	eMonthsMax
+};
+
 class DateTime {
 private:
 
@@ -41,7 +57,12 @@ public:
 	static string getCurrentTime(string delim = string());
 	static vector<string> getDaysAsVector();
 	static string subtractTime(const string& time1, const string& time2);
+	static string subtractDateTime(const string& date1, const string& date2, const string& time1, const string& time2);
 	static string addTime(const string& time1, const string& time2);
+	static string getStartOfWeek(const string& endDate);
+	static string getEndOfWeek(const string& startDate);
+	static int compareDates(const string& date1, const string& date2);
+	static int getMaxDaysInMonth(int month);
 
 };
 

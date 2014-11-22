@@ -23,6 +23,8 @@
 #include "../Pass/twoHoursZone1And2.h"
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
+#include "../Pass/weekly.h"
+#include "../System/dateTime.h"
 #include <vector>
 using std::vector;
 using Pass::TravelPass;
@@ -69,6 +71,7 @@ namespace Tic {
 	  virtual unsigned int getPurchaseCount() const;
 	  virtual vector<Pass::TravelPass*> getPurchases() const;
 	  virtual float getPurchaseTotal(string day = string()) const;
+	  virtual float getPurchaseTotalForWeek(const string& endDate) const;
 	  virtual void removePurchases(string day);
 
 	  virtual string toString() const = 0;

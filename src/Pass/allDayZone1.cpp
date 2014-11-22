@@ -120,7 +120,7 @@ namespace Pass {
 			if (j.size() == 0)
 				return requiredZone < 2;
 
-			if (j[j.size() - 1]->getArrivalTime() <= journey->getDepartureTime())
+			if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime()))
 				return requiredZone < 2;
 
 		//}
@@ -128,11 +128,5 @@ namespace Pass {
 		return false;
 
 	}
-
-//	bool AllDayZone1::canUpgrade(){
-//
-//
-//
-//	}
 
 }

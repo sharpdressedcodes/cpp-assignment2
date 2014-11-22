@@ -1,9 +1,10 @@
 #users
-bs:senior:Bjarne Stroustrup:bjarne.stroustrup@rmit.edu.au:0.00
+bs:senior:Bjarne Stroustrup:bjarne.stroustrup@rmit.edu.au:1.45
 gk:junior:greg:dsds@dsdsa.com:20.00
-ws:adult:Walter Savitch:walter.savitch@rmit.edu.au:41.50
+ws:adult:Walter Savitch:walter.savitch@rmit.edu.au:14.30
 #prices
 2Hour:Zone1:2.50
 2Hour:Zone12:3.50
 AllDay:Zone1:4.90
 AllDay:Zone12:6.80
+Weekly:Zone12:15.00

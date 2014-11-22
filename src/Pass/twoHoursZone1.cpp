@@ -124,13 +124,14 @@ namespace Pass {
 			//cout << "Current=" << current << " added=" << added << endl;
 			hours = Utility::stringToInt(added.substr(0, 2));
 			correctDay = journey->getDay().compare(journeys[0]->getDay()) == 0;
-			correctTime = journeys[0]->getArrivalTime() <= journey->getDepartureTime();
+			correctTime = Utility::stringToInt(journeys[0]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime());
 
 		}
+
+		//cout << "req=" << (required < 2) << " cd=" << correctDay << " ct=" << correctTime << " hours=" << (hours < 2) << " diff=" << diff << endl;
 
 		return required < 2 && correctDay && correctTime && hours < 2;
 
 	}
-
 
 }

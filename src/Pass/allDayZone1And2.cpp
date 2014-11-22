@@ -112,13 +112,11 @@ namespace Pass {
 		if (j.size() == 0)
 			return true;
 
-		if (j[j.size() - 1]->getArrivalTime() <= journey->getDepartureTime())
+		if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime()))
 			return true;
 
 		return false;
 
 	}
-
-
 
 }

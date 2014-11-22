@@ -10,6 +10,7 @@
 #include "../Exception/stationExists.h"
 #include "../Exception/userIdExists.h"
 #include "../Pass/journey.h"
+#include "../Pass/weekly.h"
 #include "../User/baseUser.h"
 #include "../User/adult.h"
 #include "../User/junior.h"

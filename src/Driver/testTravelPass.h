@@ -28,6 +28,7 @@
 #include "../Pass/twoHoursZone1And2.h"
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
+#include "../System/storage.h"
 #define MAX_TRAVELPASSES 100
 using namespace std;
 //using Ui::ConsoleUI;
