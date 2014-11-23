@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -8,16 +8,9 @@
 * Start up code provided by Robert T.McQuillan
 ****************************************************************************/
 
-//
-//myTic.h
-//
-// MyTic class
-//
-
 #ifndef __MYTIC_H__
 #define __MYTIC_H__
 
-/*TO DO  REQUIRED HEADER FILES AND NAMESPACES*/
 #include "../Pass/travelPass.h"
 #include "../Pass/twoHoursZone1.h"
 #include "../Pass/twoHoursZone1And2.h"
@@ -37,7 +30,6 @@ namespace Tic {
 
 	  float credit;
 	  float limit;
-	  /*TO DO ANY FURTHER ATTRIBUTES AND CONSTANTS*/
 	  unsigned int maxPasses;
 	  vector<Pass::TravelPass*> purchases;
 	  vector<string> freeDays;
@@ -49,7 +41,9 @@ namespace Tic {
 
 	  MyTic();
 	  MyTic(int maxPasses_);
-	  MyTic(float theCredit, float theLimit, int maxPasses_, vector<string> freeDays = vector<string>());
+	  MyTic(float theCredit,
+			  float theLimit, int maxPasses_,
+			  vector<string> freeDays = vector<string>());
 	  virtual ~MyTic() ;
 	  virtual void input();   // Data input for a MyTic object
 	  virtual void print();  // Data output for a MyTic object
@@ -72,7 +66,7 @@ namespace Tic {
 	  virtual vector<Pass::TravelPass*> getPurchases() const;
 	  virtual float getPurchaseTotal(string day = string()) const;
 	  virtual float getPurchaseTotalForWeek(const string& endDate) const;
-	  virtual void removePurchases(string day);
+	  virtual void removePurchases(const string& day);
 
 	  virtual string toString() const = 0;
 

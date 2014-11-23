@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -22,7 +22,8 @@ namespace Pass {
 	TwoHoursZone1::TwoHoursZone1(float theCost)
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost){}
 
-	TwoHoursZone1::TwoHoursZone1(string theLength, string theZones, float theCost)
+	TwoHoursZone1::TwoHoursZone1(string theLength,
+			string theZones, float theCost)
 		: TravelPass(theLength, theZones, theCost) {}
 
 	TwoHoursZone1::~TwoHoursZone1(){}
@@ -106,10 +107,14 @@ namespace Pass {
 
 		bool correctDay = true;
 		bool correctTime = true;
-		string diff = System::DateTime::subtractTime(journey->getDepartureTime(), journey->getArrivalTime());
+		string diff = System::DateTime::subtractTime(
+			journey->getDepartureTime(),
+			journey->getArrivalTime()
+		);
 		int hours = Utility::stringToInt(diff.substr(0, 2));
 		int required = journey->getHighestZone();
 
+		// Do we have any existing journeys?
 		if (journeys.size() > 0){
 
 			// calculate the time between first departure and last arrival
@@ -117,18 +122,15 @@ namespace Pass {
 
 			string current = System::DateTime::subtractTime(
 				journeys[0]->getDepartureTime(),
-				//journeys[journeys.size() - 1]->getArrivalTime()
 				journey->getArrivalTime()
 			);
-			string added = current;//System::DateTime::addTime(current, diff);
-			//cout << "Current=" << current << " added=" << added << endl;
+			string added = current;
 			hours = Utility::stringToInt(added.substr(0, 2));
 			correctDay = journey->getDay().compare(journeys[0]->getDay()) == 0;
-			correctTime = Utility::stringToInt(journeys[0]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime());
+			correctTime = Utility::stringToInt(journeys[0]->getArrivalTime())
+				<= Utility::stringToInt(journey->getDepartureTime());
 
 		}
-
-		//cout << "req=" << (required < 2) << " cd=" << correctDay << " ct=" << correctTime << " hours=" << (hours < 2) << " diff=" << diff << endl;
 
 		return required < 2 && correctDay && correctTime && hours < 2;
 

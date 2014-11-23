@@ -8,11 +8,6 @@
 * Start up code provided by Robert T.McQuillan
 ****************************************************************************/
 
-// testTravelPass.cpp for CPT 323 Assignment 2 SP3 2014
-//
-//
-// CPT323 2014  assignment 2
-
 #include "testTravelPass.h"
 
 /*

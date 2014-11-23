@@ -1,3 +1,12 @@
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #include "dateTime.h"
 
@@ -28,6 +37,9 @@ const string DateTime::MONTHS[] = {
 	"December"
 };
 
+/*
+ * Had to resort to c based functions for this.
+ */
 tm *DateTime::getLocalTime(){
 
 	time_t raw;
@@ -85,13 +97,14 @@ vector<string> DateTime::getDaysAsVector(){
 
 }
 
-string DateTime::subtractDateTime(const string& date1, const string& date2, const string& time1, const string& time2){
+string DateTime::subtractDateTime(const string& date1, const string& date2,
+		const string& time1, const string& time2){
 
-	// return the time between two dates in ddmmyyyy format
+	// return the time between two dates in hhmm format
 
 	stringstream ss;
 	string timeDiff = subtractTime(time1, time2);
-	int hours, d1, d2, m1, m2, y1, y2, d, m, y;//, dayMax1;//, dayMax2;
+	int hours, d1, d2, m1, m2, y1, y2, d, m, y;
 	string sdate1(date1), sdate2(date2);
 
 	if (sdate1.length() == 7)
@@ -106,34 +119,15 @@ string DateTime::subtractDateTime(const string& date1, const string& date2, cons
 	m2 = Utility::stringToInt(sdate2.substr(2, 2));
 	y1 = Utility::stringToInt(sdate1.substr(4));
 	y2 = Utility::stringToInt(sdate2.substr(4));
-	//dayMax1 = getMaxDaysInMonth(m1 - 1);
-	//dayMax2 = getMaxDaysInMonth(m2 - 1);
 
 	d = d2 - d1;
 	m = m2 - m1;
 	y = y2 - y1;
 
-	//if (d < 1){
-		//d += dayMax1;
-		//--m;
-	//}
-
-	//while (m < 1){
-		//m += eMonthsMax;
-		//--y;
-	//}
-
 	hours = (d * 24) + (m * 24 * 12) + ( y * 24 * 12 * 365 );
-
-	//cout << "DateTime::subtractDateTime: " << endl;
-	//cout << "d1=" << d1 << " d2=" << d2 << " m1=" << m1 << " m2=" << m2 << " y1=" << y1 << " y2=" << y2 << " d=" << d << " m=" << m << " y=" << y << endl;
-	//cout << "HOURS=" << hours << endl;
-
-	//ss << d << m << y;
 	ss << hours << "00";
-	return addTime(timeDiff, ss.str());
 
-	//return ss.str();
+	return addTime(timeDiff, ss.str());
 
 }
 
@@ -154,9 +148,6 @@ string DateTime::subtractTime(const string& time1, const string& time2){
 
 	h = hour2 - hour1;
 	m = minute2 - minute1;
-
-	//cout << "DateTime::subtractTime: " << endl;
-	//cout << "h1=" << hour1 << " h2=" << hour2 << " m1=" << minute1 << " m2=" << minute2 << " h=" << h << " m=" << m << "\n" << endl;
 
 	while (m > mMax){
 		m -= mMax;
@@ -303,8 +294,6 @@ int DateTime::compareDates(const string& date1, const string& date2){
 
 	if (d2.length() == 7)
 		d2.insert(0, "0");
-
-	//cout << "d1=" << d1 << " d2=" << d2 << "\n" << endl;
 
 	day1 = d1.substr(0, 2);
 	month1 = d1.substr(2, 2);

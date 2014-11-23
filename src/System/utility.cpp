@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -109,7 +109,8 @@ string Utility::getStringChoiceFromConsole(const vector<string>& choices,
 	size_t smallestLength = 1000;
 	size_t longestLength = 0;
 
-	for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+	for (vector<string>::const_iterator it =
+			choices.begin(); it != choices.end(); ++it){
 		size_t len = (*it).length();
 		if (smallestLength > len)
 			smallestLength = len;
@@ -134,7 +135,8 @@ string Utility::getStringChoiceFromConsole(const vector<string>& choices,
 			continue;
 		}
 
-		for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+		for (vector<string>::const_iterator it =
+				choices.begin(); it != choices.end(); ++it){
 			if (result.compare((*it).c_str()) == 0){
 				isValid = true;
 				break;
@@ -159,7 +161,8 @@ string Utility::getSubstringChoiceFromConsole(const unsigned int min,
 	size_t smallestLength = min;
 	size_t longestLength = 0;
 
-	for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
+	for (vector<string>::const_iterator it =
+			choices.begin(); it != choices.end(); ++it){
 		size_t len = (*it).length();
 		if (longestLength < len)
 			longestLength = len;
@@ -182,8 +185,10 @@ string Utility::getSubstringChoiceFromConsole(const unsigned int min,
 			continue;
 		}
 
-		for (vector<string>::const_iterator it = choices.begin(); it != choices.end(); ++it){
-			if (toLower(result).compare(toLower((*it).substr(0, result.length())).c_str()) == 0){
+		for (vector<string>::const_iterator it =
+				choices.begin(); it != choices.end(); ++it){
+			if (toLower(result).compare(toLower((*it).substr(0,
+					result.length())).c_str()) == 0){
 				isValid = true;
 				break;
 			}
@@ -324,7 +329,8 @@ string Utility::loadFile(const string& filename){
 
 }
 
-bool Utility::saveFile(const string& filename, const string& data, bool append = false){
+bool Utility::saveFile(const string& filename, const string& data,
+		bool append = false){
 
 	bool result = false;
 	ofstream fs;
@@ -370,12 +376,14 @@ string Utility::implode(const vector<string> arr, const string& delim){
 
 	string result;
 
-	for (vector<string>::const_iterator it = arr.begin(); it != arr.end(); ++it){
+	for (vector<string>::const_iterator it =
+			arr.begin(); it != arr.end(); ++it){
 		result.append((*it));
 		result.append(delim);
 	}
 
-	if (result.length() > 0 && result.compare(result.size() - delim.size(), delim.size(), delim) == 0)
+	if (result.length() > 0 && result.compare(result.size() -
+			delim.size(), delim.size(), delim) == 0)
 		result = result.substr(0, result.size() - delim.size());
 
 	return result;
@@ -384,7 +392,9 @@ string Utility::implode(const vector<string> arr, const string& delim){
 
 bool Utility::startsWith(const string& str, const string& lookup){
 
-	if (str.length() == 0 || lookup.length() == 0 || lookup.length() > str.length())
+	if (str.length() == 0 ||
+			lookup.length() == 0 ||
+			lookup.length() > str.length())
 		return false;
 
 	return str.compare(0, lookup.length(), lookup.c_str()) == 0;
@@ -393,10 +403,13 @@ bool Utility::startsWith(const string& str, const string& lookup){
 
 bool Utility::endsWith(const string& str, const string& lookup){
 
-	if (str.length() == 0 || lookup.length() == 0 || lookup.length() > str.length())
+	if (str.length() == 0 ||
+			lookup.length() == 0 ||
+			lookup.length() > str.length())
 		return false;
 
-	return str.compare(str.length() - lookup.length(), lookup.length(), lookup.c_str()) == 0;
+	return str.compare(str.length() -
+			lookup.length(), lookup.length(), lookup.c_str()) == 0;
 
 }
 
@@ -404,7 +417,8 @@ string Utility::ltrim(const string& str, const string& lookup){
 
 	string result(str);
 
-	while (Utility::startsWith(result, lookup) && lookup.length() < result.length())
+	while (Utility::startsWith(result, lookup) &&
+			lookup.length() < result.length())
 		result = result.substr(lookup.length());
 
 
@@ -433,7 +447,8 @@ string Utility::trim(const string& str, const string& lookup){
 
 }
 
-string Utility::replace(const string& str, const string& lookup, string replacement, bool all){
+string Utility::replace(const string& str,
+		const string& lookup, string replacement, bool all){
 
 	string result(str);
 	size_t pos = result.find(lookup.c_str());
@@ -455,7 +470,8 @@ string Utility::toLower(const string& str){
 
 	for (string::iterator it = s.begin(); it != s.end(); ++it){
 		char c = (*it);
-		result.append(1, c > 'A' - 1 && c < 'Z' + 1 ? c + STRING_CASE_CONVERSION : c);
+		result.append(1, c > 'A' - 1 &&
+				c < 'Z' + 1 ? c + STRING_CASE_CONVERSION : c);
 	}
 
 	return result;
@@ -468,7 +484,8 @@ string Utility::toUpper(const string& str){
 
 	for (string::iterator it = s.begin(); it != s.end(); ++it){
 		char c = (*it);
-		result.append(1, c > 'a' - 1 && c < 'z' + 1 ? c - STRING_CASE_CONVERSION : c);
+		result.append(1, c > 'a' - 1 &&
+				c < 'z' + 1 ? c - STRING_CASE_CONVERSION : c);
 	}
 
 	return result;

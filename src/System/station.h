@@ -1,14 +1,16 @@
-/*
- * station.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #ifndef STATION_H_
 #define STATION_H_
 
-//#include "../Pass/travelPass.h"
 #include <istream>
 #include <ostream>
 #include <strstream>
@@ -23,22 +25,20 @@ namespace System {
 
 	private:
 		string name;
-		//Pass::TravelPass* zone;
 		int zone;
 		unsigned int startedJourneys;
 		unsigned int finishedJourneys;
+
 	public:
 		static const int UNASSIGNED_ZONE;
 		Station();
-		//Station(string name, Pass::TravelPass* zone);
 		Station(const string& name, const int& zone);
+		~Station();
 		string getName() const;
-		//Pass::TravelPass* getZone() const;
 		int getZone() const;
 		unsigned int getStartedJourneys() const;
 		unsigned int getFinishedJourneys() const;
 		void setName(string newValue);
-		//void setZone(Pass::TravelPass* newValue);
 		void setZone(const int& newValue);
 		void incrementStartedJourneys();
 		void incrementFinishedJourneys();

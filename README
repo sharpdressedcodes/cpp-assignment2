@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -25,7 +25,15 @@ None
 
 Incomplete functionality:
 -------------------------
-None
+Requirement 8:
+Created the generic storage class but didn't get time to implement it.
+
+Requirement 9:
+Created and used a function object (Email Validator) but couldn't work out
+how to cast it back from a BaseValidator* when using it in a map.
+
+Requirement 11:
+Didn't have enough time to complete.
 
 
 Assumptions:
@@ -33,24 +41,18 @@ Assumptions:
 None
 
 
-SECTION C 
-Answer to Array of TravelPass Objects vs. Array of TravelPass Pointers:
------------------------------------------------------------------------
-Because we run into the slicing problem. When we cast back to a TravelPass
-object, we will lose information about the derived objects. We cannot get
-that information back afterwards.
-
-Also, using a vector is preferred over using an array.
-
-
 Any other notes for the marker:
 -------------------------------
-The input and output methods inside the MyTic class were not implemented
-because I did not want too much coupling. I left the input to the UI class.
+Requirement 1:
+I know TestTravelPas is not a class, but I put it there for illustrative
+purposes (to show main()).
 
-For Task C, I implemented the input methods in the derived classes, but
-left out the error checking. This was just to show that I understood the
-concept. Again, I left the error checking of input to the UI class as I
-saw this a more suitable fit.
+Requirement 8 Locations:
+System::Storage, Driver::TestTravelPass
 
+Requirement 9 Locations:
+Ui::Console::addUser, System::MyTicSystem::userFromString
 
+Requirement 10 Locations:
+Pass::Weekly, System::MyTicSystem, and other various locations throughout
+the project.

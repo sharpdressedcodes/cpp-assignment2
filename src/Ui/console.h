@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -31,29 +31,6 @@ using namespace Pass;
 using Pass::AllDayZone1;
 using System::Utility;
 
-/*enum MENU_OPTIONS {
-	MENU_INDEX_QUIT,
-	MENU_INDEX_BUY,
-	MENU_INDEX_CHARGE,
-	MENU_INDEX_SHOW,
-	MENU_INDEX_PRINT,
-	MAX_MENU
-};
-
-enum MENU_TIME_OPTIONS {
-	MENU_INDEX_TIME_2HOURS = 'a',
-	MENU_INDEX_TIME_DAY = 'b',
-	MENU_INDEX_TIME_CANCEL = 'c',
-	MAX_MENU_TIME = 3
-};
-
-enum MENU_ZONE_OPTIONS {
-	MENU_INDEX_ZONE_1 = 'a',
-	MENU_INDEX_ZONE_1AND2 = 'b',
-	MENU_INDEX_ZONE_CANCEL = 'c',
-	MAX_MENU_ZONE = 3
-};*/
-
 namespace Ui {
 
 /*
@@ -74,35 +51,11 @@ private:
 	static string MENU_STRING_ADD;
 	static string MENU_STRING_QUIT;
 
-	/*static string MENU_STRING_QUIT;
-	static string MENU_STRING_BUY;
-	static string MENU_STRING_CHARGE;
-	static string MENU_STRING_SHOW;
-	static string MENU_STRING_PRINT;
-	static string MENU_STRING_CANCEL;*/
-
-	static string CREDIT_PREFIX;
-	static string YOU_PURCHASED_PREFIX;
-	static string PURCHASED_PREFIX;
-	static string PURCHASES_PREFIX;
-	static string PURCHASES_SUFFIX;
-
-	static string MESSAGE_CANNOT_ADD_CREDIT;
-	static string MESSAGE_ADD_CREDIT;
-	static string MESSAGE_CREDIT_OVER;
-	static string MESSAGE_CREDIT_DIVISOR;
-	static string MESSAGE_NOT_ENOUGH_CREDIT;
-	static string MESSAGE_NO_PURCHASES;
-	static string MESSAGE_NO_CREDIT;
-	static string MESSAGE_MAX_PASSES;
-	static string MESSAGE_MENU_WELCOME;
 	static string MESSAGE_MENU_OPTION;
 	static string MESSAGE_MENU_SELECTION;
 	static string MESSAGE_MENU_INVALID_SELECTION;
 	static string MESSAGE_MENU_GOODBYE;
-	static string MESSAGE_MENU_TIME_PERIOD;
 	static string MESSAGE_MENU_YOUR_SELECTION;
-	static string MESSAGE_MENU_ZONE;
 
 public:
 

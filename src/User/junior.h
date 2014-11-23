@@ -1,9 +1,12 @@
-/*
- * junior.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #ifndef JUNIOR_H_
 #define JUNIOR_H_
@@ -20,6 +23,5 @@ namespace User {
 	};
 
 }
-
 
 #endif /* JUNIOR_H_ */

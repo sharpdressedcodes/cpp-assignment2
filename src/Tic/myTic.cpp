@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -21,7 +21,8 @@ namespace Tic {
 	MyTic::MyTic(int maxPasses_)
 		: credit(0), limit(MAX_LIMIT), maxPasses(maxPasses_){}
 
-	MyTic::MyTic(float theCredit, float theLimit, int maxPasses_, vector<string> freeDays)
+	MyTic::MyTic(float theCredit,
+			float theLimit, int maxPasses_, vector<string> freeDays)
 	: credit(theCredit), limit(theLimit), maxPasses(maxPasses_){
 		this->freeDays = freeDays;
 	}
@@ -69,7 +70,8 @@ namespace Tic {
 	bool MyTic::isFreeDay(const string& day){
 
 		if (this->freeDays.size() > 0){
-			for (vector<string>::const_iterator it = freeDays.begin(); it != freeDays.end(); ++it)
+			for (vector<string>::const_iterator it =
+					freeDays.begin(); it != freeDays.end(); ++it)
 				if (day.compare((*it)) == 0)
 					return true;
 		}
@@ -85,7 +87,8 @@ namespace Tic {
 	}
 
 	/*
-	 * Attempt to add credit to an account. If the amount exceeds the limit, this
+	 * Attempt to add credit to an account.
+	 * If the amount exceeds the limit, this
 	 * function will return false.
 	 */
 	bool MyTic::addCredit(float amount){
@@ -107,10 +110,7 @@ namespace Tic {
 		if (maxPasses > 0 && purchases.size() >= maxPasses)
 			return false;
 
-		//addCredit(-getRealAmount(day, pass->getCost()));
 		addCredit(-pass->getCost());
-		//cout << "Adding credit " << -pass->getCost() << endl;
-		//cout << "Adding pass " << pass->getLength() << endl;
 		purchases.push_back(pass);
 
 		return true;
@@ -142,8 +142,11 @@ namespace Tic {
 
 		float result = 0;
 
-		for (vector<Pass::TravelPass*>::const_iterator it = purchases.begin(); it != purchases.end(); ++it){
-			if (day.length() > 0 && (*it)->getJourneys().size() > 0 && day.compare((*it)->getJourneys().at(0)->getDay()) != 0)
+		for (vector<Pass::TravelPass*>::const_iterator it =
+				purchases.begin(); it != purchases.end(); ++it){
+			if (day.length() > 0 &&
+					(*it)->getJourneys().size() > 0 &&
+					day.compare((*it)->getJourneys().at(0)->getDay()) != 0)
 				continue;
 			result += (*it)->getCost();
 		}
@@ -156,25 +159,24 @@ namespace Tic {
 
 		float result = 0;
 
-		for (vector<Pass::TravelPass*>::const_reverse_iterator it = purchases.rbegin(); it != purchases.rend(); ++it){
-			if (dynamic_cast<Pass::Weekly*>((*it)) != NULL /*&& result > 0*/){
-				//result = 0;//(*it)->getCost();
+		for (vector<Pass::TravelPass*>::const_reverse_iterator it =
+				purchases.rbegin(); it != purchases.rend(); ++it){
+			if (dynamic_cast<Pass::Weekly*>((*it)) != NULL)
 				break;
-			}
-			if (/*dynamic_cast<Pass::Weekly*>((*it)) == NULL &&*/
-					(*it)->getJourneys().size() > 0 &&
-					System::DateTime::compareDates((*it)->getStartDate(), System::DateTime::getStartOfWeek(endDate)) >= 0 &&
-					System::DateTime::compareDates((*it)->getEndDate(), endDate) <= 0)
+
+			if ((*it)->getJourneys().size() > 0 &&
+					System::DateTime::compareDates((*it)->getStartDate(),
+							System::DateTime::getStartOfWeek(endDate)) >= 0 &&
+					System::DateTime::compareDates((*it)->getEndDate(),
+							endDate) <= 0)
 				result += (*it)->getCost();
 		}
-
-		//cout << "ptotal=" << result << endl;
 
 		return result;
 
 	}
 
-	void MyTic::removePurchases(string day){
+	void MyTic::removePurchases(const string& day){
 
 //		cout << "Deleting " << purchases[0]->getLength() << endl;
 //		delete purchases[0];
@@ -182,7 +184,8 @@ namespace Tic {
 //		return;
 //
 //		for (size_t i = 0, i_ = purchases.size(); i < i_; ++i){
-//			Pass::TwoHoursZone1* zone = dynamic_cast<Pass::TwoHoursZone1*>(purchases[i]);
+//			Pass::TwoHoursZone1* zone =
+//			dynamic_cast<Pass::TwoHoursZone1*>(purchases[i]);
 //			if (zone != NULL){
 //				cout << "Deleting " << zone->getLength() << endl;
 //				//delete zone;

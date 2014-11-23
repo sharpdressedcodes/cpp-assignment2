@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -72,7 +72,8 @@ public:
 
 	static bool fileExists(const string& filename);
 	static string loadFile(const string& filename);
-	static bool saveFile(const string& filename, const string& data, bool append);
+	static bool saveFile(const string& filename,
+			const string& data, bool append);
 	static vector<string> explode(const string& str, const string& delim);
 	static string implode(const vector<string> arr, const string& delim);
 	static bool startsWith(const string& str, const string& lookup);
@@ -80,7 +81,9 @@ public:
 	static string ltrim(const string& str, const string& lookup);
 	static string rtrim(const string& str, const string& lookup);
 	static string trim(const string& str, const string& lookup);
-	static string replace(const string& str, const string& lookup, string replacement = std::string(), bool all = true);
+	static string replace(const string& str,
+			const string& lookup,
+			string replacement = std::string(), bool all = true);
 	static string toLower(const string& str);
 	static string toUpper(const string& str);
 	static string reverse(const string& str);
@@ -94,7 +97,8 @@ public:
 		if (objectMap.size() == 0)
 			return;
 
-		for (typename map<string, T>::const_iterator it = objectMap.begin(); it != objectMap.end(); ++it)
+		for (typename map<string, T>::const_iterator it =
+				objectMap.begin(); it != objectMap.end(); ++it)
 			keys.push_back((string)it->first);
 
 		for (size_t i = 0; i < keys.size(); i++)

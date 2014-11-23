@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -8,14 +8,10 @@
 * Start up code provided by Robert T.McQuillan
 ****************************************************************************/
 
-//
-// testPropertyA.h
-//
-// header file for the driver program
-//
-
 #ifndef __TESTTRAVELPASS_H__
 #define __TESTTRAVELPASS_H__
+
+#define MAX_TRAVELPASSES 100
 
 #include <iostream>
 #include <string>
@@ -29,8 +25,7 @@
 #include "../Pass/allDayZone1.h"
 #include "../Pass/allDayZone1And2.h"
 #include "../System/storage.h"
-#define MAX_TRAVELPASSES 100
+
 using namespace std;
-//using Ui::ConsoleUI;
 
 #endif

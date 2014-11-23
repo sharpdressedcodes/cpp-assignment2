@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -29,7 +29,6 @@ namespace Pass {
 		static const string DEFAULT_ZONES;
 
 		AllDayZone1();
-//		AllDayZone1(const AllDayZone1& zone);
 		AllDayZone1(float theCost);
 		AllDayZone1(string theLength, string theZones, float theCost);
 		~AllDayZone1();

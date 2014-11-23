@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -19,11 +19,6 @@ namespace Pass {
 	AllDayZone1::AllDayZone1()
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
 
-//	AllDayZone1::AllDayZone1(const AllDayZone1& zone)
-//		: TravelPass(zone.getLength(), zone.getZones(), zone.getCost()) {
-//
-//	}
-
 	AllDayZone1::AllDayZone1(float theCost)
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
 
@@ -32,9 +27,6 @@ namespace Pass {
 
 	AllDayZone1::~AllDayZone1(){}
 
-	/*
-	 * Shortcut for Task C. This does not validate user input.
-	 */
 	void AllDayZone1::input(){
 
 		cin >> *this;
@@ -78,9 +70,6 @@ namespace Pass {
 
 	}
 
-	/*
-	 * Task C - C3.
-	 */
 	ostream& operator<<(ostream& stream, AllDayZone1& pass){
 
 		stream << pass.toString();
@@ -89,9 +78,6 @@ namespace Pass {
 
 	}
 
-	/*
-	 * Task C - C3. This does not validate user input.
-	 */
 	istream& operator>>(istream& stream, AllDayZone1& pass){
 
 		cout << "Enter length: ";
@@ -111,19 +97,19 @@ namespace Pass {
 
 		int requiredZone = journey->getHighestZone();
 
-		//if (journey->getDay().compare(System::DateTime::getCurrentDayOfWeek()) == 0){
+		// Do we have any existing journeys?
+		if (journeys.size() == 0)
+			return requiredZone < 2;
 
-			if (journeys.size() == 0)
-				return requiredZone < 2;
+		// Are they for this day?
+		vector<Journey*> j = getJourneys(journey->getDay());
+		if (j.size() == 0)
+			return requiredZone < 2;
 
-			vector<Journey*> j = getJourneys(journey->getDay());
-			if (j.size() == 0)
-				return requiredZone < 2;
-
-			if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime()))
-				return requiredZone < 2;
-
-		//}
+		// Is the time correct?
+		if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <=
+				Utility::stringToInt(journey->getDepartureTime()))
+			return requiredZone < 2;
 
 		return false;
 

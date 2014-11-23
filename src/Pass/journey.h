@@ -1,9 +1,12 @@
-/*
- * journey.h
- *
- *  Created on: 09/11/2014
- *      Author: greg
- */
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #ifndef JOURNEY_H_
 #define JOURNEY_H_
@@ -20,7 +23,6 @@ namespace Pass {
 class Journey {
 
 private:
-	//float length;
 	string day;
 	string departureTime;
 	string arrivalTime;
@@ -31,17 +33,17 @@ private:
 
 public:
 	Journey();
-	//Journey(float length);
-	Journey(string day, string departureDate, string arrivalDate, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation);
-	//float getLength() const;
+	Journey(string day, string departureDate, string arrivalDate,
+			string departureTime, string arrivalTime,
+			System::Station *fromStation, System::Station *toStation);
+	~Journey();
 	string getDay() const;
 	string getDepartureTime() const;
 	string getArrivalTime() const;
 	System::Station *getFromStation() const;
 	System::Station *getToStation() const;
 	string toString() const;
-	int getHighestZone()const;
-	//void setLength(float newValue);
+	int getHighestZone() const;
 	string getDepartureDate() const;
 	string getArrivalDate() const;
 };

@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -17,7 +17,6 @@
 #ifndef __TRAVELPASS_H__
 #define __TRAVELPASS_H__
 
-//#include <algorithm>
 #include <string>
 #include <iostream>
 #include <typeinfo>
@@ -64,7 +63,6 @@ namespace Pass {
 	  virtual string toString() = 0;
 	  virtual bool canAddJourney(Journey* journey) = 0;
 	  virtual void removeJourney(Journey *journey);
-	  //virtual bool canUpgrade() = 0;
 	  virtual string getStartTime() const;
 	  virtual string getStartDay() const;
 	  virtual string getStartDate() const;

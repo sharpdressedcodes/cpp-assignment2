@@ -1,9 +1,12 @@
-/*
- * dateTime.h
- *
- *  Created on: 18/11/2014
- *      Author: greg
- */
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #ifndef DATETIME_H_
 #define DATETIME_H_
@@ -57,7 +60,8 @@ public:
 	static string getCurrentTime(string delim = string());
 	static vector<string> getDaysAsVector();
 	static string subtractTime(const string& time1, const string& time2);
-	static string subtractDateTime(const string& date1, const string& date2, const string& time1, const string& time2);
+	static string subtractDateTime(const string& date1, const string& date2,
+			const string& time1, const string& time2);
 	static string addTime(const string& time1, const string& time2);
 	static string getStartOfWeek(const string& endDate);
 	static string getEndOfWeek(const string& startDate);
@@ -67,6 +71,5 @@ public:
 };
 
 }
-
 
 #endif /* DATETIME_H_ */

@@ -1,3 +1,12 @@
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #ifndef MYTICSYSTEM_H_
 #define MYTICSYSTEM_H_
@@ -40,7 +49,7 @@ namespace System {
 		static const string USER_FILE_FLAG;
 		static const string ZONE_FILE_FLAG;
 		static const string COMMENT_FILE_FLAG;
-		static const unsigned int MAX_TRAVELPASSES;
+
 	public:
 		static const string FILE_DATA_DELIM;
 		MyTicSystem();
@@ -69,16 +78,18 @@ namespace System {
 		static string prepareLengthAsKey(const string& length);
 		static string prepareZoneAsKey(const string& zone);
 		void addJourney(User::BaseUser* user, Pass::Journey* journey);
-		void addPass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Journey* journey);
-		void upgradePass(User::BaseUser* user, Pass::TravelPass* pass, Pass::Journey* journey, int required, int hours);
-		void transferJourneys(Pass::TravelPass *fromPass, Pass::TravelPass *toPass);
+		void addPass(User::BaseUser* user,
+				Pass::TravelPass* pass, Pass::Journey* journey);
+		void upgradePass(User::BaseUser* user, Pass::TravelPass* pass,
+				Pass::Journey* journey, int required, int hours);
+		void transferJourneys(Pass::TravelPass *fromPass,
+				Pass::TravelPass *toPass);
 		void incrementStations(Pass::Journey *journey);
-		Pass::TravelPass *createRequiredPass(User::BaseUser* user, Pass::Journey *journey, int required, int hours);
+		Pass::TravelPass *createRequiredPass(User::BaseUser* user,
+				Pass::Journey *journey, int required, int hours);
 		void addUser(User::BaseUser* user);
 		map<string, Validation::BaseValidator<string>*> getValidators();
 		Validation::BaseValidator<string>* getValidator(const string& key);
-
-
 
 	};
 

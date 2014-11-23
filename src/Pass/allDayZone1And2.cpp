@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -22,14 +22,12 @@ namespace Pass {
 	AllDayZone1And2::AllDayZone1And2(float theCost)
 		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
 
-	AllDayZone1And2::AllDayZone1And2(string theLength, string theZones, float theCost)
+	AllDayZone1And2::AllDayZone1And2(string theLength,
+			string theZones, float theCost)
 		: TravelPass(theLength, theZones, theCost) {}
 
 	AllDayZone1And2::~AllDayZone1And2(){}
 
-	/*
-	 * Shortcut for Task C. This does not validate user input.
-	 */
 	void AllDayZone1And2::input(){
 
 		cin >> *this;
@@ -73,9 +71,6 @@ namespace Pass {
 
 	}
 
-	/*
-	 * Task C - C3.
-	 */
 	ostream& operator<<(ostream& stream, AllDayZone1And2& pass){
 
 		stream << pass.toString();
@@ -84,9 +79,6 @@ namespace Pass {
 
 	}
 
-	/*
-	 * Task C - C3. This does not validate user input.
-	 */
 	istream& operator>>(istream& stream, AllDayZone1And2& pass){
 
 		cout << "Enter length: ";
@@ -105,14 +97,18 @@ namespace Pass {
 
 	bool AllDayZone1And2::canAddJourney(Journey* journey){
 
+		// Do we have any existing journeys?
 		if (journeys.size() == 0)
 			return true;
 
+		// Are they for this day?
 		vector<Journey*> j = getJourneys(journey->getDay());
 		if (j.size() == 0)
 			return true;
 
-		if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <= Utility::stringToInt(journey->getDepartureTime()))
+		// Is the time correct?
+		if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <=
+				Utility::stringToInt(journey->getDepartureTime()))
 			return true;
 
 		return false;

@@ -1,6 +1,6 @@
 /****************************************************************************
 * CPT 323 - Object Oriented Programming in C++
-* Study Period 3 2014 Assignment 1 - "MelbourneConnect - RMIT" Ticketing System
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
 * Full Name        : Greg Kappatos
 * Student Number   : 3460969
 * Course Code      : CPT323
@@ -34,13 +34,17 @@ namespace Pass {
 		return cost;
 	}
 
+	/*
+	 * Return all journeys, or all journeys for a certain day.
+	 */
 	vector<Journey*> TravelPass::getJourneys(string day) {
 
 		if (day.length() == 0)
 			return this->journeys;
 		else {
 			vector<Journey*> j;
-			for (vector<Journey*>::const_iterator it = journeys.begin(); it != journeys.end(); ++it){
+			for (vector<Journey*>::const_iterator it = journeys.begin();
+					it != journeys.end(); ++it){
 				if (day.compare((*it)->getDay()) == 0)
 					j.push_back((*it));
 			}
@@ -61,6 +65,9 @@ namespace Pass {
 		cost = newCost;
 	}
 
+	/*
+	 * Add journey, and initialise required variables.
+	 */
 	void TravelPass::addJourney(Journey* journey){
 
 		if (journeys.size() == 0){
@@ -82,14 +89,8 @@ namespace Pass {
 
 	void TravelPass::removeJourney(Journey *journey){
 
-		//journeys.
-		//size_t i = 0;
-		//vector<Journey*>::iterator it = remove(journeys.begin(), journeys.end(), 1);
-
 		for (size_t i = 0, i_ = journeys.size(); i < i_; ++i){
 			if (journey->toString().compare(journeys[i]->toString()) == 0){
-				//journeys.erase(journeys.begin() + i);
-				//cout << "Erasing " << journeys[i]->toString() << endl;
 				journeys.erase(journeys.begin() + i);
 				break;
 			}

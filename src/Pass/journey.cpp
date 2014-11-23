@@ -1,28 +1,24 @@
+/****************************************************************************
+* CPT 323 - Object Oriented Programming in C++
+* Study Period 3 2014 Assignment 2 - "MelbourneConnect - RMIT" Ticketing System
+* Full Name        : Greg Kappatos
+* Student Number   : 3460969
+* Course Code      : CPT323
+* Program Code     : ?
+* Start up code provided by Robert T.McQuillan
+****************************************************************************/
 
 #include "journey.h"
 
 namespace Pass {
 
-/*Journey::Journey(){
-	this->length = 0;
-}
-
-Journey::Journey(float length){
-	this->length = length;
-}
-
-float Journey::getLength() const {
-	return this->length;
-}
-
-void Journey::setLength(float newValue) {
-	this->length = newValue;
-}*/
-
 Journey::Journey ()
-	: day(string()), departureTime(string()), arrivalTime(string()), fromStation(NULL), toStation(NULL){}
+	: day(string()), departureTime(string()), arrivalTime(string()),
+	  fromStation(NULL), toStation(NULL){}
 
-Journey::Journey(string day, string departureDate, string arrivalDate, string departureTime, string arrivalTime, System::Station *fromStation, System::Station *toStation){
+Journey::Journey(string day, string departureDate, string arrivalDate,
+		string departureTime, string arrivalTime, System::Station *fromStation,
+		System::Station *toStation){
 
 	this->day = day;
 	this->departureTime = departureTime;
@@ -33,6 +29,8 @@ Journey::Journey(string day, string departureDate, string arrivalDate, string de
 	this->arrivalDate = arrivalDate;
 
 }
+
+Journey::~Journey(){}
 
 string Journey::getDay() const {
 	return this->day;
@@ -58,12 +56,16 @@ string Journey::toString() const {
 
 	stringstream ss;
 
-	ss << fromStation->getName() << " to " << toStation->getName() << " at " << departureTime;
+	ss << fromStation->getName() << " to "
+			<< toStation->getName() << " at " << departureTime;
 
 	return ss.str();
 
 }
 
+/*
+ * Returns the highest zone required.
+ */
 int Journey::getHighestZone() const{
 
 	int result = 0;
