@@ -99,7 +99,7 @@ public:
 	Console();
 	~Console();
 	bool run(int argc, char *argv[]);
-	bool buyJourney(bool debug = false);
+	bool buyJourney();
 	User::BaseUser* rechargeTic();
 	void showCredit(User::BaseUser* user = NULL);
 	void printReports();

@@ -146,7 +146,9 @@ namespace Tic {
 				purchases.begin(); it != purchases.end(); ++it){
 			if (day.length() > 0 &&
 					(*it)->getJourneys().size() > 0 &&
-					day.compare((*it)->getJourneys().at(0)->getDay()) != 0)
+					day.compare(Utility::isNumeric(day) ?
+					(*it)->getJourneys()[0]->getDepartureDate() :
+					(*it)->getJourneys()[0]->getDay()) != 0)
 				continue;
 			result += (*it)->getCost();
 		}

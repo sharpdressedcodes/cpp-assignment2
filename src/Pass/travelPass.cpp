@@ -45,7 +45,8 @@ namespace Pass {
 			vector<Journey*> j;
 			for (vector<Journey*>::const_iterator it = journeys.begin();
 					it != journeys.end(); ++it){
-				if (day.compare((*it)->getDay()) == 0)
+				string s(Utility::isNumeric(day) ? (*it)->getDepartureDate() : (*it)->getDay());
+				if (day.compare(s) == 0)
 					j.push_back((*it));
 			}
 			return j;

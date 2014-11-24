@@ -20,17 +20,32 @@ No
 
 Known bugs:
 -----------
-None
+Not really a bug but it should go here.
+Kept getting warnings (on my pc and uni pc) about a backwards compatibility
+issue. Didn't have the time to work out which header is was complaining about.
+
+/usr/include/c++/4.7/backward/backward_warning.h:33:2: 
+warning: #warning This file includes at least one deprecated or antiquated 
+header which may be removed without further notice at a future date. Please 
+use a non-deprecated interface with equivalent functionality instead. For a 
+listing of replacement headers and interfaces, consult the file 
+backward_warning.h. To disable this warning use -Wno-deprecated. [-Wcpp]
 
 
 Incomplete functionality:
 -------------------------
+If I had more time, I would have moved all the constant numbers and strings
+into class constants.
+
 Requirement 8:
 Created the generic storage class but didn't get time to implement it.
 
 Requirement 9:
 Created and used a function object (Email Validator) but couldn't work out
 how to cast it back from a BaseValidator* when using it in a map.
+The idea was to have all validators derive from BaseValidator and force them
+to override the validate method. This could have then been called
+during input validation.
 
 Requirement 11:
 Didn't have enough time to complete.
@@ -44,11 +59,11 @@ None
 Any other notes for the marker:
 -------------------------------
 Requirement 1:
-I know TestTravelPas is not a class, but I put it there for illustrative
+I know TestTravelPass is not a class, but I put it there for illustrative
 purposes (to show main()).
 
 Requirement 8 Locations:
-System::Storage, Driver::TestTravelPass
+System::Storage
 
 Requirement 9 Locations:
 Ui::Console::addUser, System::MyTicSystem::userFromString
@@ -56,3 +71,145 @@ Ui::Console::addUser, System::MyTicSystem::userFromString
 Requirement 10 Locations:
 Pass::Weekly, System::MyTicSystem, and other various locations throughout
 the project.
+
+
+Test Cases:
+-----------
+
+Requirement 8:
+
+Ui::Console* testConsole = new Ui::Console();
+System::MyTicSystem* testSystem = new System::MyTicSystem();
+System::Storage<Ui::Console*>* storage = 
+    new System::Storage<Ui::Console*>(0, testConsole, "testConsole", true);
+System::Storage<System::MyTicSystem*>* system = 
+    new System::Storage<System::MyTicSystem*>(1, testSystem, 
+    "testSystem", true);
+
+cout << storage->getTag() << " " << system->getTag() << endl;
+
+delete storage;
+delete system;
+
+
+------------------------------------------------------------------------------
+
+
+Requirement 9:
+
+string goodEmail("test@example.com");
+string badEmail("testexamplecom");
+Validation::EmailAddress emailValidator;
+bool b = emailValidator(goodEmail);
+
+cout << "Email address is " << (b ? "" : "in") << "valid" << endl;
+
+b = emailValidator(badEmail);
+cout << "Email address is " << (b ? "" : "in") << "valid" << endl;
+
+
+my attempt to use inside an STL container:
+
+
+------------------------------------------------------------------------------
+
+
+Requirement 10:
+
+Ui::Console console;
+System::MyTicSystem* m_system = console.getSystem();
+
+m_system->loadUsersFromFile("myTic.dat");
+m_system->loadZonePricesFromFile("myTic.dat");
+m_system->loadStationsFromFile("stations.dat");
+
+User::BaseUser* user = m_system->getUser("bs");
+System::Station* fromStation = m_system->getStation("central");
+System::Station* toStation = m_system->getStation("flagstaff");
+string day = "Monday";
+string departureTime = "900";
+string arrivalTime = "905";
+string departureDate = "01012014";
+string arrivalDate = "01012014";
+Journey *journey = new Journey(day, departureDate, arrivalDate,
+        departureTime, arrivalTime, fromStation, toStation);
+try {
+    m_system->addJourney(user, journey);
+    console.showCredit(user);
+    cout << endl;
+} catch (Exception::InsufficientCredit &noCredit){
+    cerr << noCredit.getMessage() << endl;
+    return false;
+}
+
+fromStation = m_system->getStation("flagstaff");
+toStation = m_system->getStation("richmond");
+day = "Monday";
+departureTime = "1000";
+arrivalTime = "1015";
+departureDate = "01012014";
+arrivalDate = "01012014";
+journey = new Journey(day, departureDate, arrivalDate,
+        departureTime, arrivalTime, fromStation, toStation);
+try {
+    m_system->addJourney(user, journey);
+    console.showCredit(user);
+    cout << endl;
+} catch (Exception::InsufficientCredit &noCredit){
+    cerr << noCredit.getMessage() << endl;
+    return false;
+}
+
+
+fromStation = m_system->getStation("richmond");
+toStation = m_system->getStation("flagstaff");
+day = "Monday";
+departureTime = "1500";
+arrivalTime = "1525";
+departureDate = "01012014";
+arrivalDate = "01012014";
+journey = new Journey(day, departureDate, arrivalDate,
+        departureTime, arrivalTime, fromStation, toStation);
+try {
+    m_system->addJourney(user, journey);
+    console.showCredit(user);
+    cout << endl;
+} catch (Exception::InsufficientCredit &noCredit){
+    cerr << noCredit.getMessage() << endl;
+    return false;
+}
+
+fromStation = m_system->getStation("flagstaff");
+toStation = m_system->getStation("epping");
+day = "Wednesday";
+departureTime = "1500";
+arrivalTime = "1525";
+departureDate = "03012014";
+arrivalDate = "04012014";
+journey = new Journey(day, departureDate, arrivalDate,
+        departureTime, arrivalTime, fromStation, toStation);
+try {
+    m_system->addJourney(user, journey);
+    console.showCredit(user);
+    cout << endl;
+} catch (Exception::InsufficientCredit &noCredit){
+    cerr << noCredit.getMessage() << endl;
+    return false;
+}
+
+
+
+
+console output:
+2 Hours Zone 1 (Consession) Pass purchased for bs for $1.25
+Valid until 1100
+Credit remaining for bs: $10.95
+
+Current 2 Hours Travel Pass still valid
+Credit remaining for bs: $10.95
+
+2 Hours Travel Pass upgraded to All Day Pass for bs for $1.20
+Credit remaining for bs: $9.75
+
+All Day Travel Pass upgraded to Weekly Pass for bs for $6.30
+Credit remaining for bs: $3.45

@@ -189,6 +189,7 @@ string Utility::getSubstringChoiceFromConsole(const unsigned int min,
 				choices.begin(); it != choices.end(); ++it){
 			if (toLower(result).compare(toLower((*it).substr(0,
 					result.length())).c_str()) == 0){
+				result = (*it);
 				isValid = true;
 				break;
 			}

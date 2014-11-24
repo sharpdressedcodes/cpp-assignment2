@@ -50,9 +50,9 @@ bool Console::run(int argc, char *argv[]){
 	}
 
 	try {
-		m_system.loadStationsFromFile(argv[LoadStations]);
-		m_system.loadUsersFromFile(argv[LoadUsersAndZones]);
-		m_system.loadZonePricesFromFile(argv[LoadUsersAndZones]);
+		m_system->loadStationsFromFile(argv[LoadStations]);
+		m_system->loadUsersFromFile(argv[LoadUsersAndZones]);
+		m_system->loadZonePricesFromFile(argv[LoadUsersAndZones]);
 	} catch (Exception::BaseException& e){
 		cerr << e.getMessage() << endl;
 		return false;
@@ -142,206 +142,67 @@ bool Console::run(int argc, char *argv[]){
 	cout << MESSAGE_MENU_GOODBYE << endl;
 
 	// Persist user and zone states.
-	m_system.saveUsersToFile(argv[Console::SaveUsersAndZones]);
-	m_system.saveZonesToFile(argv[Console::SaveUsersAndZones]);
+	m_system->saveUsersToFile(argv[Console::SaveUsersAndZones]);
+	m_system->saveZonesToFile(argv[Console::SaveUsersAndZones]);
 
 	return true;
 
 }
 
-bool Console::buyJourney(bool debug){
+bool Console::buyJourney(){
 
 	const unsigned int minDayLength = 3;
 	string day, departureTime, arrivalTime, departureDate, arrivalDate;
-	//static int ela = 10;
 
-	if (debug){
+	User::BaseUser* user = getUserFromConsole();
+	System::Station* fromStation = getStationFromConsole("From");
+	System::Station* toStation = getStationFromConsole("To");
 
-		User::BaseUser* user = m_system.getUser("bs");
-		System::Station* fromStation = m_system.getStation("central");
-		System::Station* toStation = m_system.getStation("flagstaff");
-		day = "Monday";
-		//departureTime = "0900";
-		//arrivalTime = "0905";
-		departureTime = "900";
-		arrivalTime = "905";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		//departureTime = Utility::intToString(ela);
-		//departureTime.append("00");
-		//arrivalTime = Utility::intToString(ela);
-		//arrivalTime.append("20");
-		//ela++;
-		Journey *journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
+	while (fromStation->getName().compare(toStation->getName()) == 0){
+		cerr << "Error: stations must be different." << endl;
+		toStation = getStationFromConsole("To");
+	}
 
-		fromStation = m_system.getStation("flagstaff");
-		toStation = m_system.getStation("richmond");
-		day = "Monday";
-		departureTime = "1000";
-		arrivalTime = "1015";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
+	day = Utility::getSubstringChoiceFromConsole(
+		minDayLength,
+		System::DateTime::getDaysAsVector(),
+		"What day (eg mon): ",
+		"Error: Invalid day."
+	);
 
+	departureDate = getDateFromConsole("Departure ");
+	departureTime = getTimeFromConsole("Departure ");
+	arrivalDate = getDateFromConsole("Arrival ");
+	arrivalTime = getTimeFromConsole("Arrival ");
 
-		fromStation = m_system.getStation("richmond");
-		toStation = m_system.getStation("flagstaff");
-		day = "Monday";
-		departureTime = "1500";
-		arrivalTime = "1525";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
+	string diff = System::DateTime::subtractDateTime(departureDate,
+			arrivalDate, departureTime, arrivalTime);
 
-		fromStation = m_system.getStation("flagstaff");
-		toStation = m_system.getStation("epping");
-		day = "Wednesday";
-		departureTime = "1500";
-		arrivalTime = "1525";
-		departureDate = "03012014";
-		arrivalDate = "04012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
+	int ih = Utility::stringToInt(diff.substr(0, 2));
+	int im = Utility::stringToInt(diff.substr(2));
 
-
-
-		user = m_system.getUser("ws");
-		fromStation = m_system.getStation("flagstaff");
-		toStation = m_system.getStation("richmond");
-		day = "Monday";
-		departureTime = "1600";
-		arrivalTime = "1650";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
-
-		fromStation = m_system.getStation("richmond");
-		toStation = m_system.getStation("lilydale");
-		day = "Monday";
-		departureTime = "1700";
-		arrivalTime = "1730";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
-
-		fromStation = m_system.getStation("lilydale");
-		toStation = m_system.getStation("epping");
-		day = "Monday";
-		departureTime = "1800";
-		arrivalTime = "1950";
-		departureDate = "01012014";
-		arrivalDate = "01012014";
-		journey = new Journey(day, departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
-
-
-	} else {
-		User::BaseUser* user = getUserFromConsole();
-		System::Station* fromStation = getStationFromConsole("From");
-		System::Station* toStation = getStationFromConsole("To");
-
-		while (fromStation->getName().compare(toStation->getName()) == 0){
-			cerr << "Error: stations must be different." << endl;
-			toStation = getStationFromConsole("To");
-		}
-
-		day = Utility::getSubstringChoiceFromConsole(
-			minDayLength,
-			System::DateTime::getDaysAsVector(),
-			"What day: ",
-			"Error: Invalid day."
-		);
+	while (ih < 0 || im < 0 || (ih == 0 && im == 0)){
+		cerr << "Departure time must be before arrival time." << endl;
 		departureDate = getDateFromConsole("Departure ");
 		departureTime = getTimeFromConsole("Departure ");
 		arrivalDate = getDateFromConsole("Arrival ");
 		arrivalTime = getTimeFromConsole("Arrival ");
+		diff = System::DateTime::subtractDateTime(departureDate,
+			arrivalDate, departureTime, arrivalTime);
+		ih = Utility::stringToInt(diff.substr(0, 2));
+		im = Utility::stringToInt(diff.substr(2));
+	}
 
-
-		// TODO: make sure arrival date is after departure date
-		int id, ia;
-		id = Utility::stringToInt(departureTime);
-		ia = Utility::stringToInt(arrivalTime);
-
-		while (id >= ia){
-			cerr << "Departure time must be before arrival time." << endl;
-			departureTime = getTimeFromConsole("Departure ");
-			arrivalTime = getTimeFromConsole("Arrival ");
-			id = Utility::stringToInt(departureTime);
-			ia = Utility::stringToInt(arrivalTime);
-		}
-
-		Journey *journey = new Journey(day,
-				departureDate, arrivalDate,
-				departureTime, arrivalTime, fromStation, toStation);
-		try {
-			m_system.addJourney(user, journey);
-			showCredit(user);
-			cout << endl;
-		} catch (Exception::InsufficientCredit &noCredit){
-			cerr << noCredit.getMessage() << endl;
-			return false;
-		}
+	Journey *journey = new Journey(day,
+			departureDate, arrivalDate,
+			departureTime, arrivalTime, fromStation, toStation);
+	try {
+		m_system->addJourney(user, journey);
+		showCredit(user);
+		cout << endl;
+	} catch (Exception::InsufficientCredit &noCredit){
+		cerr << noCredit.getMessage() << endl;
+		return false;
 	}
 
 	return true;
@@ -385,7 +246,7 @@ void Console::showCredit(User::BaseUser* user){
 void Console::printReports(){
 
 	bool printed = false;
-	map<string, User::BaseUser*> users = m_system.getUsers();
+	map<string, User::BaseUser*> users = m_system->getUsers();
 
 	cout << "User Reports:" << endl;
 
@@ -482,7 +343,7 @@ bool Console::updatePricing(){
 
 void Console::showStatistics(){
 
-	map<string, System::Station*> stations = m_system.getStations();
+	map<string, System::Station*> stations = m_system->getStations();
 
 	cout << "Station travel statistics:" << endl;
 
@@ -510,11 +371,11 @@ bool Console::addUser(){
 
 	while (!b){
 		id = Utility::getStringFromConsole(1,
-				m_system.getLongestUserIdLength(), "Choose an id: ",
+				m_system->getLongestUserIdLength(), "Choose an id: ",
 				"Error: Invalid id.");
 		if (!validateData(id))
 			continue;
-		user = m_system.getUser(id);
+		user = m_system->getUser(id);
 
 		if (user != NULL){
 			// throw Exception::userIdExists();
@@ -539,11 +400,11 @@ bool Console::addUser(){
 				User::BaseUser::EMAIL_LEN_MAX, "User email address: ",
 				"Error: Invalid email.");
 		//Validation::BaseValidator<string>* emailValidator =
-		//dynamic_cast<Validation::EmailAddress*>(m_system.getValidator("email"));
+		//dynamic_cast<Validation::EmailAddress*>(m_system->getValidator("email"));
 
 		Validation::EmailAddress emailValidator;
 		b = emailValidator(email);
-		//b = m_system.getValidator("email")(email);
+		//b = m_system->getValidator("email")(email);
 		if (!b) {
 			cerr << "Error: Invalid email format." << endl;
 		} else {
@@ -570,7 +431,7 @@ bool Console::addUser(){
 		break;
 	}
 
-	m_system.addUser(user);
+	m_system->addUser(user);
 	cout << "Created new " << type << " user with id " << id << endl;
 
 	return true;
@@ -637,9 +498,9 @@ User::BaseUser* Console::getUserFromConsole(){
 
 	while (user == NULL){
 		string id = Utility::getStringFromConsole(1,
-				m_system.getLongestUserIdLength(), "What user: ",
+				m_system->getLongestUserIdLength(), "What user: ",
 				"Error: Input string too long.");
-		user = m_system.getUser(id);
+		user = m_system->getUser(id);
 		if (user == NULL)
 			cerr << "Error: Cannot find that user, try again." << endl;
 	}
@@ -659,9 +520,9 @@ System::Station* Console::getStationFromConsole(string prefix){
 
 	while (station == NULL){
 		string name = Utility::getStringFromConsole(1,
-				m_system.getLongestStationIdLength(), message,
+				m_system->getLongestStationIdLength(), message,
 				"Error: Input string too long.");
-		station = m_system.getStation(name);
+		station = m_system->getStation(name);
 		if (station == NULL)
 			cerr << "Error: Cannot find that station, try again." << endl;
 	}
@@ -719,7 +580,7 @@ Pass::TravelPass* Console::getPassFromConsole(string suffix){
 			break;
 		}
 
-		pass = m_system.getPass(ss.str());
+		pass = m_system->getPass(ss.str());
 
 		if (pass == NULL)
 			cerr << "Error: Cannot find that Pass, try again." << endl;
@@ -745,13 +606,11 @@ string Console::getDateFromConsole(string prefix){
 	else
 		message.append("D");
 
-	message.append("ate: ");
+	message.append("ate (ddmmyyyy): ");
 
 	while (!b){
-		result = Utility::getStringFromConsole(dateSize - 1,
-				dateSize, message, errorMessage);
-		if (result.length() == dateSize - 1)
-			result.insert(0, "0");
+		result = System::DateTime::fixDate(Utility::getStringFromConsole(
+			dateSize - 1, dateSize, message, errorMessage));
 
 		if (!Utility::isNumeric(result)){
 			cerr << errorMessage << endl;
@@ -784,13 +643,12 @@ string Console::getTimeFromConsole(string prefix){
 	else
 		message.append("T");
 
-	message.append("ime: ");
+	message.append("ime (hhmm): ");
 
 	while (!b){
-		result = Utility::getStringFromConsole(timeSize - 1,
-				timeSize, message, errorMessage);
-		if (result.length() == timeSize - 1)
-			result.insert(0, "0");
+		result = System::DateTime::fixTime(Utility::getStringFromConsole(
+			timeSize - 1, timeSize, message, errorMessage));
+
 		if (!Utility::isNumeric(result)){
 			cerr << errorMessage << endl;
 		} else if (Utility::stringToInt(result.substr(0, ts)) >= hourMax){

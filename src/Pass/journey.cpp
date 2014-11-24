@@ -88,4 +88,10 @@ string Journey::getArrivalDate() const {
 	return arrivalDate;
 }
 
+bool Journey::isSameDay(){
+
+	return departureDate.compare(arrivalDate) == 0;
+
+}
+
 }

@@ -46,6 +46,7 @@ public:
 	int getHighestZone() const;
 	string getDepartureDate() const;
 	string getArrivalDate() const;
+	bool isSameDay();
 };
 
 }

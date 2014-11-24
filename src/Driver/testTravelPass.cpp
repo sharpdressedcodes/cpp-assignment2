@@ -17,11 +17,6 @@ int main(int argc, char *argv[]){
 
 	Ui::Console console;
 
-	// Requirement 8 example
-	System::Storage<int> *storage = new System::Storage<int>();
-	delete storage;
-	// end example
-
 	if (!console.run(argc, argv))
 		return EXIT_FAILURE;
 

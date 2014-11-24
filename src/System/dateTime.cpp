@@ -105,13 +105,7 @@ string DateTime::subtractDateTime(const string& date1, const string& date2,
 	stringstream ss;
 	string timeDiff = subtractTime(time1, time2);
 	int hours, d1, d2, m1, m2, y1, y2, d, m, y;
-	string sdate1(date1), sdate2(date2);
-
-	if (sdate1.length() == 7)
-		sdate1.insert(0, "0");
-
-	if (sdate2.length() == 7)
-		sdate2.insert(0, "0");
+	string sdate1(fixDate(date1)), sdate2(fixDate(date2));
 
 	d1 = Utility::stringToInt(sdate1.substr(0, 2));
 	d2 = Utility::stringToInt(sdate2.substr(0, 2));
@@ -210,10 +204,7 @@ string DateTime::addTime(const string& time1, const string& time2){
 string DateTime::getStartOfWeek(const string& endDate){
 
 	//10122014
-	string date(endDate), startDate, day, month, year;
-
-	if (date.length() == 7)
-		date.insert('0', 0);
+	string date(fixDate(endDate)), startDate, day, month, year;
 
 	day = date.substr(0, 2);
 	month = date.substr(2, 2);
@@ -248,10 +239,7 @@ string DateTime::getStartOfWeek(const string& endDate){
 string DateTime::getEndOfWeek(const string& startDate){
 
 	//10122014
-	string date(startDate), endDate, day, month, year;
-
-	if (date.length() == 7)
-		date.insert('0', 0);
+	string date(fixDate(startDate)), endDate, day, month, year;
 
 	day = date.substr(0, 2);
 	month = date.substr(2, 2);
@@ -287,13 +275,8 @@ int DateTime::compareDates(const string& date1, const string& date2){
 
 	int result = 0;
 
-	string d1(date1), d2(date2), day1, month1, year1, day2, month2, year2;
-
-	if (d1.length() == 7)
-		d1.insert(0, "0");
-
-	if (d2.length() == 7)
-		d2.insert(0, "0");
+	string d1(fixDate(date1)), d2(fixDate(date2));
+	string day1, month1, year1, day2, month2, year2;
 
 	day1 = d1.substr(0, 2);
 	month1 = d1.substr(2, 2);
@@ -360,6 +343,28 @@ int DateTime::getMaxDaysInMonth(int month){
 	}
 
 	return dayMax;
+
+}
+
+string DateTime::fixTime(const string& time){
+
+	string result(time);
+
+	if (result.length() == 3)
+		result.insert(0, "0");
+
+	return result;
+
+}
+
+string DateTime::fixDate(const string& date){
+
+	string result(date);
+
+	if (result.length() == 7)
+		result.insert(0, "0");
+
+	return result;
 
 }
 

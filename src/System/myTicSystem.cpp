@@ -512,9 +512,12 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 		if (key.compare("Weekly") == 0){
 			upgrade = false;
 		} else if (key.compare("2 HoursZone 1") == 0){
-			upgrade = totalHours > 2 || required == 2;
+			upgrade = currentZone->getStartDate().compare(
+					journey->getDepartureDate()) != 0 ||
+					totalHours > 2 || required == 2;
 			if (!upgrade){
-				upgrade = user->getTic()->getPurchaseTotal(journey->getDay()) +
+				upgrade = user->getTic()->getPurchaseTotal(
+						journey->getDepartureDate()) +
 						user->getTic()->getRealAmount(journey->getDay(),
 								requiredZone->getCost()) >=
 					(user->getTic()->getRealAmount(journey->getDay(),
@@ -522,16 +525,20 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 									adZone1->getCost()));
 			}
 		} else if (key.compare("2 HoursZones 1 and 2") == 0){
-			upgrade = totalHours > 2;
+			upgrade = currentZone->getStartDate().compare(
+					journey->getDepartureDate()) != 0 || totalHours > 2;
 			if (!upgrade){
-				upgrade = user->getTic()->getPurchaseTotal(journey->getDay()) +
+				upgrade = user->getTic()->getPurchaseTotal(
+						journey->getDepartureDate()) +
 						user->getTic()->getRealAmount(journey->getDay(),
 								requiredZone->getCost()) >=
 					user->getTic()->getRealAmount(journey->getDay(),
 							adZone12->getCost());
 			}
 		} else if (key.compare("All DayZone 1") == 0){
-			upgrade = totalHours > 23 || required == 2;
+			upgrade = currentZone->getStartDate().compare(
+					journey->getDepartureDate()) != 0 ||
+					totalHours > 23 || required == 2;
 			if (!upgrade){
 				upgrade = user->getTic()->getPurchaseTotalForWeek(
 						currentZone->getEndDate()) +
@@ -541,7 +548,8 @@ void MyTicSystem::addJourney(User::BaseUser* user, Pass::Journey* journey){
 							weekly->getCost());
 			}
 		} else if (key.compare("All DayZones 1 and 2") == 0){
-			upgrade = totalHours > 23;
+			upgrade = currentZone->getStartDate().compare(
+					journey->getDepartureDate()) != 0 || totalHours > 23;
 			if (!upgrade){
 				upgrade = user->getTic()->getPurchaseTotalForWeek(
 						currentZone->getEndDate()) +
@@ -586,11 +594,11 @@ void MyTicSystem::addPass(User::BaseUser* user,
 		<< " for $" << Utility::floatToString(pass->getCost(), 2) << endl;
 
 	if (pass->getLength().find("AllDay") != string::npos)
-		cout << "Valid until midnight" << endl;
+		cout << "Valid until midnight " << journey->getDay() << endl;
 	else if (pass->getLength().find("Weekly") != string::npos)
 		cout << "Valid until " << pass->getEndDate() << endl;
 	else
-		cout << "Valid until " << DateTime::addTime(
+		cout << "Valid until midnight " << DateTime::addTime(
 				journey->getDepartureTime(), "0200") << endl;
 
 }
@@ -606,7 +614,7 @@ void MyTicSystem::upgradePass(User::BaseUser* user,
 	vector<TravelPass*> purchases = user->getTic()->getPurchases();
 	float cost = pass->getCost() - (isWeekly ?
 		user->getTic()->getPurchaseTotalForWeek(journey->getArrivalDate()) :
-		user->getTic()->getPurchaseTotal(journey->getDay()));
+		user->getTic()->getPurchaseTotal(journey->getDepartureDate()));
 	pass->setCost(cost);
 	bool dateSet = false;
 
@@ -695,7 +703,7 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user,
 	Pass::Weekly *weekly =
 			dynamic_cast<Pass::Weekly*>(passes.at("WeeklyZone12"));
 
-	if (hours < 2){
+	if (journey->isSameDay() && hours < 2){
 		if (required < 2){
 			requiredZone = new Pass::TwoHoursZone1(thZone1->getLength(),
 					thZone1->getZones(),
@@ -707,7 +715,7 @@ Pass::TravelPass *MyTicSystem::createRequiredPass(User::BaseUser* user,
 					user->getTic()->getRealAmount(journey->getDay(),
 							thZone12->getCost()));
 		}
-	} else if (hours < 24) {
+	} else if (journey->isSameDay() && hours < 24) {
 		if (required < 2){
 			requiredZone = new Pass::AllDayZone1(adZone1->getLength(),
 					adZone1->getZones(),

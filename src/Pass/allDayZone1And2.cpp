@@ -97,14 +97,18 @@ namespace Pass {
 
 	bool AllDayZone1And2::canAddJourney(Journey* journey){
 
+		// Don't bother going any further if the journey isn't on the same day.
+		if (!journey->isSameDay())
+			return false;
+
 		// Do we have any existing journeys?
 		if (journeys.size() == 0)
 			return true;
 
 		// Are they for this day?
-		vector<Journey*> j = getJourneys(journey->getDay());
+		vector<Journey*> j = getJourneys(journey->getDepartureDate());
 		if (j.size() == 0)
-			return true;
+			return false;
 
 		// Is the time correct?
 		if (Utility::stringToInt(j[j.size() - 1]->getArrivalTime()) <=

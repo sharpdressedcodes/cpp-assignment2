@@ -26,6 +26,7 @@ enum eDays {
 	Wednesday,
 	Thursday,
 	Friday,
+	Saturday,
 	eDaysMax
 };
 
@@ -67,6 +68,8 @@ public:
 	static string getEndOfWeek(const string& startDate);
 	static int compareDates(const string& date1, const string& date2);
 	static int getMaxDaysInMonth(int month);
+	static string fixTime(const string& time);
+	static string fixDate(const string& date);
 
 };
 

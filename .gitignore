@@ -9,4 +9,4 @@ Release/*
 Task*/
 mytic
 *.dat
-src/myTic.dat
+src/*.dat

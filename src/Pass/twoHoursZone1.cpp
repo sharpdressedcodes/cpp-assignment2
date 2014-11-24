@@ -105,6 +105,10 @@ namespace Pass {
 
 	bool TwoHoursZone1::canAddJourney(Journey* journey){
 
+		// Don't bother going any further if the journey isn't on the same day.
+		if (!journey->isSameDay())
+			return false;
+
 		bool correctDay = true;
 		bool correctTime = true;
 		string diff = System::DateTime::subtractTime(
@@ -126,7 +130,8 @@ namespace Pass {
 			);
 			string added = current;
 			hours = Utility::stringToInt(added.substr(0, 2));
-			correctDay = journey->getDay().compare(journeys[0]->getDay()) == 0;
+			correctDay = journey->getDepartureDate().compare(
+					journeys[0]->getDepartureDate()) == 0;
 			correctTime = Utility::stringToInt(journeys[0]->getArrivalTime())
 				<= Utility::stringToInt(journey->getDepartureTime());
 
