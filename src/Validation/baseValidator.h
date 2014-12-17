@@ -16,9 +16,9 @@ namespace Validation {
 template <class T>
 class BaseValidator {
 public:
-	//typedef bool (T::*memberFunction)();
-	virtual ~BaseValidator(){}
-	virtual bool validate(T obj) = 0;
+    //typedef bool (T::*memberFunction)();
+    virtual ~BaseValidator(){}
+    virtual bool validate(T obj) = 0;
 };
 
 }

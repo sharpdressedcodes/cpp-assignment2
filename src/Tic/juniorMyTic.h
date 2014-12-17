@@ -15,18 +15,18 @@
 
 namespace Tic {
 
-	class JuniorMyTic : public ConsessionTic {
+    class JuniorMyTic : public ConsessionTic {
 
-	public:
-		JuniorMyTic();
-		JuniorMyTic(float credit,
-				float discountRate = ConsessionTic::DEFAULT_DISCOUNT_RATE,
-				vector<string> freeDays = vector<string>());
-		~JuniorMyTic();
-		float getDiscountRate() const;
+    public:
+        JuniorMyTic();
+        JuniorMyTic(float credit,
+                float discountRate = ConsessionTic::DEFAULT_DISCOUNT_RATE,
+                vector<string> freeDays = vector<string>());
+        ~JuniorMyTic();
+        float getDiscountRate() const;
 
-		string toString() const;
-	};
+        string toString() const;
+    };
 
 }
 

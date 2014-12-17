@@ -13,15 +13,15 @@
 namespace Ui {
 
 BaseUI::BaseUI(){
-	m_system = new System::MyTicSystem();
+    m_system = new System::MyTicSystem();
 }
 
 BaseUI::~BaseUI(){
-	delete m_system;
+    delete m_system;
 }
 
 System::MyTicSystem* BaseUI::getSystem() {
-	return m_system;
+    return m_system;
 }
 
 }

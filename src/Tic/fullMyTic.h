@@ -15,15 +15,15 @@
 
 namespace Tic {
 
-	class FullMyTic : public MyTic {
-	public:
-		FullMyTic();
-		FullMyTic(float credit, vector<string> freeDays = vector<string>());
-		~FullMyTic();
-		virtual float getRealAmount(const string& day, const float amount);
+    class FullMyTic : public MyTic {
+    public:
+        FullMyTic();
+        FullMyTic(float credit, vector<string> freeDays = vector<string>());
+        ~FullMyTic();
+        virtual float getRealAmount(const string& day, const float amount);
 
-		string toString() const;
-	};
+        string toString() const;
+    };
 
 }
 

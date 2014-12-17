@@ -18,23 +18,23 @@ namespace Pass {
 
 class Weekly : public TravelPass {
 public:
-	static const float DEFAULT_PRICE;
-	static const string DEFAULT_LENGTH;
-	static const string DEFAULT_ZONES;
+    static const float DEFAULT_PRICE;
+    static const string DEFAULT_LENGTH;
+    static const string DEFAULT_ZONES;
 
-	Weekly();
-	Weekly(float theCost);
-	Weekly(string theLength, string theZones, float theCost);
-	~Weekly();
-	void input();   // Data input for a Weekly object
-	void print();  // Data output for a Weekly object
-	bool isTravelPass(TravelPass& pUnknown);
-	string toString();
+    Weekly();
+    Weekly(float theCost);
+    Weekly(string theLength, string theZones, float theCost);
+    ~Weekly();
+    void input();   // Data input for a Weekly object
+    void print();  // Data output for a Weekly object
+    bool isTravelPass(TravelPass& pUnknown);
+    string toString();
 
-	friend ostream& operator<<(ostream& stream, Weekly& pass);
-	friend istream& operator>>(istream& stream, Weekly& pass);
-	bool canAddJourney(Journey* journey);
-	string getEndDate();
+    friend ostream& operator<<(ostream& stream, Weekly& pass);
+    friend istream& operator>>(istream& stream, Weekly& pass);
+    bool canAddJourney(Journey* journey);
+    string getEndDate();
 };
 
 }

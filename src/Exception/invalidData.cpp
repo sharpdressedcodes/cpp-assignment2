@@ -13,8 +13,8 @@
 namespace Exception {
 
 string InvalidData::getMessage(){
-	string s("Invalid data was entered!");
-	return s;
+    string s("Invalid data was entered!");
+    return s;
 }
 
 }

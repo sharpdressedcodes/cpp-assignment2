@@ -15,8 +15,8 @@ namespace Exception {
 PassExists::PassExists() : BaseException(string()) {}
 
 string PassExists::getMessage() {
-	string s("Sorry, that Travel Pass is already in use.");
-	return s;
+    string s("Sorry, that Travel Pass is already in use.");
+    return s;
 }
 
 }

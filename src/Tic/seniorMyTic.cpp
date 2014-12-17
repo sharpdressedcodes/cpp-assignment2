@@ -15,13 +15,13 @@ namespace Tic {
 SeniorMyTic::SeniorMyTic() : ConsessionTic (){}
 
 SeniorMyTic::SeniorMyTic(float credit,
-		float discountRate, vector<string> freeDays)
-	: ConsessionTic (credit, discountRate, freeDays){
+        float discountRate, vector<string> freeDays)
+    : ConsessionTic (credit, discountRate, freeDays){
 
-	vector<string> days;
+    vector<string> days;
 
-	days.push_back(System::DateTime::DAYS[System::Sunday]);
-	this->setFreeDays(days);
+    days.push_back(System::DateTime::DAYS[System::Sunday]);
+    this->setFreeDays(days);
 
 }
 
@@ -31,11 +31,11 @@ SeniorMyTic::~SeniorMyTic(){}
  * Calculate the real amount this user should be charged.
  */
 float SeniorMyTic::getDiscountRate() const {
-	return this->discountRate;
+    return this->discountRate;
 }
 
 string SeniorMyTic::toString() const {
-	return "";
+    return "";
 }
 
 }

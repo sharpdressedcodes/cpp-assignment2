@@ -18,18 +18,18 @@ using std::stringstream;
 
 namespace Exception {
 
-	class InvalidFileFormat : public BaseException {
-	private:
-		/*
-		 * filename is used to show which filename caused the error.
-		 */
-		string filename;
+    class InvalidFileFormat : public BaseException {
+    private:
+        /*
+         * filename is used to show which filename caused the error.
+         */
+        string filename;
 
-	public:
-		InvalidFileFormat(string filename);
-		string getMessage();
+    public:
+        InvalidFileFormat(string filename);
+        string getMessage();
 
-	};
+    };
 
 }
 

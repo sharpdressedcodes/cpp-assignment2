@@ -15,11 +15,11 @@
  */
 int main(int argc, char *argv[]){
 
-	Ui::Console console;
+    Ui::Console console;
 
-	if (!console.run(argc, argv))
-		return EXIT_FAILURE;
+    if (!console.run(argc, argv))
+        return EXIT_FAILURE;
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 
 }

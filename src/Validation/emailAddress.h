@@ -20,11 +20,11 @@ namespace Validation {
 
 class EmailAddress : public BaseValidator<string> {
 private:
-	string email;
+    string email;
 public:
-	EmailAddress(string email = string());
-	bool operator() (string email);
-	bool validate(string obj);
+    EmailAddress(string email = string());
+    bool operator() (string email);
+    bool validate(string obj);
 };
 
 }

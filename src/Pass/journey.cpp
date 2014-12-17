@@ -13,53 +13,53 @@
 namespace Pass {
 
 Journey::Journey ()
-	: day(string()), departureTime(string()), arrivalTime(string()),
-	  fromStation(NULL), toStation(NULL){}
+    : day(string()), departureTime(string()), arrivalTime(string()),
+      fromStation(NULL), toStation(NULL){}
 
 Journey::Journey(string day, string departureDate, string arrivalDate,
-		string departureTime, string arrivalTime, System::Station *fromStation,
-		System::Station *toStation){
+        string departureTime, string arrivalTime, System::Station *fromStation,
+        System::Station *toStation){
 
-	this->day = day;
-	this->departureTime = departureTime;
-	this->arrivalTime = arrivalTime;
-	this->fromStation = fromStation;
-	this->toStation = toStation;
-	this->departureDate = departureDate;
-	this->arrivalDate = arrivalDate;
+    this->day = day;
+    this->departureTime = departureTime;
+    this->arrivalTime = arrivalTime;
+    this->fromStation = fromStation;
+    this->toStation = toStation;
+    this->departureDate = departureDate;
+    this->arrivalDate = arrivalDate;
 
 }
 
 Journey::~Journey(){}
 
 string Journey::getDay() const {
-	return this->day;
+    return this->day;
 }
 
 string Journey::getDepartureTime() const {
-	return this->departureTime;
+    return this->departureTime;
 }
 
 string Journey::getArrivalTime() const {
-	return this->arrivalTime;
+    return this->arrivalTime;
 }
 
 System::Station *Journey::getFromStation() const {
-	return this->fromStation;
+    return this->fromStation;
 }
 
 System::Station *Journey::getToStation() const {
-	return this->toStation;
+    return this->toStation;
 }
 
 string Journey::toString() const {
 
-	stringstream ss;
+    stringstream ss;
 
-	ss << fromStation->getName() << " to "
-			<< toStation->getName() << " at " << departureTime;
+    ss << fromStation->getName() << " to "
+            << toStation->getName() << " at " << departureTime;
 
-	return ss.str();
+    return ss.str();
 
 }
 
@@ -68,29 +68,29 @@ string Journey::toString() const {
  */
 int Journey::getHighestZone() const{
 
-	int result = 0;
+    int result = 0;
 
-	if (fromStation->getZone() > result)
-		result = fromStation->getZone();
+    if (fromStation->getZone() > result)
+        result = fromStation->getZone();
 
-	if (toStation->getZone() > result)
-		result = toStation->getZone();
+    if (toStation->getZone() > result)
+        result = toStation->getZone();
 
-	return result;
+    return result;
 
 }
 
 string Journey::getDepartureDate() const {
-	return departureDate;
+    return departureDate;
 }
 
 string Journey::getArrivalDate() const {
-	return arrivalDate;
+    return arrivalDate;
 }
 
 bool Journey::isSameDay(){
 
-	return departureDate.compare(arrivalDate) == 0;
+    return departureDate.compare(arrivalDate) == 0;
 
 }
 

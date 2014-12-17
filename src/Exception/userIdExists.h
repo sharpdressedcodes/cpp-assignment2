@@ -20,15 +20,15 @@ using std::stringstream;
 
 namespace Exception {
 
-	class UserIdExists : public BaseException {
-	private:
-		string toAppend;
+    class UserIdExists : public BaseException {
+    private:
+        string toAppend;
 
-	public:
-		UserIdExists(string toAppend = string());
-		string getMessage();
+    public:
+        UserIdExists(string toAppend = string());
+        string getMessage();
 
-	};
+    };
 
 }
 

@@ -15,8 +15,8 @@ namespace Tic {
 FullMyTic::FullMyTic(){}
 
 FullMyTic::FullMyTic(float credit, vector<string> freeDays) : MyTic() {
-	this->credit = credit;
-	this->freeDays = freeDays;
+    this->credit = credit;
+    this->freeDays = freeDays;
 }
 
 FullMyTic::~FullMyTic(){}
@@ -26,12 +26,12 @@ FullMyTic::~FullMyTic(){}
  */
 float FullMyTic::getRealAmount(const string& day, float amount){
 
-	return isFreeDay(day) ? 0 : amount;
+    return isFreeDay(day) ? 0 : amount;
 
 }
 
 string FullMyTic::toString() const {
-	return "";
+    return "";
 }
 
 }

@@ -12,12 +12,12 @@
 
 namespace Exception {
 
-	InsufficientCredit::InsufficientCredit() : BaseException(string()) {}
+    InsufficientCredit::InsufficientCredit() : BaseException(string()) {}
 
-	string InsufficientCredit::getMessage(){
-		string s("Insufficient credit to perform that transaction!");
-		return s;
-	}
+    string InsufficientCredit::getMessage(){
+        string s("Insufficient credit to perform that transaction!");
+        return s;
+    }
 
 }
 

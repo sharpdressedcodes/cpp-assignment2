@@ -16,11 +16,11 @@
 
 namespace User {
 
-	class Junior : public BaseUser {
-	public:
-		Junior(string id, string name, string email, float credit);
-		~Junior();
-	};
+    class Junior : public BaseUser {
+    public:
+        Junior(string id, string name, string email, float credit);
+        ~Junior();
+    };
 
 }
 

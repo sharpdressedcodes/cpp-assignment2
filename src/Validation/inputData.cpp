@@ -13,18 +13,18 @@
 namespace Validation {
 
 InputData::InputData(string delim){
-	this->delim = delim;
+    this->delim = delim;
 }
 
 bool InputData::operator ()(string data) {
 
-	return validate(data);
+    return validate(data);
 
 }
 
 bool InputData::validate(string data){
 
-	return data.find(delim) == string::npos;
+    return data.find(delim) == string::npos;
 
 }
 

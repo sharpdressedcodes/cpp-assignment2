@@ -17,8 +17,8 @@ JuniorMyTic::JuniorMyTic() : ConsessionTic(){
 }
 
 JuniorMyTic::JuniorMyTic(float credit,
-		float discountRate, vector<string> freeDays)
-	: ConsessionTic(credit, discountRate, freeDays){
+        float discountRate, vector<string> freeDays)
+    : ConsessionTic(credit, discountRate, freeDays){
 
 }
 
@@ -30,11 +30,11 @@ JuniorMyTic::~JuniorMyTic(){
  * Calculate the real amount this user should be charged.
  */
 float JuniorMyTic::getDiscountRate() const {
-	return this->discountRate;
+    return this->discountRate;
 }
 
 string JuniorMyTic::toString() const {
-	return "";
+    return "";
 }
 
 }

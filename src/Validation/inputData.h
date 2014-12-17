@@ -20,11 +20,11 @@ namespace Validation {
 
 class InputData : public BaseValidator<string> {
 private:
-	string delim;
+    string delim;
 public:
-	InputData(string delim);
-	bool operator() (string data);
-	bool validate(string data);
+    InputData(string delim);
+    bool operator() (string data);
+    bool validate(string data);
 };
 
 }

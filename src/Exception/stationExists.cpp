@@ -15,8 +15,8 @@ namespace Exception {
 StationExists::StationExists() : BaseException(string()){}
 
 string StationExists::getMessage() {
-	string s("Sorry, that station is already in use.");
-	return s;
+    string s("Sorry, that station is already in use.");
+    return s;
 }
 
 }

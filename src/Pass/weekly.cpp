@@ -12,109 +12,109 @@
 
 namespace Pass {
 
-	const float Weekly::DEFAULT_PRICE = 15;
-	const string Weekly::DEFAULT_LENGTH = "Weekly";
-	const string Weekly::DEFAULT_ZONES = "Zones 1 and 2";
+    const float Weekly::DEFAULT_PRICE = 15;
+    const string Weekly::DEFAULT_LENGTH = "Weekly";
+    const string Weekly::DEFAULT_ZONES = "Zones 1 and 2";
 
-	Weekly::Weekly()
-		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
+    Weekly::Weekly()
+        : TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, DEFAULT_PRICE) {}
 
-	Weekly::Weekly(float theCost)
-		: TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
+    Weekly::Weekly(float theCost)
+        : TravelPass(DEFAULT_LENGTH, DEFAULT_ZONES, theCost) {}
 
-	Weekly::Weekly(string theLength, string theZones, float theCost)
-		: TravelPass(theLength, theZones, theCost) {}
+    Weekly::Weekly(string theLength, string theZones, float theCost)
+        : TravelPass(theLength, theZones, theCost) {}
 
-	Weekly::~Weekly(){}
+    Weekly::~Weekly(){}
 
-	/*
-	 * Shortcut for Task C. This does not validate user input.
-	 */
-	void Weekly::input(){
+    /*
+     * Shortcut for Task C. This does not validate user input.
+     */
+    void Weekly::input(){
 
-		cin >> *this;
+        cin >> *this;
 
-	}
+    }
 
-	void Weekly::print(){
+    void Weekly::print(){
 
-		cout << this->toString();
+        cout << this->toString();
 
-	}
+    }
 
-	/*
-	 * I couldn't really see a use for this function. I think it should be
-	 * static because if you have to call this method from an already created
-	 * AlLDayZone1 instance, then you should already know what it is.
-	 * Calling it statically makes more sense.
-	 */
-	bool Weekly::isTravelPass(TravelPass& pUnknown){
+    /*
+     * I couldn't really see a use for this function. I think it should be
+     * static because if you have to call this method from an already created
+     * AlLDayZone1 instance, then you should already know what it is.
+     * Calling it statically makes more sense.
+     */
+    bool Weekly::isTravelPass(TravelPass& pUnknown){
 
-		Weekly* test = dynamic_cast<Weekly*>(&pUnknown);
+        Weekly* test = dynamic_cast<Weekly*>(&pUnknown);
 
-		if (test)
-			return true;
-		else
-			return false;
+        if (test)
+            return true;
+        else
+            return false;
 
-	}
+    }
 
-	/*
-	 * Output a string representing this instance.
-	 */
-	string Weekly::toString(){
+    /*
+     * Output a string representing this instance.
+     */
+    string Weekly::toString(){
 
-		stringstream ss;
+        stringstream ss;
 
-		ss << this->length << " pass for " << this->zones << ", costing $"
-			<< Utility::floatToString(this->cost, 2) << endl;
+        ss << this->length << " pass for " << this->zones << ", costing $"
+            << Utility::floatToString(this->cost, 2) << endl;
 
-		return ss.str();
+        return ss.str();
 
-	}
+    }
 
-	/*
-	 * Task C - C3.
-	 */
-	ostream& operator<<(ostream& stream, Weekly& pass){
+    /*
+     * Task C - C3.
+     */
+    ostream& operator<<(ostream& stream, Weekly& pass){
 
-		stream << pass.toString();
+        stream << pass.toString();
 
-		return stream;
+        return stream;
 
-	}
+    }
 
-	/*
-	 * Task C - C3. This does not validate user input.
-	 */
-	istream& operator>>(istream& stream, Weekly& pass){
+    /*
+     * Task C - C3. This does not validate user input.
+     */
+    istream& operator>>(istream& stream, Weekly& pass){
 
-		cout << "Enter length: ";
-		stream >> pass.length;
+        cout << "Enter length: ";
+        stream >> pass.length;
 
-		cout << "Enter zones: ";
-		stream >> pass.zones;
+        cout << "Enter zones: ";
+        stream >> pass.zones;
 
-		cout << "Enter cost: ";
-		stream >> pass.cost;
+        cout << "Enter cost: ";
+        stream >> pass.cost;
 
-		return stream;
+        return stream;
 
-	}
+    }
 
-	bool Weekly::canAddJourney(Journey* journey){
+    bool Weekly::canAddJourney(Journey* journey){
 
-		// is the end date of this pass >= journey end date?
+        // is the end date of this pass >= journey end date?
 
-		int i = System::DateTime::compareDates(this->getEndDate(),
-				journey->getArrivalDate());
+        int i = System::DateTime::compareDates(this->getEndDate(),
+                journey->getArrivalDate());
 
-		return i >= 0;
+        return i >= 0;
 
-	}
+    }
 
-	string Weekly::getEndDate(){
-		return System::DateTime::getEndOfWeek(startDate);
-	}
+    string Weekly::getEndDate(){
+        return System::DateTime::getEndOfWeek(startDate);
+    }
 
 }

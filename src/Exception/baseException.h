@@ -17,17 +17,17 @@ using std::string;
 
 namespace Exception {
 
-	class BaseException{
-	protected:
-		string message;
+    class BaseException{
+    protected:
+        string message;
 
-	public:
-		BaseException();
-		BaseException(string message);
-		virtual ~BaseException();
-		virtual string getMessage() = 0;
+    public:
+        BaseException();
+        BaseException(string message);
+        virtual ~BaseException();
+        virtual string getMessage() = 0;
 
-	};
+    };
 }
 
 #endif /* BASEEXCEPTION_H_ */

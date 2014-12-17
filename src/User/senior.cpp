@@ -12,13 +12,13 @@
 
 namespace User {
 
-	Senior::Senior(string id, string name, string email, float credit)
-		: BaseUser(id, name, email, credit){
+    Senior::Senior(string id, string name, string email, float credit)
+        : BaseUser(id, name, email, credit){
 
-		this->tic = new Tic::SeniorMyTic(credit);
+        this->tic = new Tic::SeniorMyTic(credit);
 
-	}
+    }
 
-	Senior::~Senior(){}
+    Senior::~Senior(){}
 
 }

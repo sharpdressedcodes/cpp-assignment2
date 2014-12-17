@@ -12,14 +12,14 @@
 
 namespace Exception {
 
-	UserIdExists::UserIdExists(string toAppend) : BaseException(string()){
-		this->toAppend = toAppend;
-	}
+    UserIdExists::UserIdExists(string toAppend) : BaseException(string()){
+        this->toAppend = toAppend;
+    }
 
-	string UserIdExists::getMessage(){
-		stringstream ss;
-		ss << "Sorry, that id is already in use." << toAppend;
-		return ss.str();
-	}
+    string UserIdExists::getMessage(){
+        stringstream ss;
+        ss << "Sorry, that id is already in use." << toAppend;
+        return ss.str();
+    }
 
 }

@@ -15,10 +15,10 @@
 
 namespace Exception {
 
-	class InvalidData : public BaseException {
-	public:
-		string getMessage();
-	};
+    class InvalidData : public BaseException {
+    public:
+        string getMessage();
+    };
 
 }
 

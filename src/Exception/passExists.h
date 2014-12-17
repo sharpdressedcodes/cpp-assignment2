@@ -15,12 +15,12 @@
 
 namespace Exception {
 
-	class PassExists : public BaseException {
-	public:
-		PassExists();
-		string getMessage();
+    class PassExists : public BaseException {
+    public:
+        PassExists();
+        string getMessage();
 
-	};
+    };
 
 }
 

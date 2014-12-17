@@ -17,7 +17,7 @@ BaseException::BaseException(){}
 BaseException::~BaseException(){}
 
 BaseException::BaseException(string message){
-	this->message = message;
+    this->message = message;
 }
 
 }

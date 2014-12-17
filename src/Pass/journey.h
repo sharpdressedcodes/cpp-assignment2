@@ -23,30 +23,30 @@ namespace Pass {
 class Journey {
 
 private:
-	string day;
-	string departureTime;
-	string arrivalTime;
-	System::Station *fromStation;
-	System::Station *toStation;
-	string departureDate;
-	string arrivalDate;
+    string day;
+    string departureTime;
+    string arrivalTime;
+    System::Station *fromStation;
+    System::Station *toStation;
+    string departureDate;
+    string arrivalDate;
 
 public:
-	Journey();
-	Journey(string day, string departureDate, string arrivalDate,
-			string departureTime, string arrivalTime,
-			System::Station *fromStation, System::Station *toStation);
-	~Journey();
-	string getDay() const;
-	string getDepartureTime() const;
-	string getArrivalTime() const;
-	System::Station *getFromStation() const;
-	System::Station *getToStation() const;
-	string toString() const;
-	int getHighestZone() const;
-	string getDepartureDate() const;
-	string getArrivalDate() const;
-	bool isSameDay();
+    Journey();
+    Journey(string day, string departureDate, string arrivalDate,
+            string departureTime, string arrivalTime,
+            System::Station *fromStation, System::Station *toStation);
+    ~Journey();
+    string getDay() const;
+    string getDepartureTime() const;
+    string getArrivalTime() const;
+    System::Station *getFromStation() const;
+    System::Station *getToStation() const;
+    string toString() const;
+    int getHighestZone() const;
+    string getDepartureDate() const;
+    string getArrivalDate() const;
+    bool isSameDay();
 };
 
 }

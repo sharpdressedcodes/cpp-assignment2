@@ -15,11 +15,11 @@
 
 namespace Exception {
 
-	class InsufficientCredit : public BaseException {
-	public:
-		InsufficientCredit();
-		string getMessage();
-	};
+    class InsufficientCredit : public BaseException {
+    public:
+        InsufficientCredit();
+        string getMessage();
+    };
 
 }
 

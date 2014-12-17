@@ -13,15 +13,15 @@
 namespace Exception {
 
 InvalidFileFormat::InvalidFileFormat(string filename) :BaseException(string()){
-	this->filename = filename;
+    this->filename = filename;
 }
 
 string InvalidFileFormat::getMessage(){
 
-	stringstream ss;
-	ss << "Invalid format when reading " << this->filename;
+    stringstream ss;
+    ss << "Invalid format when reading " << this->filename;
 
-	return ss.str();
+    return ss.str();
 
 }
 

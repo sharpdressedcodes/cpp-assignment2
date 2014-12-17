@@ -21,31 +21,31 @@ using namespace std;
 
 namespace System {
 
-	class Station {
+    class Station {
 
-	private:
-		string name;
-		int zone;
-		unsigned int startedJourneys;
-		unsigned int finishedJourneys;
+    private:
+        string name;
+        int zone;
+        unsigned int startedJourneys;
+        unsigned int finishedJourneys;
 
-	public:
-		static const int UNASSIGNED_ZONE;
-		Station();
-		Station(const string& name, const int& zone);
-		~Station();
-		string getName() const;
-		int getZone() const;
-		unsigned int getStartedJourneys() const;
-		unsigned int getFinishedJourneys() const;
-		void setName(string newValue);
-		void setZone(const int& newValue);
-		void incrementStartedJourneys();
-		void incrementFinishedJourneys();
+    public:
+        static const int UNASSIGNED_ZONE;
+        Station();
+        Station(const string& name, const int& zone);
+        ~Station();
+        string getName() const;
+        int getZone() const;
+        unsigned int getStartedJourneys() const;
+        unsigned int getFinishedJourneys() const;
+        void setName(string newValue);
+        void setZone(const int& newValue);
+        void incrementStartedJourneys();
+        void incrementFinishedJourneys();
 
-		friend ostream& operator<<(ostream& stream, Station& station);
-		friend istream& operator>>(istream& stream, Station& station);
-	};
+        friend ostream& operator<<(ostream& stream, Station& station);
+        friend istream& operator>>(istream& stream, Station& station);
+    };
 
 }
 

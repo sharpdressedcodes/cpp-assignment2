@@ -15,12 +15,12 @@
 
 namespace Exception {
 
-	class StationExists : public BaseException {
-	public:
-		StationExists();
-		string getMessage();
+    class StationExists : public BaseException {
+    public:
+        StationExists();
+        string getMessage();
 
-	};
+    };
 
 }
 

@@ -16,51 +16,51 @@ namespace System {
 template <class T>
 class Storage {
 protected:
-	int index;
-	T data;
-	string tag;
-	bool autoDelete;
+    int index;
+    T data;
+    string tag;
+    bool autoDelete;
 
 public:
-	Storage(int index, T data, string tag = string(), bool autoDelete = false){
+    Storage(int index, T data, string tag = string(), bool autoDelete = false){
 
-		this->index = index;
-		this->data = data;
-		this->tag = tag;
-		this->autoDelete = autoDelete;
+        this->index = index;
+        this->data = data;
+        this->tag = tag;
+        this->autoDelete = autoDelete;
 
-	}
+    }
 
-	~Storage(){
+    ~Storage(){
 
-		if (this->autoDelete)
-			delete this->data;
+        if (this->autoDelete)
+            delete this->data;
 
-	}
+    }
 
-	int getIndex() const {
-		return index;
-	}
+    int getIndex() const {
+        return index;
+    }
 
-	T getData() const {
-		return data;
-	}
+    T getData() const {
+        return data;
+    }
 
-	string getTag() const {
-		return tag;
-	}
+    string getTag() const {
+        return tag;
+    }
 
-	void setIndex(int newValue){
-		index = newValue;
-	}
+    void setIndex(int newValue){
+        index = newValue;
+    }
 
-	void setData(T newValue) {
-		data = newValue;
-	}
+    void setData(T newValue) {
+        data = newValue;
+    }
 
-	void setTag(string newValue){
-		tag = newValue;
-	}
+    void setTag(string newValue){
+        tag = newValue;
+    }
 
 };
 
